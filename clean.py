@@ -21,6 +21,7 @@ def cleaner_function(text):
 	text = text.replace(" n ", " and ")						# Replacing 'n' with 'and'
 	text = text.replace(" bcz ", " because ")				# replacing 'bcz' with 'because'
 	text = text.replace(" ur ", " your ")					# replacing 'ur' with 'your'
+	text = text.replace(" u ", " you ")					# replacing 'ur' with 'your'
 	text = text.replace(" b4 ", " before ")					# relpacing 'b4' with 'before'
 	text = text.replace(" awsm ", " awesome ")				# replacing 'awsm' with 'awesome'
 	
