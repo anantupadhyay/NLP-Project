@@ -126,12 +126,12 @@ def getStanfordAnalysis(text):
 			if word in val:
 				print word,
 		
-		
+		print ("\n\n\nEnd of function")
 	except Exception as e:
 		#print e
 		return 'failure',"Failed to Analyse Data, 9000 down"
 
-text = "The dinner is not prepared the right way"
+text = "the ac stops working"
 print (text)
 
 print getStanfordAnalysis(text.lower())
