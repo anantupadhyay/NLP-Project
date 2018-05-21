@@ -68,7 +68,7 @@ def main(sentence):
 if __name__=="__main__" :
     import sys   
     # Parse the example sentence
-    sent = 'there is only one room available'
+    sent = 'The dinner is not prepared with precision'
     nlp = StanfordCoreNLP('http://13.127.253.52:9000/')
     output = nlp.annotate(sent, properties={'annotators': 'dcoref','outputFormat':'json'})
     parseTree = output['sentences'][0]['parse']

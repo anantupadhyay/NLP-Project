@@ -5,7 +5,7 @@ def getStanfordAnalysis(text):
 	try:
 		nlp = StanfordCoreNLP('http://13.127.253.52:9000/')
 		output = nlp.annotate(text, properties={'annotators': 'dcoref','outputFormat':'json'})#'annotators': 'tokenize,ssplit,pos,depparse,parse,dcoref'
-		print(output['sentences'][0]['parse'])
+		#print(output['sentences'][0]['parse'])
 		#print(output['sentences'])
 		#print getSentences(output['sentences'])
 		#for i in range(0,len(output['sentences'])):
@@ -87,6 +87,12 @@ def getStanfordAnalysis(text):
 					key.add(wjdata[0]['basicDependencies'][x]['dependentGloss'])
 				elif(wjdata[0]['basicDependencies'][x]['governorGloss'] in val):
 					val.add(wjdata[0]['basicDependencies'][x]['dependentGloss'])
+
+			if(wjdata[0]['basicDependencies'][x]['dep'] == 'neg'):
+				if(wjdata[0]['basicDependencies'][x]['governorGloss'] in key):
+					key.add(wjdata[0]['basicDependencies'][x]['dependentGloss'])
+				elif(wjdata[0]['basicDependencies'][x]['governorGloss'] in val):
+					val.add(wjdata[0]['basicDependencies'][x]['dependentGloss'])
 			
 		for x in range(len(wjdata[0]['tokens'])):
 			if(wjdata[0]['tokens'][x]['pos'] == 'VB'):
@@ -102,8 +108,8 @@ def getStanfordAnalysis(text):
 			#	if(wjdata[0]['tokens'][x]['originalText']) not in val:
 			#		key.add(wjdata[0]['tokens'][x]['originalText'])
 			
-		print nmod
-		print case
+		# print nmod
+		# print case
 		
 		remove_word = set()
 		for x in val:
@@ -111,15 +117,21 @@ def getStanfordAnalysis(text):
 				remove_word.add(x)
 
 		val = val.difference(remove_word)
-		print ("key are ", key)
-		print ("values are ", val)
+		#print ("key are ", key)
+		for word in text.split():
+			if word in key:
+				print word,
+		print('\n')
+		for word in text.split():
+			if word in val:
+				print word,
 		
 		
 	except Exception as e:
 		#print e
 		return 'failure',"Failed to Analyse Data, 9000 down"
 
-text = "Hot water was available"
+text = "The dinner is not prepared the right way"
 print (text)
 
 print getStanfordAnalysis(text.lower())
