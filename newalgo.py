@@ -171,70 +171,79 @@ def find_attributes(node):
 	#print node
 	# Searching all the siblings of the node
 	for sibling in dad:
-		if ((sibling.label() == 'JJ') or (sibling.label() == 'RB') or (sibling.label() == 'CD')):
+		if ((sibling.label() == 'JJ') or (sibling.label() == 'JJS') or (sibling.label() == 'RB') or (sibling.label() == 'CD')):
 			attrs.append(sibling[0])
 		#print sibling[0][0]
 
 	# Searching all the uncles of the node
 	for uncle in gdad:
 		#print uncle
+		if(uncle == dad):
+			continue
 		# Checking if directly a adverb is present, then append it to attribute list
 		if((uncle.label() == 'RB')):
 			attrs.append(uncle[0])
 		
 		# If it is a verb phrase, then check all the children of the VP
-		
 		elif (uncle.label() == 'VP'):
+			#print uncle[0][0]
 			for cousin in uncle:
 				#print cousin.label()
 				if cousin.label() == 'ADJP':
-					for ch in cousin:
-						attrs.append(ch[0])
+					attrs.append(' '.join(cousin.flatten()))
 						#print ch[0]
+				elif cousin.label() == 'ADVP':
+					attrs.append(' '.join(cousin.flatten()))
 
 				elif ((cousin.label() == 'VBN') or (cousin.label() == 'VBG') or (cousin.label() == 'RB') or (cousin.label() == 'VBP') or (cousin.label() == 'VBZ')):
 					attrs.append(cousin[0])
 				# the leaves() method returns a list of node
 				elif cousin.label() == 'VP':
-					for ch in cousin:
-						ls = ch.leaves()
-						#print ls
-						fin_val = ""
-						for word in ls:
-							fin_val += (' '.join(ls))
-						attrs.append(fin_val)
+					attrs.append(' '.join(cousin.flatten()))
 				# if cousin is a noun phrase
 				elif (cousin.label() == 'NP'):
-					attrs.append(cousin[0][0])
+					attrs.append(' '.join(cousin.flatten()))
 
+
+		elif uncle.label() == 'VBD':
+			attrs.append(' '.join(uncle.flatten()))
+		elif uncle.label() == 'VB':
+			attrs.append(' '.join(uncle.flatten()))
 
 	# Searching all the sibling of grand-parent of the node
 	# Here we are looking for verb phrase and its children only
-	ggdad = gdad.parent()
-	if(ggdad.label() != 'ROOT'):
-		for s in ggdad:
-			#print s
-			if s.label() == 'VP':
-				for uch in s:
-					#print uch
-					'''
-						If the children are adjective or adverb
-					'''
-					if uch.label() == 'ADJP':
-						for ch in uch:
-							attrs.append(ch[0])
+	#print attrs
+	if len(attrs)==0:
+		ggdad = gdad.parent()
+		if(ggdad.label() != 'ROOT'):
+			for s in ggdad:
+				if s==gdad:
+					continue
+				if s.label() == 'VP':
+					for uch in s:
+						#print uch
+						'''
+							If the children are adjective or adverb
+						'''
+						if uch.label() == 'ADJP':
+							attrs.append(' '.join(uch.flatten()))
 
-					elif uch.label() == 'ADVP':
-						for ch in uch:
-							attrs.append(ch[0])
+						elif uch.label() == 'ADVP':
+							attrs.append(' '.join(uch.flatten()))
 
-					# Check if it is a verb participle, then append it
-					elif uch.label() == 'VBP' or uch.label()=='VBZ' or uch.label()=='VBN' or uch.label()=='VBG':
-						attrs.append(uch[0])
+						# Check if it is a verb participle, then append it
+						elif uch.label() == 'VBP' or uch.label()=='VBZ' or uch.label()=='VBN' or uch.label()=='VBG':
+							attrs.append(uch[0])
 
-					elif uch.label() == 'NP':
-						for ch in uch:
-							#print ch[0]
+						elif uch.label() == 'NP':
+							attrs.append(' '.join(uch.flatten()))
+
+				elif s.label() == 'VB':
+					attrs.append(' '.join(s.flatten()))
+
+				elif s.label() == 'NP':
+					for ch in s:
+						if ch.label().startswith('NN'):
 							attrs.append(ch[0])
 
 
@@ -270,6 +279,7 @@ def parsetreeAnalysis(text):
 					rel2.pop(n[0])
 
 		#print rel2
+		print ('\n')
 		for key, val in rel2.items():
 			st = ' '.join(val)
 			rel2[key] = st
@@ -312,16 +322,19 @@ def merge_dictionaries(rel, rel2):
 			val2 = rel2[key]
 			merged = merge(val.lower().split(), val2.lower().split())
 			new_val = ' '.join(' '.join(x) for x in merged)
+			print new_val
 			fin_rel[key] = new_val
 		else:
-			fin_rel = val
-
-	for key, val in rel2.items():
-		if key not in fin_rel.keys():
+			#pass
 			fin_rel[key] = val
 
-
+	for key, val in rel2.items():
+		if key not in (fin_rel.keys()):
+			fin_rel[key] = val
+	
 	return fin_rel
+
+
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 '''
 	CODE FOR MERGING ENDS HERE
@@ -336,7 +349,7 @@ def merge_dictionaries(rel, rel2):
 '''
 #-----------------------------------------------
 if __name__=="__main__" :
-	text = "The tea is served hot here"
+	text = "The strongest rain ever recorded in India shut down the financial hub of Mumbai, snapped communication lines, closed airports and forced thousands of people to sleep in their offices or walk home during the night"
 	print (text)
 
 	res = (getStanfordAnalysis(text))
