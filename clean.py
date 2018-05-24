@@ -11,6 +11,7 @@ def cleaner_function(text):
                            "]+", flags=re.UNICODE)
 
 	text = re.sub(r"\b([A-Za-z]+)'re\b", '\\1 are', text)	# changing "'re" to 'are'
+	text = re.sub(r"\b([A-Za-z]+)isn't\b", '\\1 is not', text)	# changing "sn't" to 'is not'
 	text = re.sub(r"\b([A-Za-z]+)'s\b", '\\1 is', text)		# changing "'s" to 'is'
 	text = re.sub(r"\b([A-Za-z]+)'m\b", '\\1 am', text)		# changing "'am" to 'am'
 	text = re.sub(r"\b([A-Za-z]+)'ve\b", '\\1 have', text)	# changing "'ve" to 'have'
@@ -57,6 +58,6 @@ emojis = [(':-J', ' '), ('=^_^=', ' '), (':-o', ' '), ('=-D', ' '), ('>_<', ' ')
 
 filename = 'sample.txt'
 text = load_doc(filename)
-
+print type(text)
 clean_text = cleaner_function(text)
-
+print type(clean_text)
