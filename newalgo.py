@@ -163,6 +163,135 @@ def getStanfordAnalysis(text):
 '''
 #------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+def second_level_pp(node):
+	atrb = []
+	for child in node:
+		if child.label() == 'DT':
+			x = child[0].lower()
+			if x=='no' or x=='not':
+				atrb.append(x)
+
+		elif child.label() == 'IN':
+			atrb.append(' '.join(child.flatten()))
+
+		elif child.label() == 'NP':
+			tmp = noun_phrase_attrb(child)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+
+	return atrb
+
+def noun_phrase_attrb(node):
+	atrb = []
+	for child in node:
+		if child.label() == 'DT':
+			x = child[0].lower()
+			if x=='no' or x=='not':
+				atrb.append(x)
+
+		elif child.label().startswith('NN'):
+			atrb.append(' '.join(child.flatten()))
+
+		elif child.label().startswith('JJ'):
+			atrb.append(' '.join(child.flatten()))
+
+		elif child.label() == 'NP':
+			tmp = noun_phrase_attrb(child)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+
+		elif child.label() == 'VP':
+			tmp = verb_phrase_attrb(child)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+
+		elif child.label() == 'ADJP':
+			tmp = adjective_phrase_attrb(child)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+
+		elif child.label() == 'ADVP':
+			atrb.append(' '.join(child.flatten()))
+
+	return atrb
+
+
+def adjective_phrase_attrb(node):
+	atrb = []
+	for child in node:
+		if child.label().startswith('JJ'):
+			atrb.append(' '.join(child.flatten()))
+
+		elif child.label() == 'VP':
+			tmp = verb_phrase_attrb(child)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+
+		elif child.label() == 'NP':
+			tmp = noun_phrase_attrb(child)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+
+		elif child.label() == 'PP':
+			tmp = second_level_pp(child)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+
+		elif child.label() == 'ADVP':
+			atrb.append(' '.join(child.flatten()))
+
+		elif child.label() == 'RB':
+			atrb.append(' '.join(child.flatten()))
+
+		elif cousin.label() == 'CD':
+			atrb.append(' '.join(cousin.flatten()))
+
+	return atrb
+
+def verb_phrase_attrb(node):
+	atrb = []
+	for cousin in node:
+		#print cousin.label()
+		if cousin.label() == 'ADJP':
+			tmp = adjective_phrase_attrb(cousin)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+		#print ch[0]
+		elif cousin.label() == 'ADVP':
+			atrb.append(' '.join(cousin.flatten()))
+
+		elif ((cousin.label() == 'VBN') or (cousin.label() == 'VBG') or (cousin.label() == 'RB') or (cousin.label() == 'VBP') or (cousin.label() == 'VBZ')):
+			atrb.append(cousin[0])
+		# the leaves() method returns a list of node
+		elif cousin.label() == 'VP':
+			tmp = verb_phrase_attrb(cousin)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+		# if cousin is a noun phrase
+		elif (cousin.label() == 'NP'):
+			tmp = noun_phrase_attrb(cousin)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+
+		elif cousin.label() == 'RB':
+			atrb.append(' '.join(cousin.flatten()))
+
+		elif cousin.label() == 'CD':
+			atrb.append(' '.join(cousin.flatten()))
+
+	return atrb
+
+
 def find_attributes(node):
 	attrs = []
 	dad = node.parent()
@@ -173,6 +302,10 @@ def find_attributes(node):
 	for sibling in dad:
 		if ((sibling.label() == 'JJ') or (sibling.label() == 'JJS') or (sibling.label() == 'RB') or (sibling.label() == 'CD')):
 			attrs.append(sibling[0])
+		elif sibling.label() == 'DT':
+			x = sibling[0].lower()
+			if x=='no' or x=='not':
+				attrs.append(x)
 		#print sibling[0][0]
 
 	# Searching all the uncles of the node
@@ -183,68 +316,67 @@ def find_attributes(node):
 		# Checking if directly a adverb is present, then append it to attribute list
 		if((uncle.label() == 'RB')):
 			attrs.append(uncle[0])
+
+		elif uncle.label() == 'VB':
+			attrs.append(' '.join(uncle.flatten()))
 		
 		# If it is a verb phrase, then check all the children of the VP
 		elif (uncle.label() == 'VP'):
 			#print uncle[0][0]
-			for cousin in uncle:
-				#print cousin.label()
-				if cousin.label() == 'ADJP':
-					attrs.append(' '.join(cousin.flatten()))
-						#print ch[0]
-				elif cousin.label() == 'ADVP':
-					attrs.append(' '.join(cousin.flatten()))
+			tmp = verb_phrase_attrb(uncle)
+			if len(tmp) > 0:
+				for word in tmp:
+					attrs.append(word)
 
-				elif ((cousin.label() == 'VBN') or (cousin.label() == 'VBG') or (cousin.label() == 'RB') or (cousin.label() == 'VBP') or (cousin.label() == 'VBZ')):
-					attrs.append(cousin[0])
-				# the leaves() method returns a list of node
-				elif cousin.label() == 'VP':
-					attrs.append(' '.join(cousin.flatten()))
-				# if cousin is a noun phrase
-				elif (cousin.label() == 'NP'):
-					attrs.append(' '.join(cousin.flatten()))
+		elif uncle.label() == 'ADJP':
+			tmp = adjective_phrase_attrb(uncle)
+			if len(tmp) > 0:
+				for word in tmp:
+					attrs.append(word)
 
+		elif uncle.label() == 'NP':
+			tmp = noun_phrase_attrb(uncle)
+			if len(tmp) > 0:
+				for word in tmp:
+					attrs.append(word)
 
-		elif uncle.label() == 'VBD':
-			attrs.append(' '.join(uncle.flatten()))
-		elif uncle.label() == 'VB':
-			attrs.append(' '.join(uncle.flatten()))
+		elif uncle.label() == 'S':
+			for child in uncle:
+				if child.label() == 'VP':
+					tmp = verb_phrase_attrb(child)
+					if len(tmp) > 0:
+						for word in tmp:
+							attrs.append(word)
+
+		elif uncle.label() == 'PP':
+			tmp = second_level_pp(uncle)
+			if len(tmp) > 0:
+				for word in tmp:
+					attrs.append(word)
 
 	# Searching all the sibling of grand-parent of the node
 	# Here we are looking for verb phrase and its children only
 	#print attrs
-	if len(attrs)==0:
+	if len(attrs)==0 or gdad.parent().label()=='S':
 		ggdad = gdad.parent()
 		if(ggdad.label() != 'ROOT'):
 			for s in ggdad:
 				if s==gdad:
 					continue
 				if s.label() == 'VP':
-					for uch in s:
-						#print uch
-						'''
-							If the children are adjective or adverb
-						'''
-						if uch.label() == 'ADJP':
-							attrs.append(' '.join(uch.flatten()))
-
-						elif uch.label() == 'ADVP':
-							attrs.append(' '.join(uch.flatten()))
-
-						# Check if it is a verb participle, then append it
-						elif uch.label() == 'VBP' or uch.label()=='VBZ' or uch.label()=='VBN' or uch.label()=='VBG':
-							attrs.append(uch[0])
-
-						elif uch.label() == 'NP':
-							attrs.append(' '.join(uch.flatten()))
+					tmp = verb_phrase_attrb(s)
+					if len(tmp) > 0:
+						for word in tmp:
+							attrs.append(word)
 
 				elif s.label() == 'VB':
 					attrs.append(' '.join(s.flatten()))
 
 				elif s.label() == 'NP':
-					for ch in s:
-						if ch.label().startswith('NN'):
-							attrs.append(ch[0])
+					tmp = noun_phrase_attrb(s)
+					if len(tmp) > 0:
+						for word in tmp:
+							attrs.append(word)
 
 
 
@@ -265,7 +397,7 @@ def parsetreeAnalysis(text):
 				This part deals with the problem that the child of ROOT comes as NP,
 				and hence, each noun was counted twice.
 			'''
-			for n in s.subtrees(lambda n: n.label().startswith('NN')):
+			for n in s.subtrees(lambda n: n.label().startswith('NN') or n.label()=='PRP'):
 				vis = np.get(n[0], 0)
 				if(vis == 1):
 					continue
@@ -322,7 +454,7 @@ def merge_dictionaries(rel, rel2):
 			val2 = rel2[key]
 			merged = merge(val.lower().split(), val2.lower().split())
 			new_val = ' '.join(' '.join(x) for x in merged)
-			print new_val
+			#print new_val
 			fin_rel[key] = new_val
 		else:
 			#pass
@@ -349,7 +481,7 @@ def merge_dictionaries(rel, rel2):
 '''
 #-----------------------------------------------
 if __name__=="__main__" :
-	text = "The strongest rain ever recorded in India shut down the financial hub of Mumbai, snapped communication lines, closed airports and forced thousands of people to sleep in their offices or walk home during the night"
+	text = "This was horrible experience I have ever had with the hotel in my entire life"
 	print (text)
 
 	res = (getStanfordAnalysis(text))
