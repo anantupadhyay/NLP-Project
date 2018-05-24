@@ -1,9 +1,23 @@
-from gingerit.gingerit import GingerIt
+# from gingerit.gingerit import GingerIt
 
-text = "The plac is vary far frm ind"
-corr_spell = ""
+# text = "the got busi working"
 
-parser = GingerIt()
-print parser.parse(text)['result']
+# parser = GingerIt()
+# print parser.parse(text)['result']
 
-print text
+# print text
+
+
+from googletrans import Translator
+translator = Translator()
+
+txt = "they got busy workin"
+spell = translator.translate(txt, dest='en')
+print spell.text
+
+# import coreference_resolution as cr 
+
+# text = "The got busi in wrk"
+
+# op = cr.correct_spell(text)
+# print op

@@ -1,5 +1,11 @@
 from pycorenlp import StanfordCoreNLP
+from googletrans import Translator
 import json
+
+def correct_spell(text):
+	translator = Translator()
+	spell = translator.translate(text, dest='en')
+	return spell.text
 
 def fun(text):
 	nlp = StanfordCoreNLP('http://13.127.253.52:9000/')
@@ -32,7 +38,7 @@ def fun(text):
 			else:
 				coref[key] = lis
 
-	text = []
+	new_text = []
 	for idx in range(len(sen)):
 		tmp = ""
 		for x in range(len(sen[idx]['tokens'])):
@@ -40,7 +46,7 @@ def fun(text):
 			if x<len(sen[idx]['tokens'])-1:
 				tmp += " "
 
-		text.append(tmp)
+		new_text.append(tmp)
 
 	for key in coref.keys():
 		tp = coref[key]
@@ -48,8 +54,16 @@ def fun(text):
 			word = ele[0]
 			idx = ele[1]
 
-			text[idx-1] = text[idx-1].replace(word, key)
+			new_text[idx-1] = new_text[idx-1].replace(word, key)
 
+	return new_text
+
+if __name__=="__main__" :
+	txt = "We reached on 24.05.2018. the staff was good. they treated us well. they were nice."
+	text = correct_spell(txt)
 	print text
-
-fun("We reached at 10am. the staff was good. they treated us well. they were nice.")
+	text = text.encode("utf-8")
+	
+	var = fun(text)
+	for sen in var:
+		print sen.encode("utf-8")
