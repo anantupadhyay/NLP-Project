@@ -11,7 +11,7 @@ rel2 = dict()
 def getStanfordAnalysis(text):
 	try:
 		nlp = StanfordCoreNLP('http://13.127.253.52:9000/')
-		output = nlp.annotate(text, properties={'annotators': 'dcoref','outputFormat':'json'})
+		output = nlp.annotate(text, properties={'annotators': 'dcoref','outputFormat':'json', 'pipelineLanguage': 'en'})
 		#'annotators': 'tokenize,ssplit,pos,depparse,parse,dcoref'
 		#print(output['sentences'])
 		
@@ -32,7 +32,7 @@ def getStanfordAnalysis(text):
 		# print ('#'*100)
 
 # Code for extracting noun ends here!		
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-----------------------	-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 		
 # The Code here deals with extracting the dependencies of noun with adjectives and verbs
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -47,7 +47,7 @@ def getStanfordAnalysis(text):
 				if(wjdata[0]['enhancedPlusPlusDependencies'][x]['governorGloss'] == 'ROOT'):
 					continue
 				#print (idx)
-				if((wjdata[0]['tokens'][idx-1]['pos'] == 'JJ') or (wjdata[0]['tokens'][idx-1]['pos'] == 'JJS') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VBN') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VBG') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VB') or (wjdata[0]['tokens'][idx-1]['pos'] == 'RB') or (wjdata[0]['tokens'][idx-1]['pos'] == 'CD') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VBZ')):
+				if((wjdata[0]['tokens'][idx-1]['pos'] == 'JJ') or (wjdata[0]['tokens'][idx-1]['pos'] == 'JJS') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VBN') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VBG') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VB') or (wjdata[0]['tokens'][idx-1]['pos'] == 'RB') or (wjdata[0]['tokens'][idx-1]['pos'] == 'CD') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VBZ')  or (wjdata[0]['tokens'][idx-1]['pos'] == 'JJR')):
 					#print ("not here")
 					#print (wjdata[0]['tokens'][idx]['word'])
 					if(noun[(wjdata[0]['enhancedPlusPlusDependencies'][x]['dependent'])] not in rel.keys()):
@@ -61,7 +61,7 @@ def getStanfordAnalysis(text):
 				# If it is related to ROOT, then no need to add it to dictionary
 				if(wjdata[0]['enhancedPlusPlusDependencies'][x]['dependentGloss'] == 'ROOT'):
 					continue
-				if((wjdata[0]['tokens'][idx-1]['pos'] == 'JJ') or (wjdata[0]['tokens'][idx-1]['pos'] == 'JJS') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VBN') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VBG') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VB') or (wjdata[0]['tokens'][idx-1]['pos'] == 'CD') or (wjdata[0]['tokens'][idx-1]['pos'] == 'RB') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VBZ')):
+				if((wjdata[0]['tokens'][idx-1]['pos'] == 'JJ') or (wjdata[0]['tokens'][idx-1]['pos'] == 'JJS') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VBN') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VBG') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VB') or (wjdata[0]['tokens'][idx-1]['pos'] == 'RB') or (wjdata[0]['tokens'][idx-1]['pos'] == 'CD') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VBZ')  or (wjdata[0]['tokens'][idx-1]['pos'] == 'JJR')):
 					#print("here")
 					if(noun[(wjdata[0]['enhancedPlusPlusDependencies'][x]['governor'])] not in rel.keys()):
 						rel.setdefault(noun[(wjdata[0]['enhancedPlusPlusDependencies'][x]['governor'])], [])
@@ -135,13 +135,13 @@ def getStanfordAnalysis(text):
 
 # This part prints the final key value pair
 		
-		for key, val in rel.items():
-			st = ""
-			for word in text.split():
-				#print word
-				if word in val:
-					st += word + " "
-			rel[key] = st
+		# for key, val in rel.items():
+		# 	st = ""
+		# 	for word in text.split():
+		# 		#print word
+		# 		if word in val:
+		# 			st += word + " "
+		# 	rel[key] = st
 
 		print rel
 
@@ -163,6 +163,130 @@ def getStanfordAnalysis(text):
 '''
 #------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+def second_level_pp(node):
+	atrb = []
+	for child in node:
+		if child.label()=='NP':
+			tmp = noun_phrase_attr(child)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+
+		elif child.label()=='IN':
+			x = child[0].lower()
+			if x != 'in':
+				atrb.append(x)
+
+	return atrb
+
+def noun_phrase_attr(node):
+	atrb = []
+	for ch in node:
+		if(ch.label().startswith('NN') or ch.label().startswith('PRP')):
+			atrb.append(' '.join(ch.flatten()))
+		elif ch.label().startswith('JJ'):
+			atrb.append(' '.join(ch.flatten()))
+		elif ch.label()=='DT':
+			x = ch[0].lower()
+			if x=='no' or x=='not':
+				atrb.append(x)
+		elif ch.label()=='NP':
+			tmp = noun_phrase_attr(ch)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+
+	return atrb
+
+def adjective_phrase_attr(node):
+	atrb = list()
+	#print node
+	for child in node:
+		if child.label().startswith('JJ'):
+			atrb.append(' '.join(child.flatten()))
+		elif child.label()=='RB':
+			atrb.append(' '.join(child.flatten()))
+		elif child.label()=='VP':
+			tmp = verb_phrase_attr(child)
+			if len(tmp) > 0:
+				for word in tmp:
+					#print word
+					atrb.append(word)
+		elif child.label() == 'NP':
+			tmp = noun_phrase_attr(child)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+
+		elif child.label() == 'ADJP':
+			tmp = adjective_phrase_attr(child)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+
+		elif child.label() == 'ADVP':
+			atrb.append(' '.join(child.flatten()))
+
+	return atrb
+
+def verb_phrase_attr(node):
+	#print node
+	atrb = list()
+	#atrb.append('test')
+	for child in node:
+		if(child.label() == 'VP'):
+			tmp = verb_phrase_attr(child)
+			if len(tmp)>0:
+				for word in tmp:
+					atrb.append(word)
+
+		elif child.label() == 'ADVP':
+			atrb.append(' '.join(child.flatten()))
+
+		elif child.label() == 'RB':
+			atrb.append(' '.join(child.flatten()))
+
+		elif child.label().startswith('JJ'):
+			atrb.append(' '.join(child.flatten()))
+
+		elif child.label() == 'ADJP':
+			temp = adjective_phrase_attr(child)
+			if len(temp) > 0:
+				for word in temp:
+					atrb.append(word)
+
+		elif child.label()=='VBZ' or child.label()=='VBN' or child.label()=='VBP' or child.label()=='VBN' or child.label()=='VBG':
+			atrb.append(' '.join(child.flatten()))
+
+		elif child.label()=='NP':
+			tmp = noun_phrase_attr(child)
+			for word in tmp:
+				atrb.append(word)
+
+		elif child.label()=='S':
+			for ch in child:
+				if ch.label()=='ADJP':
+					#print "I am here"
+					tmp = adjective_phrase_attr(ch)
+					#print tmp
+					if len(tmp) > 0:
+						for word in tmp:
+							atrb.append(word)
+				elif ch.label()=='VP':
+					tmp = verb_phrase_attr(ch)
+					if len(tmp) > 0:
+						for word in tmp:
+							atrb.append(word)
+
+				elif ch.label()=='RB':
+					atrb.append(' '.join(ch.flatten()))
+				elif ch.label().startswith('JJ'):
+					atrb.append(' '.join(ch.flatten()))
+
+	#print atrb
+	return atrb
+
+
 def find_attributes(node):
 	attrs = []
 	dad = node.parent()
@@ -172,71 +296,65 @@ def find_attributes(node):
 	# Searching all the siblings of the node
 	for sibling in dad:
 		if ((sibling.label() == 'JJ') or (sibling.label() == 'JJS') or (sibling.label() == 'RB') or (sibling.label() == 'CD')):
-			attrs.append(sibling[0])
+			attrs.append(' '.join(sibling.flatten()))
+
+		elif sibling.label()=='DT':
+			x = sibling[0].lower()
+			if x=='no' or x=='not':
+				attrs.append(x)
+
 		#print sibling[0][0]
 
 	# Searching all the uncles of the node
 	for uncle in gdad:
-		#print uncle
 		if(uncle == dad):
 			continue
+		#print uncle.label(), node[0]
 		# Checking if directly a adverb is present, then append it to attribute list
 		if((uncle.label() == 'RB')):
-			attrs.append(uncle[0])
+			attrs.append(' '.join(uncle.flatten()))
 		
 		# If it is a verb phrase, then check all the children of the VP
 		elif (uncle.label() == 'VP'):
 			#print uncle[0][0]
-			for cousin in uncle:
-				#print cousin.label()
-				if cousin.label() == 'ADJP':
-					attrs.append(' '.join(cousin.flatten()))
-						#print ch[0]
-				elif cousin.label() == 'ADVP':
-					attrs.append(' '.join(cousin.flatten()))
-
-				elif ((cousin.label() == 'VBN') or (cousin.label() == 'VBG') or (cousin.label() == 'RB') or (cousin.label() == 'VBP') or (cousin.label() == 'VBZ')):
-					attrs.append(cousin[0])
-				# the leaves() method returns a list of node
-				elif cousin.label() == 'VP':
-					attrs.append(' '.join(cousin.flatten()))
-				# if cousin is a noun phrase
-				elif (cousin.label() == 'NP'):
-					attrs.append(' '.join(cousin.flatten()))
-
+			tmp_attr = verb_phrase_attr(uncle)
+			if len(tmp_attr) > 0:
+				for word in tmp_attr:
+					attrs.append(word)
 
 		elif uncle.label() == 'VBD':
 			attrs.append(' '.join(uncle.flatten()))
 		elif uncle.label() == 'VB':
 			attrs.append(' '.join(uncle.flatten()))
+		elif uncle.label() == 'S':
+			for uch in uncle:
+				if uch.label()=='VP':
+					tmp = verb_phrase_attr(uch)
+					if len(tmp) > 0:
+						for word in tmp:
+							attrs.append(word)
+
+		# elif uncle.label()=='PP':
+		# 	tmp = second_level_pp(uncle)
+		# 	if len(tmp) > 0:
+		# 		for word in tmp:
+		# 			attrs.append(word)
 
 	# Searching all the sibling of grand-parent of the node
 	# Here we are looking for verb phrase and its children only
 	#print attrs
-	if len(attrs)==0:
+	if len(attrs)==0 or gdad.parent().label()=='S':
 		ggdad = gdad.parent()
 		if(ggdad.label() != 'ROOT'):
 			for s in ggdad:
 				if s==gdad:
 					continue
 				if s.label() == 'VP':
-					for uch in s:
-						#print uch
-						'''
-							If the children are adjective or adverb
-						'''
-						if uch.label() == 'ADJP':
-							attrs.append(' '.join(uch.flatten()))
-
-						elif uch.label() == 'ADVP':
-							attrs.append(' '.join(uch.flatten()))
-
-						# Check if it is a verb participle, then append it
-						elif uch.label() == 'VBP' or uch.label()=='VBZ' or uch.label()=='VBN' or uch.label()=='VBG':
-							attrs.append(uch[0])
-
-						elif uch.label() == 'NP':
-							attrs.append(' '.join(uch.flatten()))
+					tmp = verb_phrase_attr(s)
+					#print len(tmp)
+					if len(tmp) > 0:
+						for word in tmp:
+							attrs.append(word)
 
 				elif s.label() == 'VB':
 					attrs.append(' '.join(s.flatten()))
@@ -244,7 +362,12 @@ def find_attributes(node):
 				elif s.label() == 'NP':
 					for ch in s:
 						if ch.label().startswith('NN'):
-							attrs.append(ch[0])
+							attrs.append(' '.join(ch.flatten()))
+						# Explicitly checking if 'no' or 'not' is tagged as determiner
+						elif ch.label()=='DT':
+							x = ch[0].lower()
+							if x=='no' or x=='not':
+								attrs.append(x)
 
 
 
@@ -253,7 +376,7 @@ def find_attributes(node):
 def parsetreeAnalysis(text):
 	try:
 		nlp = StanfordCoreNLP('http://13.127.253.52:9000/')
- 		output = nlp.annotate(text, properties={'annotators': 'dcoref','outputFormat':'json'})
+ 		output = nlp.annotate(text, properties={'annotators': 'dcoref','outputFormat':'json', 'pipelineLanguage': 'en'})
  		parse_tree = output['sentences'][0]['parse']
 		tree = ParentedTree.convert(Tree.fromstring(parse_tree))
 		#tree.pretty_print()
@@ -265,7 +388,7 @@ def parsetreeAnalysis(text):
 				This part deals with the problem that the child of ROOT comes as NP,
 				and hence, each noun was counted twice.
 			'''
-			for n in s.subtrees(lambda n: n.label().startswith('NN')):
+			for n in s.subtrees(lambda n: n.label().startswith('NN') or n.label()=='PRP'):
 				vis = np.get(n[0], 0)
 				if(vis == 1):
 					continue
@@ -278,6 +401,7 @@ def parsetreeAnalysis(text):
 				if len(attr)==0:
 					rel2.pop(n[0])
 
+		#print np
 		#print rel2
 		print ('\n')
 		for key, val in rel2.items():
@@ -290,11 +414,14 @@ def parsetreeAnalysis(text):
 	except Exception as e:
  		print e
 		return 'failure',"An error has occured, Failed to Analyse Data, 9000 down"
+
 # ---------------------------------------------------------------------------------------------------
 '''
 	CODE FOR PARSE TREE ENDS HERE
 '''
 # ---------------------------------------------------------------------------------------------------
+
+#****************************************************************************************************
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 '''
@@ -349,7 +476,7 @@ def merge_dictionaries(rel, rel2):
 '''
 #-----------------------------------------------
 if __name__=="__main__" :
-	text = "The strongest rain ever recorded in India shut down the financial hub of Mumbai, snapped communication lines, closed airports and forced thousands of people to sleep in their offices or walk home during the night"
+	text = "the bed was like sleeping on a coroners table"
 	print (text)
 
 	res = (getStanfordAnalysis(text))
@@ -360,9 +487,9 @@ if __name__=="__main__" :
 	if(res2 != None):
 		print res2
 
-	kvp = merge_dictionaries(rel, rel2)
-	print "\nThe final key value pairs are"
-	print kvp
+	# kvp = merge_dictionaries(rel, rel2)
+	# print "\nThe final key value pairs are"
+	# print kvp
 
 # ------------------------------------------------------
 '''
