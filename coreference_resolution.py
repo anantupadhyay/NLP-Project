@@ -8,8 +8,10 @@ def fun(text):
 	#print output['corefs']
 	dmp = json.dumps(output['corefs'])
 	data = json.loads(dmp)
+	dmp2 = json.dumps(output['sentences'])
+	sen = json.loads(dmp2)
 
-	pnoun = ['he', 'she', 'they', 'it', 'their', 'we']
+	pnoun = ['he', 'she', 'they', 'it', 'we']
 	coref = dict()
 	for keys in data:
 		if len(data[keys]) > 1:
@@ -25,8 +27,29 @@ def fun(text):
 					lis.append(tup)
 					del(tup)
 
-			coref[key] = lis
+			if len(lis) == 0:
+				coref.pop(key, None)
+			else:
+				coref[key] = lis
 
-	print coref
+	text = []
+	for idx in range(len(sen)):
+		tmp = ""
+		for x in range(len(sen[idx]['tokens'])):
+			tmp += sen[idx]['tokens'][x]['word']
+			if x<len(sen[idx]['tokens'])-1:
+				tmp += " "
 
-fun("Oyo is not fair. They are not committed to service , quality, and customer service. They are cheater and having lethargic approach.")
+		text.append(tmp)
+
+	for key in coref.keys():
+		tp = coref[key]
+		for ele in (tp):
+			word = ele[0]
+			idx = ele[1]
+
+			text[idx-1] = text[idx-1].replace(word, key)
+
+	print text
+
+fun("We reached at 10am. the staff was good. they treated us well. they were nice.")
