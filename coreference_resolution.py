@@ -7,7 +7,7 @@ def correct_spell(text):
 	spell = translator.translate(text, dest='en')
 	return spell.text
 
-def fun(text):
+def resolve_coreference_in_text(text):
 	nlp = StanfordCoreNLP('http://13.127.253.52:9000/')
 	output = nlp.annotate(text, properties={'annotators': 'coref','outputFormat':'json'})
 	#'annotators': 'tokenize,ssplit,pos,depparse,parse,dcoref'
@@ -64,6 +64,6 @@ if __name__=="__main__" :
 	print text
 	text = text.encode("utf-8")
 	
-	var = fun(text)
+	var = resolve_coreference_in_text(text)
 	for sen in var:
 		print sen.encode("utf-8")

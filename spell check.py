@@ -1,19 +1,20 @@
-# from gingerit.gingerit import GingerIt
+from gingerit.gingerit import GingerIt
 
-# text = "the got busi working"
+text = "the got busi working .the got busi working. the got busi working. the got busi working . the got busi working .the got busi working. the got busi working. the got busi working ."
 
-# parser = GingerIt()
-# print parser.parse(text)['result']
+parser = GingerIt()
+print parser.parse(text)['result']
 
-# print text
+print text
 
 
-from googletrans import Translator
-translator = Translator()
+# from googletrans import Translator
+# translator = Translator()
 
-txt = "they got busy workin"
-spell = translator.translate(txt, dest='en')
-print spell.text
+# txt = "the got busi working .the got busi working. the got busi working. the got busi working . the got busi working .the got busi working. the got busi working. the got busi working ."
+# spell = translator.translate(txt, dest='en')
+# op = (spell.text).encode("utf-8")
+# print op
 
 # import coreference_resolution as cr 
 

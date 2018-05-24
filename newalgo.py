@@ -3,6 +3,7 @@ from nltk.tree import ParentedTree, Tree
 from nltk.parse.stanford import StanfordParser
 import difflib
 import json
+import coreference_resolution as cr 
 
 # Defining the global dictionaries
 rel = dict()
@@ -144,6 +145,7 @@ def getStanfordAnalysis(text):
 			rel[key] = st
 
 		print rel
+		rel.clear()
 
 # The part reports error, if any, occured in the code
 
@@ -417,6 +419,7 @@ def parsetreeAnalysis(text):
 			rel2[key] = st
 
 		print rel2
+		rel2.clear()
 
 	# THIS PART CHECKS FOR ERRORS, IF ANY, AND REPORTS THE FAILURE	
 	except Exception as e:
@@ -481,20 +484,32 @@ def merge_dictionaries(rel, rel2):
 '''
 #-----------------------------------------------
 if __name__=="__main__" :
-	text = "This was horrible experience I have ever had with the hotel in my entire life"
-	print (text)
+	text = "The hotel manager is a cunning person. He is a cheater."
+	# print (text)
 
-	res = (getStanfordAnalysis(text))
-	if(res != None):
-		print res
+	# op = cr.correct_spell(text)
+	# op = op.encode("utf-8")
+	# print op
+	# print type(op)
 
-	res2 = (parsetreeAnalysis(text))
-	if(res2 != None):
-		print res2
+	txt = cr.resolve_coreference_in_text(text)
+	print txt
+	for sen in txt:
+		print sen
+		# print type(sen)
+		sen = sen.encode("utf-8")
 
-	kvp = merge_dictionaries(rel, rel2)
-	print "\nThe final key value pairs are"
-	print kvp
+		res = (getStanfordAnalysis(sen))
+		if(res != None):
+			print res
+
+		res2 = (parsetreeAnalysis(sen))
+		if(res2 != None):
+			print res2
+		
+		# kvp = merge_dictionaries(rel, rel2)
+		# print "\nThe final key value pairs are"
+		# print kvp
 
 # ------------------------------------------------------
 '''
