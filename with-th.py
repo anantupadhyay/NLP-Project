@@ -257,6 +257,9 @@ def adjective_phrase_attrb(node):
 		elif child.label() == 'CD':
 			atrb.append(' '.join(child.flatten()))
 
+		elif child.label() == 'MD':
+			atrb.append(' '.join(child.flatten()))
+
 	return atrb
 
 def verb_phrase_attrb(node):
@@ -292,6 +295,9 @@ def verb_phrase_attrb(node):
 			atrb.append(' '.join(cousin.flatten()))
 
 		elif cousin.label() == 'CD':
+			atrb.append(' '.join(cousin.flatten()))
+
+		elif cousin.label() == 'MD':
 			atrb.append(' '.join(cousin.flatten()))
 
 	return atrb
@@ -362,7 +368,7 @@ def find_attributes(node):
 	# Searching all the sibling of grand-parent of the node
 	# Here we are looking for verb phrase and its children only
 	#print attrs
-	if len(attrs)==0 or gdad.parent().label()=='S':
+	if len(attrs)==0 or gdad.parent().label()=='S' or gdad.parent().label()=='FRAG':
 		ggdad = gdad.parent()
 
 		if(ggdad.label() != 'ROOT'):
@@ -486,6 +492,11 @@ def merge_dictionaries(rel, rel2):
 '''
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+# -----------------------------------------------------------------------------
+'''
+	THIS PART CONTAINS THE FUNCTION FOR RUNNING THREADS
+'''
+# -----------------------------------------------------------------------------
 
 def run_thread(sen, lock):
 	res = (getStanfordAnalysis(sen))
@@ -502,23 +513,43 @@ def run_thread(sen, lock):
 	lock.acquire()
 	finalDic.append(kvp)
 	lock.release()
+
+# -----------------------------------------------------------------------------
+'''
+	THREAD FUNCTION ENDS HERE
+'''
+# -----------------------------------------------------------------------------
+
+# =============================================================================
+'''
+	THIS PART DEALS WITH REMOVING STOPWORDS FROM FINAL LIST OF KEY-VALUE-PAIRS
+'''
+# =============================================================================
 	
 def remove_stop_words(stopwordList):
 	try:
-		print stopwordList
+		#print stopwordList
 		for x in range(len(finalDic)):
 			for k,v in finalDic[x].items():
 				for word in v.split():
-					print word
+					#print word
 					if word in stopwordList:
 						v = v.replace(word, '')
 
 				finalDic[x][k] = v
 
+		print '\n\n'
 		print finalDic
 
 	except:
 		return "An error occured"
+
+# =============================================================================
+'''
+	---------------------STOPWORD REMOVAL ENDS HERE----------------------------
+'''
+# =============================================================================
+
 
 #-----------------------------------------------
 '''
@@ -527,7 +558,7 @@ def remove_stop_words(stopwordList):
 #-----------------------------------------------
 
 if __name__=="__main__" :
-	text = "The room was dirty. the manager was cruel. the fan was not working. the ac is working"
+	text = "The room was dirty. the manager was cruel. the fan was not working. the ac is working. Hot tea should be served"
 	# print (text)
 
 	# op = cr.correct_spell(text)

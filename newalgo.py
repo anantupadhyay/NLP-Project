@@ -5,9 +5,6 @@ import difflib
 import json
 import coreference_resolution as cr 
 
-# Defining the global dictionaries
-rel = dict()
-rel2 = dict()
 
 def getStanfordAnalysis(text):
 	try:
@@ -24,7 +21,7 @@ def getStanfordAnalysis(text):
 # The code below deals with extracting noun and pronouns from the sentence and storing them in a dictionary (index:word)	
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 		noun = dict()
-
+		rel = dict()
 		for x in range(len(wjdata[0]['tokens'])):
 			if((wjdata[0]['tokens'][x]['pos'] == 'NN') or (wjdata[0]['tokens'][x]['pos'] == 'NNP') or (wjdata[0]['tokens'][x]['pos'] == 'NNS') or (wjdata[0]['tokens'][x]['pos'] == 'PRP')):
 				noun[wjdata[0]['tokens'][x]['index']] = wjdata[0]['tokens'][x]['word']
@@ -144,8 +141,8 @@ def getStanfordAnalysis(text):
 					st += word + " "
 			rel[key] = st
 
-		print rel
-		rel.clear()
+		#print rel
+		return rel
 
 # The part reports error, if any, occured in the code
 
@@ -292,6 +289,9 @@ def verb_phrase_attrb(node):
 		elif cousin.label() == 'CD':
 			atrb.append(' '.join(cousin.flatten()))
 
+		elif cousin.label() == 'MD':
+			atrb.append(' '.join(cousin.flatten()))
+
 	return atrb
 
 
@@ -360,7 +360,7 @@ def find_attributes(node):
 	# Searching all the sibling of grand-parent of the node
 	# Here we are looking for verb phrase and its children only
 	#print attrs
-	if len(attrs)==0 or gdad.parent().label()=='S':
+	if len(attrs)==0 or gdad.parent().label()=='S' or gdad.parent().label()=='FRAG':
 		ggdad = gdad.parent()
 
 		if(ggdad.label() != 'ROOT'):
@@ -384,9 +384,17 @@ def find_attributes(node):
 							attrs.append(word)
 
 				elif s.label() == 'RB':
-					attrs.append(' '.join(s.flatten()))
+					attrs.append( ' '.join(s.flatten()))
 
+	ggdad = gdad.parent()
+	if ggdad.parent().label() == 'FRAG':
+		ancestor = ggdad.parent()
+		for successor in ancestor:
+			if successor == ggdad:
+				continue
 
+			if successor.label() == 'RB':
+				attrs.append(' '.join(successor.flatten()))
 
 	return attrs
 
@@ -399,6 +407,7 @@ def parsetreeAnalysis(text):
 		#tree.pretty_print()
 
 		np = dict()
+		rel2 = dict()
 		# FINDING THE NP AND ITS CORRESPONDING NOUN OR PRONOUN
 		for s in tree.subtrees(lambda tree: tree.label() == 'NP'):
 			'''
@@ -424,8 +433,8 @@ def parsetreeAnalysis(text):
 			st = ' '.join(val)
 			rel2[key] = st
 
-		print rel2
-		rel2.clear()
+		#print rel2
+		return rel2
 
 	# THIS PART CHECKS FOR ERRORS, IF ANY, AND REPORTS THE FAILURE	
 	except Exception as e:
@@ -458,6 +467,7 @@ def merge (l, r):
 
 def merge_dictionaries(rel, rel2):
 	fin_rel = dict()
+	#print rel, rel2
 	for key, val in rel.items():
 		if key in rel2.keys():
 			val2 = rel2[key]
@@ -473,6 +483,7 @@ def merge_dictionaries(rel, rel2):
 		if key not in (fin_rel.keys()):
 			fin_rel[key] = val
 	
+	#print fin_rel
 	return fin_rel
 
 
@@ -490,7 +501,7 @@ def merge_dictionaries(rel, rel2):
 '''
 #-----------------------------------------------
 if __name__=="__main__" :
-	text = "The room was dirty. the manager was cruel. the fan was not working."
+	text = "Although staff behaviout was very nice as I said"
 	# print (text)
 
 	# op = cr.correct_spell(text)
@@ -513,7 +524,7 @@ if __name__=="__main__" :
 		if(res2 != None):
 			print res2
 		
-		kvp = merge_dictionaries(rel, rel2)
+		kvp = merge_dictionaries(res, res2)
 		print "\nThe final key value pairs are"
 		print kvp
 
