@@ -252,13 +252,14 @@ def adjective_phrase_attrb(node):
 		elif child.label() == 'RB':
 			atrb.append(' '.join(child.flatten()))
 
-		elif cousin.label() == 'CD':
-			atrb.append(' '.join(cousin.flatten()))
+		elif child.label() == 'CD':
+			atrb.append(' '.join(child.flatten()))
 
 	return atrb
 
 def verb_phrase_attrb(node):
 	atrb = []
+
 	for cousin in node:
 		#print cousin.label()
 		if cousin.label() == 'ADJP':
@@ -361,10 +362,12 @@ def find_attributes(node):
 	#print attrs
 	if len(attrs)==0 or gdad.parent().label()=='S':
 		ggdad = gdad.parent()
+
 		if(ggdad.label() != 'ROOT'):
 			for s in ggdad:
 				if s==gdad:
 					continue
+				#print s
 				if s.label() == 'VP':
 					tmp = verb_phrase_attrb(s)
 					if len(tmp) > 0:
@@ -379,6 +382,9 @@ def find_attributes(node):
 					if len(tmp) > 0:
 						for word in tmp:
 							attrs.append(word)
+
+				elif s.label() == 'RB':
+					attrs.append(' '.join(s.flatten()))
 
 
 
@@ -484,7 +490,7 @@ def merge_dictionaries(rel, rel2):
 '''
 #-----------------------------------------------
 if __name__=="__main__" :
-	text = "The hotel manager is a cunning person. He is a cheater."
+	text = "Bed was nice and clean "
 	# print (text)
 
 	# op = cr.correct_spell(text)
