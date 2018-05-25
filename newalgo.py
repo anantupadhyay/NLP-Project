@@ -490,7 +490,7 @@ def merge_dictionaries(rel, rel2):
 '''
 #-----------------------------------------------
 if __name__=="__main__" :
-	text = "the hotel is located between jaipur and delhi"
+	text = "The room was dirty. the manager was cruel. the fan was not working."
 	# print (text)
 
 	# op = cr.correct_spell(text)
@@ -513,9 +513,9 @@ if __name__=="__main__" :
 		if(res2 != None):
 			print res2
 		
-		# kvp = merge_dictionaries(rel, rel2)
-		# print "\nThe final key value pairs are"
-		# print kvp
+		kvp = merge_dictionaries(rel, rel2)
+		print "\nThe final key value pairs are"
+		print kvp
 
 # ------------------------------------------------------
 '''
