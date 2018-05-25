@@ -490,7 +490,7 @@ def merge_dictionaries(rel, rel2):
 '''
 #-----------------------------------------------
 if __name__=="__main__" :
-	text = "The place is great, but the biggest con is that it is situated right next to the road, so you might have problem sleeping at night. Otherwise, the staff is really friendly and well-mannered. Didnt have any problem during the stay. "
+	text = "the hotel is located between jaipur and delhi"
 	# print (text)
 
 	# op = cr.correct_spell(text)
