@@ -511,7 +511,7 @@ def run_thread(sen, lock):
 #-----------------------------------------------
 
 if __name__=="__main__" :
-	text = "The fan above the room was dirty. The ac was not working. The room service was good. The overall experience was mixed."
+	text = "Heater could be there. I would not recommend the hotel. the fan above the bed was dirty. We received only one towel. The manager was cruel."
 	# print (text)
 
 	# op = cr.correct_spell(text)
@@ -538,6 +538,13 @@ if __name__=="__main__" :
 
 	
 	print finalDic
+
+	with open('outputfile.txt', 'w') as fout:
+		for x in xrange(len(finalDic)):
+			for k,v in finalDic[x].items():
+				fout.write(k)
+				fout.write(": "+v)
+				fout.write('\n')
 # ------------------------------------------------------
 '''
 	CONGRATS! YOU HAVE ARRIVED AT THE END OF CODE...
