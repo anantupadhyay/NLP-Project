@@ -503,6 +503,22 @@ def run_thread(sen, lock):
 	finalDic.append(kvp)
 	lock.release()
 	
+def remove_stop_words(stopwordList):
+	try:
+		print stopwordList
+		for x in range(len(finalDic)):
+			for k,v in finalDic[x].items():
+				for word in v.split():
+					print word
+					if word in stopwordList:
+						v = v.replace(word, '')
+
+				finalDic[x][k] = v
+
+		print finalDic
+
+	except:
+		return "An error occured"
 
 #-----------------------------------------------
 '''
@@ -511,7 +527,7 @@ def run_thread(sen, lock):
 #-----------------------------------------------
 
 if __name__=="__main__" :
-	text = "Heater could be there. I would not recommend the hotel. the fan above the bed was dirty. We received only one towel. The manager was cruel."
+	text = "The room was dirty. the manager was cruel. the fan was not working. the ac is working"
 	# print (text)
 
 	# op = cr.correct_spell(text)
@@ -539,12 +555,15 @@ if __name__=="__main__" :
 	
 	print finalDic
 
-	with open('outputfile.txt', 'w') as fout:
-		for x in xrange(len(finalDic)):
-			for k,v in finalDic[x].items():
-				fout.write(k)
-				fout.write(": "+v)
-				fout.write('\n')
+	stopwordList = set(line.strip() for line in open('stopwords.txt'))
+	print remove_stop_words(stopwordList)
+	print('-'*110)
+	# with open('outputfile.txt', 'w') as fout:
+	# 	for x in xrange(len(finalDic)):
+	# 		for k,v in finalDic[x].items():
+	# 			fout.write(k)
+	# 			fout.write(": "+v)
+	# 			fout.write('\n')
 # ------------------------------------------------------
 '''
 	CONGRATS! YOU HAVE ARRIVED AT THE END OF CODE...
