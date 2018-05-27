@@ -59,7 +59,7 @@ def resolve_coreference_in_text(text):
 	return new_text
 
 if __name__=="__main__" :
-	txt = "We reached on 24.05.2018. the staff was good. they treated us well. they were nice."
+	txt = "Ashutosh is in gurgaon. He is my friend"
 	text = correct_spell(txt)
 	print text
 	text = text.encode("utf-8")
