@@ -282,6 +282,9 @@ def noun_phrase_attrb(node):
 		elif child.label() == 'ADVP':
 			atrb.append(' '.join(child.flatten()))
 
+		elif child.label() == 'CD':
+			atrb.append(' '.join(child.flatten()))
+
 	return atrb
 
 
@@ -361,6 +364,9 @@ def verb_phrase_attrb(node):
 		elif cousin.label() == 'MD':
 			atrb.append(' '.join(cousin.flatten()))
 
+		elif cousin.label() == 'VB':
+			atrb.append(' '.join(cousin.flatten()))
+
 	return atrb
 
 
@@ -382,7 +388,7 @@ def find_attributes(node):
 
 	# Searching all the uncles of the node
 	for uncle in gdad:
-		#print uncle[0]
+		#print uncle
 		if(uncle == dad):
 			continue
 		# Checking if directly a adverb is present, then append it to attribute list
@@ -431,13 +437,14 @@ def find_attributes(node):
 	#print attrs
 	if len(attrs)==0 or gdad.parent().label()=='S' or gdad.parent().label()=='FRAG':
 		ggdad = gdad.parent()
-
+		
 		if(ggdad.label() != 'ROOT'):
 			for s in ggdad:
 				if s==gdad:
 					continue
 				#print s
 				if s.label() == 'VP':
+					#print "here"
 					tmp = verb_phrase_attrb(s)
 					if len(tmp) > 0:
 						for word in tmp:
@@ -453,6 +460,15 @@ def find_attributes(node):
 							attrs.append(word)
 
 				elif s.label() == 'RB':
+					attrs.append(' '.join(s.flatten()))
+
+				elif s.label() == 'ADJP':
+					tmp = adjective_phrase_attrb(s)
+					if len(tmp) > 0:
+						for word in tmp:
+							attrs.append(word)
+
+				elif s.label() == 'ADVP':
 					attrs.append(' '.join(s.flatten()))
 
 
@@ -563,8 +579,8 @@ def merge_dictionaries(rel, rel2):
 def run_thread(sent, lock):
 	sen = sent.translate(None, string.punctuation)
 	#print sen
-	res = (getStanfordAnalysis(sen))
-	#print res
+	#res = (getStanfordAnalysis(sen))
+	res = {}
 	
 	res2 = (parsetreeAnalysis(sen))
 	#print res2
@@ -627,7 +643,7 @@ def remove_stop_words(stopwordList):
 #-----------------------------------------------
 
 if __name__=="__main__" :
-	text = "he is wrong, you are right"
+	text = "Yoga-lovers can practice on the rooftop and sunrise is the perfect time as the hostel is totally quiet early in the morning."
 	# print (text)
 
 	# op = cr.correct_spell(text)
@@ -645,7 +661,7 @@ if __name__=="__main__" :
 		#print sent
 		# print type(sen)
 		sen = sent.encode("utf-8")
-		#print type(sen)
+		print sen
 		t[x] = threading.Thread(target=run_thread, args=(sen, lock,))
 		t[x].start()
 		x += 1
