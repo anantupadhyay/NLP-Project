@@ -351,7 +351,9 @@ def verb_phrase_attrb(node):
 			atrb.append(' '.join(cousin.flatten()))
 
 		elif ((cousin.label() == 'VBN') or (cousin.label() == 'VBG') or (cousin.label() == 'RB') or (cousin.label() == 'VBP') or (cousin.label() == 'VBZ')):
-			atrb.append(cousin[0])
+			atrb.append(' '.join(cousin.flatten()))
+
+			#print "here", atrb, node
 		# the leaves() method returns a list of node
 		elif cousin.label() == 'VP':
 			tmp = verb_phrase_attrb(cousin)
@@ -379,6 +381,56 @@ def verb_phrase_attrb(node):
 
 	return atrb
 
+def ucp_phrase(node):
+	atrb = []
+
+	for cousin in node:
+		#print cousin.label()
+		if cousin.label() == 'ADJP':
+			tmp = adjective_phrase_attrb(cousin)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+		#print ch[0]
+		elif cousin.label() == 'ADVP':
+			atrb.append(' '.join(cousin.flatten()))
+
+		elif ((cousin.label() == 'VBN') or (cousin.label() == 'VBG') or (cousin.label() == 'RB') or (cousin.label() == 'VBP') or (cousin.label() == 'VBZ')):
+			atrb.append(' '.join(cousin.flatten()))
+
+		elif cousin.label() == 'VP':
+			tmp = verb_phrase_attrb(cousin)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+
+		elif cousin.label() == 'UCP':
+			tmp = ucp_phrase(cousin)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+		# if cousin is a noun phrase
+		elif (cousin.label() == 'NP'):
+			tmp = noun_phrase_attrb(cousin)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+
+		elif cousin.label() == 'RB':
+			atrb.append(' '.join(cousin.flatten()))
+
+		elif cousin.label() == 'CD':
+			atrb.append(' '.join(cousin.flatten()))
+
+		elif cousin.label() == 'MD':
+			atrb.append(' '.join(cousin.flatten()))
+
+		elif cousin.label() == 'VB':
+			atrb.append(' '.join(cousin.flatten()))
+
+	return atrb
+
+
 
 def find_attributes(node):
 	attrs = []
@@ -390,6 +442,13 @@ def find_attributes(node):
 	for sibling in dad:
 		if ((sibling.label() == 'JJ') or (sibling.label() == 'JJS') or (sibling.label() == 'RB') or (sibling.label() == 'CD')):
 			attrs.append(sibling[0])
+
+		elif sibling.label() == 'ADJP':
+			tmp = adjective_phrase_attrb(sibling)
+			if len(tmp) > 0:
+				for word in tmp:
+					attrs.append(word)
+
 		elif sibling.label() == 'DT':
 			x = sibling[0].lower()
 			if x=='no' or x=='not':
@@ -398,15 +457,22 @@ def find_attributes(node):
 
 	# Searching all the uncles of the node
 	for uncle in gdad:
-		#print uncle
+		if gdad == None:
+			break
 		if(uncle == dad):
 			continue
 		# Checking if directly a adverb is present, then append it to attribute list
 		if((uncle.label() == 'RB')):
 			attrs.append(uncle[0])
 
-		elif uncle.label() == 'VB':
+		elif uncle.label() == 'VB' or uncle.label()=='VBN':
 			attrs.append(' '.join(uncle.flatten()))
+
+		elif uncle.label() == 'UCP':
+			tmp = ucp_phrase(uncle)
+			if len(tmp) > 0:
+				for word in tmp:
+					attrs.append(word)
 		
 		# If it is a verb phrase, then check all the children of the VP
 		elif (uncle.label() == 'VP'):
@@ -445,7 +511,7 @@ def find_attributes(node):
 	# Searching all the sibling of grand-parent of the node
 	# Here we are looking for verb phrase and its children only
 	#print attrs
-	if len(attrs)==0 or gdad.parent().label()=='S' or gdad.parent().label()=='FRAG':
+	if ((gdad.parent()!=None) and (len(attrs)==0 or gdad.parent().label()=='S' or gdad.parent().label()=='FRAG' or gdad.parent().label()=='VP')):
 		ggdad = gdad.parent()
 		
 		if(ggdad.label() != 'ROOT'):
@@ -688,7 +754,12 @@ def namedEntityRecognisition(output, text):
 #-----------------------------------------------
 
 if __name__=="__main__" :
-	text = "The hotel manager was cruel."
+	text = "I was not provided blanket at night"
+	text = "the fan above the bed is dirty"
+	text = "Very limited snacks and food items available."
+	text = "The restaurant serves very reasonably priced and quality cuisine."
+	text = "The bar is decently stocked."
+	text = "Courteous staff and overall a value for money."
 	# print (text)
 
 	# op = cr.correct_spell(text)
