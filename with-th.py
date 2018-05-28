@@ -64,6 +64,8 @@ def cleaner_function(text):
 	CLEANING OF TEXT ENDS HERE
 '''
 
+# ---------------------------------------------------------------------------------------------
+
 '''
 	EXTRACTION BASED ON POS AND DEPENDENCY BEGINS HERE !
 '''
@@ -558,15 +560,15 @@ def merge_dictionaries(rel, rel2):
 
 def run_thread(sen, lock):
 	res = (getStanfordAnalysis(sen))
-	print res
+	#print res
 
 	res2 = (parsetreeAnalysis(sen))
-	print res2
+	#print res2
 	
 	kvp = merge_dictionaries(res, res2)
-	print "\nThe final key value pairs are"
-	print kvp
-	print ('*'*100)
+	#print "\nThe final key value pairs are"
+	#print kvp
+	#print ('*'*100)
 	#global xx
 	lock.acquire()
 	finalDic.append(kvp)
@@ -648,6 +650,7 @@ if __name__=="__main__" :
 	stopwordList = set(line.strip() for line in open('stopwords.txt'))
 	print remove_stop_words(stopwordList)
 	print('-'*110)
+
 	# with open('outputfile.txt', 'w') as fout:
 	# 	for x in xrange(len(finalDic)):
 	# 		for k,v in finalDic[x].items():
