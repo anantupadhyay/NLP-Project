@@ -7,6 +7,7 @@ import coreference_resolution as cr
 import threading
 import re
 import itertools
+import string
 
 # Defining the global list that would contain the final key value pair of sentences
 finalDic = list()
@@ -559,8 +560,9 @@ def merge_dictionaries(rel, rel2):
 '''
 # -----------------------------------------------------------------------------
 
-def run_thread(sen, lock):
-	sen = sen.replace('.', '')
+def run_thread(sent, lock):
+	sen = sent.translate(None, string.punctuation)
+	#print sen
 	res = (getStanfordAnalysis(sen))
 	#print res
 	
@@ -625,7 +627,7 @@ def remove_stop_words(stopwordList):
 #-----------------------------------------------
 
 if __name__=="__main__" :
-	text = "The hostel is not at all maintained. As we had to use their swimming pool it was in a bad shape, the water they say is filtered once in 6 months."
+	text = "he is wrong, you are right"
 	# print (text)
 
 	# op = cr.correct_spell(text)
@@ -639,10 +641,11 @@ if __name__=="__main__" :
 	lock = threading.Lock()
 	t = [None]*len(txt)
 	x = 0
-	for sen in txt:
-		print sen
+	for sent in txt:
+		#print sent
 		# print type(sen)
-		sen = sen.encode("utf-8")
+		sen = sent.encode("utf-8")
+		#print type(sen)
 		t[x] = threading.Thread(target=run_thread, args=(sen, lock,))
 		t[x].start()
 		x += 1

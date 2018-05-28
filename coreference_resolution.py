@@ -56,10 +56,11 @@ def resolve_coreference_in_text(text):
 
 			new_text[idx-1] = new_text[idx-1].replace(word, key)
 
+	#print type(new_text[0])
 	return new_text
 
 if __name__=="__main__" :
-	txt = "Ashutosh is in gurgaon. He is my friend"
+	txt = "Aniket is in Pune. He is my friend"
 	text = correct_spell(txt)
 	print text
 	text = text.encode("utf-8")
