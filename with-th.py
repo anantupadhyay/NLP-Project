@@ -381,7 +381,7 @@ def find_attributes(node):
 
 	# Searching all the uncles of the node
 	for uncle in gdad:
-		#print uncle
+		#print uncle[0]
 		if(uncle == dad):
 			continue
 		# Checking if directly a adverb is present, then append it to attribute list
@@ -476,6 +476,7 @@ def parsetreeAnalysis(text):
 				and hence, each noun was counted twice.
 			'''
 			for n in s.subtrees(lambda n: n.label().startswith('NN') or n.label()=='PRP'):
+				#print "here"
 				vis = np.get(n[0], 0)
 				if(vis == 1):
 					continue
@@ -559,13 +560,19 @@ def merge_dictionaries(rel, rel2):
 # -----------------------------------------------------------------------------
 
 def run_thread(sen, lock):
+	sen = sen.replace('.', '')
 	res = (getStanfordAnalysis(sen))
 	#print res
-
+	
 	res2 = (parsetreeAnalysis(sen))
 	#print res2
-	
-	kvp = merge_dictionaries(res, res2)
+	kvp = dict()
+	if res and res2:
+		kvp = merge_dictionaries(res, res2)
+	elif res:
+		kvp = res
+	elif res2:
+		kvp = res2
 	#print "\nThe final key value pairs are"
 	#print kvp
 	#print ('*'*100)
@@ -618,7 +625,7 @@ def remove_stop_words(stopwordList):
 #-----------------------------------------------
 
 if __name__=="__main__" :
-	text = "The room wasn't dirty. the manager was cruel. the fan was not working. the ac is working. Hot tea should be served"
+	text = "The hostel is not at all maintained. As we had to use their swimming pool it was in a bad shape, the water they say is filtered once in 6 months."
 	# print (text)
 
 	# op = cr.correct_spell(text)
