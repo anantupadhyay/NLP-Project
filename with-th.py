@@ -477,10 +477,11 @@ def find_attributes(node):
 
 def parsetreeAnalysis(text):
 	try:
-
+		#print text
 		nlp = StanfordCoreNLP('http://13.127.253.52:9000/')
- 		output = nlp.annotate(text, properties={'annotators': 'dcoref','outputFormat':'json'})
+ 		output = nlp.annotate(text, properties={'annotators': 'parse','outputFormat':'json'})
  		parse_tree = output['sentences'][0]['parse']
+ 		#print parse_tree
 		tree = ParentedTree.convert(Tree.fromstring(parse_tree))
 		#tree.pretty_print()
 
@@ -581,7 +582,7 @@ def run_thread(sent, lock):
 	#print sen
 	#res = (getStanfordAnalysis(sen))
 	res = {}
-	
+	#print type(sen)
 	res2 = (parsetreeAnalysis(sen))
 	#print res2
 	kvp = dict()
@@ -635,6 +636,27 @@ def remove_stop_words(stopwordList):
 '''
 # =============================================================================
 
+# =============================================================================
+'''
+	---------------------NAMED ENTITY RECOGNISITION----------------------------
+'''
+# =============================================================================
+
+def namedEntityRecognisition(text):
+	nlp = StanfordCoreNLP('http://13.127.253.52:9000/')
+	output = nlp.annotate(text, properties={'annotators': 'kbp','outputFormat':'json'})
+	for x in range(len(output['sentences'][0]['entitymentions'])):
+		tmp = output['sentences'][0]['entitymentions'][x]['text']
+		fin = '-'.join(tmp.split())
+		text = text.replace(tmp, fin)
+	return text
+
+# =============================================================================
+'''
+	----------------NAMED ENTITY RECOGNISITION ENDS HERE-----------------------
+'''
+# =============================================================================
+
 
 #-----------------------------------------------
 '''
@@ -643,7 +665,7 @@ def remove_stop_words(stopwordList):
 #-----------------------------------------------
 
 if __name__=="__main__" :
-	text = "Yoga-lovers can practice on the rooftop and sunrise is the perfect time as the hostel is totally quiet early in the morning."
+	text = "The hotel manager was cruel"
 	# print (text)
 
 	# op = cr.correct_spell(text)
@@ -661,8 +683,10 @@ if __name__=="__main__" :
 		#print sent
 		# print type(sen)
 		sen = sent.encode("utf-8")
+		sen = namedEntityRecognisition(sen)
 		print sen
-		t[x] = threading.Thread(target=run_thread, args=(sen, lock,))
+		inp = sen.encode("utf-8")
+		t[x] = threading.Thread(target=run_thread, args=(inp, lock,))
 		t[x].start()
 		x += 1
 		#t.join()
