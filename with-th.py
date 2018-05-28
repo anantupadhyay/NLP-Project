@@ -12,9 +12,24 @@ import string
 # Defining the global list that would contain the final key value pair of sentences
 finalDic = list()
 
+def getCoreNLPAnalysis(text):
+	try:
+		nlp = StanfordCoreNLP('http://13.127.253.52:9000/')
+		output = nlp.annotate(text, properties={'annotators': "tokenize,ssplit,ner,regexner", 'pipelineLanguage': 'en', 'outputFormat':'json'})
+		#'annotators': 'tokenize,ssplit,pos,depparse,parse,dcoref'
+		#print output
+		#exit()
+		return output
+
+	except Exception as er:
+		print er
+		return 'Failure\n'
+
+# =================================================================================
 '''
 	DEFINING THE CLEANER FUNCTION TO PREPROCESS THE TEXT
 '''
+# =================================================================================
 
 def cleaner_function(text):
 	emojis = [(':-J', ' '), ('=^_^=', ' '), (':-o', ' '), ('=-D', ' '), ('>_<', ' '), ('(*_*)', ' '), 
@@ -70,14 +85,9 @@ def cleaner_function(text):
 '''
 	EXTRACTION BASED ON POS AND DEPENDENCY BEGINS HERE !
 '''
-def getStanfordAnalysis(text):
+def getDependencyAnalysis(output, text):
 	try:
-		nlp = StanfordCoreNLP('http://13.127.253.52:9000/')
-		output = nlp.annotate(text, properties={'annotators': 'dcoref','outputFormat':'json'})
-		#'annotators': 'tokenize,ssplit,pos,depparse,parse,dcoref'
 		#print(output['sentences'])
-		
-		
 		wjson = json.dumps(output['sentences'])
 		wjdata = json.loads(wjson)
 
@@ -478,9 +488,10 @@ def find_attributes(node):
 def parsetreeAnalysis(text):
 	try:
 		#print text
+		#print output
 		nlp = StanfordCoreNLP('http://13.127.253.52:9000/')
- 		output = nlp.annotate(text, properties={'annotators': 'parse','outputFormat':'json'})
- 		parse_tree = output['sentences'][0]['parse']
+		output = nlp.annotate(text, properties={'annotators': "parse", 'pipelineLanguage': 'en', 'outputFormat':'json'})
+		parse_tree = output['sentences'][0]['parse']
  		#print parse_tree
 		tree = ParentedTree.convert(Tree.fromstring(parse_tree))
 		#tree.pretty_print()
@@ -580,7 +591,7 @@ def merge_dictionaries(rel, rel2):
 def run_thread(sent, lock):
 	sen = sent.translate(None, string.punctuation)
 	#print sen
-	#res = (getStanfordAnalysis(sen))
+	#res = (getDependencyAnalysis(sen))
 	res = {}
 	#print type(sen)
 	res2 = (parsetreeAnalysis(sen))
@@ -642,13 +653,25 @@ def remove_stop_words(stopwordList):
 '''
 # =============================================================================
 
-def namedEntityRecognisition(text):
-	nlp = StanfordCoreNLP('http://13.127.253.52:9000/')
-	output = nlp.annotate(text, properties={'annotators': 'kbp','outputFormat':'json'})
-	for x in range(len(output['sentences'][0]['entitymentions'])):
-		tmp = output['sentences'][0]['entitymentions'][x]['text']
-		fin = '-'.join(tmp.split())
-		text = text.replace(tmp, fin)
+def namedEntityRecognisition(output, text):
+	rep = []
+	sen = ""
+	org = ""
+	for x in range(len(output['sentences'][0]['tokens'])):
+		tmp = output['sentences'][0]['tokens'][x]['ner']
+		if tmp != 'O':	
+			word = output['sentences'][0]['tokens'][x]['originalText']
+			org += word + " "
+			sen += word + "-"
+		else:
+			if len(sen) > 1:
+				#print sen
+				sen = sen[:-1]
+				org = org[:-1]
+				text = text.replace(org, sen)
+				sen = ""
+				org = ""
+
 	return text
 
 # =============================================================================
@@ -665,7 +688,7 @@ def namedEntityRecognisition(text):
 #-----------------------------------------------
 
 if __name__=="__main__" :
-	text = "The hotel manager was cruel"
+	text = "The hotel manager was cruel."
 	# print (text)
 
 	# op = cr.correct_spell(text)
@@ -683,9 +706,12 @@ if __name__=="__main__" :
 		#print sent
 		# print type(sen)
 		sen = sent.encode("utf-8")
-		sen = namedEntityRecognisition(sen)
+		op = getCoreNLPAnalysis(sen)
+		sen = namedEntityRecognisition(op, sen)
 		print sen
+		#print op
 		inp = sen.encode("utf-8")
+		#print type(inp)
 		t[x] = threading.Thread(target=run_thread, args=(inp, lock,))
 		t[x].start()
 		x += 1
