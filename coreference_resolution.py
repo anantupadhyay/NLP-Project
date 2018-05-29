@@ -61,10 +61,10 @@ def resolve_coreference_in_text(text):
 
 if __name__=="__main__" :
 	txt = "Aniket is in Pune. He is my friend"
-	text = correct_spell(txt)
-	print text
-	text = text.encode("utf-8")
+	# text = correct_spell(txt)
+	# print text
+	# text = text.encode("utf-8")
 	
-	var = resolve_coreference_in_text(text)
+	var = resolve_coreference_in_text(txt)
 	for sen in var:
 		print sen.encode("utf-8")

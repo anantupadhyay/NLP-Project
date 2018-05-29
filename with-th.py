@@ -15,7 +15,7 @@ finalDic = list()
 def getCoreNLPAnalysis(text):
 	try:
 		nlp = StanfordCoreNLP('http://13.127.253.52:9000/')
-		output = nlp.annotate(text, properties={'annotators': "tokenize,ssplit,ner,regexner", 'pipelineLanguage': 'en', 'outputFormat':'json'})
+		output = nlp.annotate(text, properties={'annotators': "tokenize,ssplit,ner,regexner,depparse", 'pipelineLanguage': 'en', 'outputFormat':'json'})
 		#'annotators': 'tokenize,ssplit,pos,depparse,parse,dcoref'
 		#print output
 		#exit()
@@ -72,7 +72,7 @@ def cleaner_function(text):
 		text = text.replace(k, v)
 
 	print('-'*100)
-	print (text)
+	print "Cleaned text is\n", text
 	print('-'*100)
 	return text
 
@@ -654,16 +654,15 @@ def merge_dictionaries(rel, rel2):
 '''
 # -----------------------------------------------------------------------------
 
-def run_thread(sent, lock):
+def run_thread(op, sent, lock):
 	sen = sent.translate(None, string.punctuation)
 	#print sen
-	#res = (getDependencyAnalysis(sen))
-	res = {}
-	#print type(sen)
+	res = (getDependencyAnalysis(op, sen))
+	#print res
 	res2 = (parsetreeAnalysis(sen))
 	#print res2
 	kvp = dict()
-	if res and res2:
+	if res and res2 and type(res)!=tuple and type(res2)!=tuple:
 		kvp = merge_dictionaries(res, res2)
 	elif res:
 		kvp = res
@@ -760,13 +759,14 @@ if __name__=="__main__" :
 	text = "The restaurant serves very reasonably priced and quality cuisine."
 	text = "The bar is decently stocked."
 	text = "Courteous staff and overall a value for money."
-	# print (text)
+	text = "The room was good but the ac stop working"
+	
+	print "Original Text is -> ", text
 
 	# op = cr.correct_spell(text)
 	# op = op.encode("utf-8")
 	# print op
 	# print type(op)
-	fin_kvp = dict()
 	clean_txt = cleaner_function(text)
 	txt = cr.resolve_coreference_in_text(clean_txt)
 	#print txt
@@ -779,11 +779,11 @@ if __name__=="__main__" :
 		sen = sent.encode("utf-8")
 		op = getCoreNLPAnalysis(sen)
 		sen = namedEntityRecognisition(op, sen)
-		print sen
+		print "Individual sentence is -> ", sen
 		#print op
 		inp = sen.encode("utf-8")
 		#print type(inp)
-		t[x] = threading.Thread(target=run_thread, args=(inp, lock,))
+		t[x] = threading.Thread(target=run_thread, args=(op, inp, lock,))
 		t[x].start()
 		x += 1
 		#t.join()
@@ -795,6 +795,8 @@ if __name__=="__main__" :
 	print finalDic
 
 	stopwordList = set(line.strip() for line in open('stopwords.txt'))
+	print('-'*110)
+	print ("Removing stop words, Final KVP are")
 	print remove_stop_words(stopwordList)
 	print('-'*110)
 
