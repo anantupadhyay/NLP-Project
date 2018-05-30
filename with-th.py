@@ -92,8 +92,8 @@ def getDependencyAnalysis(output, text):
 		wjdata = json.loads(wjson)
 
 
-# The code below deals with extracting noun and pronouns from the sentence and storing them in a dictionary (index:word)	
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		# The code below deals with extracting noun and pronouns from the sentence and storing them in a dictionary (index:word)	
+		#-----------------------------------------------------------------------------------------------------------------------
 		noun = dict()
 		rel = dict()
 
@@ -104,12 +104,12 @@ def getDependencyAnalysis(output, text):
 		# print ("The extracted nouns from the sentence are", noun)
 		# print ('#'*100)
 
-# Code for extracting noun ends here!		
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		# Code for extracting noun ends here!
+		#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 		
-# The Code here deals with extracting the dependencies of noun with adjectives and verbs
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		#Buddy Check token also
+		# The Code here deals with extracting the dependencies of noun with adjectives and verbs
+		# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		
 		for x in range(len(wjdata[0]['enhancedPlusPlusDependencies'])):
 			if((wjdata[0]['enhancedPlusPlusDependencies'][x]['dependent']) in noun.keys()):
 				#getting the index of the governor
@@ -140,13 +140,13 @@ def getDependencyAnalysis(output, text):
 						rel.setdefault(noun[(wjdata[0]['enhancedPlusPlusDependencies'][x]['governor'])], [])
 					rel[noun[(wjdata[0]['enhancedPlusPlusDependencies'][x]['governor'])]].append(wjdata[0]['enhancedPlusPlusDependencies'][x]['dependentGloss'])
 		
-# The part dealing with extracting adjective and verb dependencies from noun ends here!
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~		
+		# The part dealing with extracting adjective and verb dependencies from noun ends here!
+		# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~		
 
 
 
-# The following part deals with extracting negative and compound relations from the sentence
-# ============================================================================================================================================================================================================================================================================================================================================================
+		# The following part deals with extracting negative and compound relations from the sentence
+		# ============================================================================================================================================================================================================================================================================================================================================================
 		for x in range(len(wjdata[0]['enhancedPlusPlusDependencies'])):
 			if((wjdata[0]['enhancedPlusPlusDependencies'][x]['dep'] == 'neg')):
 				for key, val in rel.items():
@@ -203,10 +203,10 @@ def getDependencyAnalysis(output, text):
 						if(wjdata[0]['enhancedPlusPlusDependencies'][x]['governorGloss'] != key):
 							rel[key].insert(0, wjdata[0]['enhancedPlusPlusDependencies'][x]['governorGloss'])
 
-# This part ends here! 
-# =========================================================================================================================================================================================================================================
+		# This part ends here! 
+		# =========================================================================================================================================================================================================================================
 
-# This part prints the final key value pair
+		# This part prints the final key value pair
 		
 		for key, val in rel.items():
 			st = ""
@@ -220,15 +220,15 @@ def getDependencyAnalysis(output, text):
 		return rel
 		
 
-# The part reports error, if any, occured in the code
+	# The part reports error, if any, occured in the code
 
 	except Exception as e:
 		#print e
 		return 'failure',"An error has occured, Failed to Analyse Data, 9000 down"
 
-#The text analysis function ends here
-#.........................................................................................................................................................
-#*********************************************************************************************************************************************************
+	#The text analysis function ends here
+	#.........................................................................................................................................................
+	#*********************************************************************************************************************************************************
 
 
 
@@ -580,24 +580,20 @@ def parsetreeAnalysis(text):
 		np = dict()
 		rel2 = dict()
 		# FINDING THE NP AND ITS CORRESPONDING NOUN OR PRONOUN
-		for s in tree.subtrees(lambda tree: tree.label() == 'NP'):
-			'''
-				This part deals with the problem that the child of ROOT comes as NP,
-				and hence, each noun was counted twice.
-			'''
-			for n in s.subtrees(lambda n: n.label().startswith('NN') or n.label()=='PRP'):
-				#print "here"
-				vis = np.get(n[0], 0)
-				if(vis == 1):
-					continue
-				np[n[0]] = 1
-				rel2.setdefault(n[0], [])
+		for s in tree.subtrees(lambda tree: tree.label().startswith('NN') or tree.label()=='PRP'):
+			
+			#print s[0]
+			vis = np.get(s[0], 0)
+			if(vis == 1):
+				continue
+			np[s[0]] = 1
+			rel2.setdefault(s[0], [])
 
-				attr = find_attributes(n)
-				rel2[n[0]] = attr
-				#print attr
-				if len(attr)==0:
-					rel2.pop(n[0])
+			attr = find_attributes(s)
+			rel2[s[0]] = attr
+			#print attr
+			if len(attr)==0:
+				rel2.pop(s[0])
 
 		#print rel2
 		print ('\n')
@@ -672,8 +668,8 @@ def merge_dictionaries(rel, rel2):
 def run_thread(op, sent, lock):
 	#sen = sent.translate(None, string.punctuation)
 	#print sent
-	res = (getDependencyAnalysis(op, sen))
-	#res = {}
+	#res = (getDependencyAnalysis(op, sent))
+	res = {}
 	res2 = (parsetreeAnalysis(sent))
 	#print res2
 	kvp = dict()
@@ -781,6 +777,8 @@ if __name__=="__main__" :
 	text = "Food was cold but food was good. it should be eaten raw."
 	text = "Food was cold but it was good and it should be eaten raw."
 	#text = "the room was clean, beautiful, spacious and good"
+	text = "The room was dirty. New day. Looking for bugs in this part. A regular one."
+	text = "The room was dirty and the drower was empty"
 	
 	print "Original Text is -> ", text
 
