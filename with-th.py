@@ -352,7 +352,7 @@ def verb_phrase_attrb(node):
 
 		elif ((cousin.label() == 'VBN') or (cousin.label() == 'VBG') or (cousin.label() == 'RB') or (cousin.label() == 'VBP') or (cousin.label() == 'VBZ')):
 			tmp = ' '.join(cousin.flatten())
-			if tmp.lower() != 'is':
+			if tmp.lower() != "is":
 				atrb.append(tmp)
 
 			#print "here", atrb, node
@@ -399,7 +399,7 @@ def ucp_phrase(node):
 
 		elif ((cousin.label() == 'VBN') or (cousin.label() == 'VBG') or (cousin.label() == 'RB') or (cousin.label() == 'VBP') or (cousin.label() == 'VBZ')):
 			tmp = (' '.join(cousin.flatten()))
-			if tmp.lower() != 'is':
+			if tmp.lower() != "is":
 				atrb.append(tmp)
 
 		elif cousin.label() == 'VP':
@@ -441,10 +441,10 @@ def find_attributes(node):
 	dad = node.parent()
 	gdad = dad.parent()
 	#print node, dad, gdad
-	#print node
+	#print node[0]
 	# Searching all the siblings of the node
 	for sibling in dad:
-		if ((sibling.label() == 'JJ') or (sibling.label() == 'JJS') or (sibling.label() == 'RB') or (sibling.label() == 'CD')):
+		if ((sibling.label().startswith('JJ')) or (sibling.label() == 'RB') or (sibling.label() == 'CD')):
 			attrs.append(sibling[0])
 
 		elif sibling.label() == 'ADJP':
@@ -457,6 +457,11 @@ def find_attributes(node):
 			x = sibling[0].lower()
 			if x=='no' or x=='not':
 				attrs.append(x)
+
+		elif sibling.label() == 'VBG':
+			tmp = sibling[0].lower()
+			if tmp != "is":
+				attrs.append(tmp)
 		#print sibling[0][0]
 
 	# Searching all the uncles of the node
@@ -661,8 +666,8 @@ def merge_dictionaries(rel, rel2):
 def run_thread(op, sent, lock):
 	sen = sent.translate(None, string.punctuation)
 	#print sen
-	res = (getDependencyAnalysis(op, sen))
-	#print res
+	#res = (getDependencyAnalysis(op, sen))
+	res = {}
 	res2 = (parsetreeAnalysis(sen))
 	#print res2
 	kvp = dict()
@@ -764,6 +769,10 @@ if __name__=="__main__" :
 	text = "The bar is decently stocked."
 	text = "Courteous staff and overall a value for money."
 	text = "The room was good but the ac stop working"
+	text = "Staff is quite good and managing person is really good person I ever meet in my life (hotel)"
+	text = "smell of cigarettes smoking was there when I entered  rooms should be smelling good and fresh"
+	text = "Food was cold but it was good it should be eaten raw"
+	text = "Staff is quite good and the managing person is a really good person I have ever meet in my life (hotel)"
 	
 	print "Original Text is -> ", text
 
@@ -783,8 +792,11 @@ if __name__=="__main__" :
 		sen = sent.encode("utf-8")
 		op = getCoreNLPAnalysis(sen)
 		sen = namedEntityRecognisition(op, sen)
-		print "Individual sentence is -> ", sen
+		print "Individual sentence is -> ", sen.encode("utf-8")
 		#print op
+		sen = sen.replace("-LRB-", "(")
+		sen = sen.replace("-RRB-", ")")
+		#print sen
 		inp = sen.encode("utf-8")
 		#print type(inp)
 		t[x] = threading.Thread(target=run_thread, args=(op, inp, lock,))
@@ -802,7 +814,7 @@ if __name__=="__main__" :
 	print('-'*110)
 	print ("Removing stop words, Final KVP are")
 	print remove_stop_words(stopwordList)
-	print('-'*110)
+	print('-'*100)
 
 	# with open('outputfile.txt', 'w') as fout:
 	# 	for x in xrange(len(finalDic)):
