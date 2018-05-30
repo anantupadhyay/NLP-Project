@@ -1,20 +1,23 @@
-from gingerit.gingerit import GingerIt
+# -*- coding: utf-8 -*-
 
-text = "the got busi working .the got busi working. the got busi working. the got busi working . the got busi working .the got busi working. the got busi working. the got busi working ."
+# from gingerit.gingerit import GingerIt
 
-parser = GingerIt()
-print parser.parse(text)['result']
+# text = "the got busi working .the got busi working. the got busi working. the got busi working . the got busi working .the got busi working. the got busi working. the got busi working ."
+# text = "Klüft skräms inför på fédéral électoral große"
 
-print text
+# parser = GingerIt()
+# print parser.parse(text)['result']
+
+# print text
 
 
-# from googletrans import Translator
-# translator = Translator()
+from googletrans import Translator
+translator = Translator()
 
-# txt = "the got busi working .the got busi working. the got busi working. the got busi working . the got busi working .the got busi working. the got busi working. the got busi working ."
-# spell = translator.translate(txt, dest='en')
-# op = (spell.text).encode("utf-8")
-# print op
+txt = "Klüft skräms inför på fédéral électoral große stüff"
+spell = translator.translate(txt, dest='en')
+op = (spell.text).encode("utf-8")
+print op
 
 # import coreference_resolution as cr 
 

@@ -316,6 +316,12 @@ def adjective_phrase_attrb(node):
 				for word in tmp:
 					atrb.append(word)
 
+		elif child.label() == 'ADJP':
+			tmp = adjective_phrase_attrb(child)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+
 		elif child.label() == 'PP':
 			tmp = second_level_pp(child)
 			if len(tmp) > 0:
@@ -664,11 +670,11 @@ def merge_dictionaries(rel, rel2):
 # -----------------------------------------------------------------------------
 
 def run_thread(op, sent, lock):
-	sen = sent.translate(None, string.punctuation)
-	#print sen
-	#res = (getDependencyAnalysis(op, sen))
-	res = {}
-	res2 = (parsetreeAnalysis(sen))
+	#sen = sent.translate(None, string.punctuation)
+	#print sent
+	res = (getDependencyAnalysis(op, sen))
+	#res = {}
+	res2 = (parsetreeAnalysis(sent))
 	#print res2
 	kvp = dict()
 	if res and res2 and type(res)!=tuple and type(res2)!=tuple:
@@ -771,8 +777,10 @@ if __name__=="__main__" :
 	text = "The room was good but the ac stop working"
 	text = "Staff is quite good and managing person is really good person I ever meet in my life (hotel)"
 	text = "smell of cigarettes smoking was there when I entered  rooms should be smelling good and fresh"
-	text = "Food was cold but it was good it should be eaten raw"
 	text = "Staff is quite good and the managing person is a really good person I have ever meet in my life (hotel)"
+	text = "Food was cold but food was good. it should be eaten raw."
+	text = "Food was cold but it was good and it should be eaten raw."
+	#text = "the room was clean, beautiful, spacious and good"
 	
 	print "Original Text is -> ", text
 
