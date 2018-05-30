@@ -351,7 +351,9 @@ def verb_phrase_attrb(node):
 			atrb.append(' '.join(cousin.flatten()))
 
 		elif ((cousin.label() == 'VBN') or (cousin.label() == 'VBG') or (cousin.label() == 'RB') or (cousin.label() == 'VBP') or (cousin.label() == 'VBZ')):
-			atrb.append(' '.join(cousin.flatten()))
+			tmp = ' '.join(cousin.flatten())
+			if tmp.lower() != 'is':
+				atrb.append(tmp)
 
 			#print "here", atrb, node
 		# the leaves() method returns a list of node
@@ -396,7 +398,9 @@ def ucp_phrase(node):
 			atrb.append(' '.join(cousin.flatten()))
 
 		elif ((cousin.label() == 'VBN') or (cousin.label() == 'VBG') or (cousin.label() == 'RB') or (cousin.label() == 'VBP') or (cousin.label() == 'VBZ')):
-			atrb.append(' '.join(cousin.flatten()))
+			tmp = (' '.join(cousin.flatten()))
+			if tmp.lower() != 'is':
+				atrb.append(tmp)
 
 		elif cousin.label() == 'VP':
 			tmp = verb_phrase_attrb(cousin)
