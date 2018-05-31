@@ -425,7 +425,7 @@ def ucp_phrase(node):
 
 	return atrb
 
-def check_uplevel_cond(gdad):
+def check_uplevel_cond(gdad, attrs):
 	return (gdad.parent()!=None) and (gdad.label()!='S' and gdad.label()!='FRAG' and gdad.label()!='SBAR') and (len(attrs)==0 or gdad.parent().label()=='S' or gdad.parent().label()=='FRAG' or gdad.parent().label()=='VP')
 
 def find_attributes(node):
@@ -436,11 +436,9 @@ def find_attributes(node):
 	#print node[0]
 	# Searching all the siblings of the node
 	for sibling in dad:
-		if ((sibling.label().startswith('JJ')) or (sibling.label() == 'RB') or (sibling.label() == 'CD')):
-			attrs.append(sibling[0])
 
-		elif sibling.label() == 'ADJP':
-			tmp = adjective_phrase_attrb(sibling)
+		if sibling.label() == 'ADJP' or sibling.label()=='NP':
+			tmp = noun_verb_adj_attr(sibling)
 			if len(tmp) > 0:
 				for word in tmp:
 					attrs.append(word)
@@ -450,11 +448,11 @@ def find_attributes(node):
 			if x=='no' or x=='not':
 				attrs.append(x)
 
-		elif sibling.label() == 'VBG':
-			tmp = sibling[0].lower()
-			if tmp != "is":
-				attrs.append(tmp)
-		#print sibling[0][0]
+		else:
+			tmp = common_check(sibling)
+			if len(tmp) > 0:
+				for word in tmp:
+					attrs.append(word)
 
 	# Searching all the uncles of the node
 	for uncle in gdad:
@@ -499,7 +497,7 @@ def find_attributes(node):
 	# Searching all the sibling of grand-parent of the node
 	# Here we are looking for verb phrase and its children only
 	#print attrs
-	if (check_uplevel_cond(gdad)):
+	if (check_uplevel_cond(gdad, attrs)):
 		ggdad = gdad.parent()
 		
 		if(ggdad.label() != 'ROOT'):
@@ -541,7 +539,7 @@ def parsetreeAnalysis(text):
 		np = dict()
 		rel2 = dict()
 		# FINDING THE NP AND ITS CORRESPONDING NOUN OR PRONOUN
-		for s in tree.subtrees(lambda tree: tree.label().startswith('NN') or tree.label()=='PRP'):
+		for s in tree.subtrees(lambda tree: tree.label().startswith('NN')):
 			
 			#print s[0]
 			vis = np.get(s[0], 0)
@@ -726,13 +724,15 @@ def namedEntityRecognisition(output, text):
 #-----------------------------------------------
 
 if __name__=="__main__" :
+	text = "The fan above the bed was dirty"
 	text = "I was not provided blanket at night"
+	text = "We were only given one towel initially"
 	text = "the fan above the bed is dirty"
 	text = "Very limited snacks and food items available."
 	text = "The restaurant serves very reasonably priced and quality cuisine."
-	text = "The bar is decently stocked."
-	text = "Courteous staff and overall a value for money."
-	text = "The room was good but the ac stop working"
+	#text = "The bar is decently stocked."
+	#text = "Courteous staff and overall a value for money."
+	#text = "The room was good but the ac stop working"
 	#text = "Staff is quite good and managing person is really good person I ever meet in my life (hotel)"
 	#text = "smell of cigarettes smoking was there when I entered  rooms should be smelling good and fresh"
 	#text = "Staff is quite good and the managing person is a really good person I have ever meet in my life (hotel)"
