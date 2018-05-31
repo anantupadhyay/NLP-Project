@@ -242,12 +242,16 @@ def add_to_list(atrb, data):
 	if len(data) > 0:
 		for word in data:
 			atrb.append(word)
-
 	return atrb
 
+def check_for_not(atrb, node):
+	if node[0].lower=="no" or node[0].lower=="not":
+		atrb.append(node[0])
+	return atrb
 
 def common_check(child):
 	atrb = []
+	vb_check = ['VBN', 'VBP', 'VBZ']
 	#print child.parent().label(), child[0]
 	if child.label().startswith('JJ') or child.label()=='RB':
 		atrb.append(' '.join(child.flatten()))
@@ -261,18 +265,16 @@ def common_check(child):
 	elif child.label()=='VB':
 		atrb.append(' '.join(child.flatten()))
 
-	elif child.label()=='VBG':
-		tmp = ' '.join(child.flatten())
-		if tmp.lower() != 'is':
-			atrb.append(tmp)
+	elif child.parent().label()=='VP':
+		if child.label() in vb_check:
+			wrd = (' '.join(child.flatten()))
+			atrb.append(wrd) and wrd.lower()!="is"
 
 	#print(atrb)
 	return atrb
 
-
 def noun_verb_adj_attr(node):
 	atrb = []
-
 	for child in node:
 		#print child.label()
 		if child.label()=='ADJP':
@@ -288,7 +290,6 @@ def noun_verb_adj_attr(node):
 			atrb = add_to_list(atrb, tmp)
 
 		else:
-			#print "Going for common_check"
 			tmp = common_check(child)
 			atrb = add_to_list(atrb, tmp)
 
@@ -298,9 +299,7 @@ def second_level_pp(node):
 	atrb = []
 	for child in node:
 		if child.label() == 'DT':
-			x = child[0].lower()
-			if x=='no' or x=='not':
-				atrb.append(x)
+			atrb = check_for_not(atrb, child)
 
 		elif child.label() == 'IN':
 			atrb.append(' '.join(child.flatten()))
@@ -315,9 +314,7 @@ def noun_phrase_attrb(node):
 	atrb = []
 	for child in node:
 		if child.label() == 'DT':
-			x = child[0].lower()
-			if x=='no' or x=='not':
-				atrb.append(x)
+			atrb = check_for_not(atrb, child)
 
 		elif child.label().startswith('NN'):
 			atrb.append(' '.join(child.flatten()))
@@ -340,9 +337,6 @@ def adjective_phrase_attrb(node):
 			tmp = second_level_pp(child)
 			atrb = add_to_list(atrb, tmp)
 
-		elif child.label() == 'MD':
-			atrb.append(' '.join(child.flatten()))
-
 		elif child.label()=='NP' or child.label()=='VP' or child.label()=='ADJP':
 			tmp = noun_verb_adj_attr(child)
 			atrb = add_to_list(atrb, tmp)
@@ -358,16 +352,7 @@ def verb_phrase_attrb(node):
 
 	for cousin in node:
 		#print cousin.label()
-		if ((cousin.label() == 'VBN') or (cousin.label() == 'VBG') or (cousin.label() == 'RB') or (cousin.label() == 'VBP') or (cousin.label() == 'VBZ')):
-			tmp = ' '.join(cousin.flatten())
-			#print "here in verb phrase"
-			if tmp.lower() != "is":
-				atrb.append(tmp)
-
-		elif cousin.label() == 'VB':
-			atrb.append(' '.join(cousin.flatten()))
-
-		elif cousin.label()=='NP' or cousin.label()=='VP' or cousin.label()=='ADJP':
+		if cousin.label()=='NP' or cousin.label()=='VP' or cousin.label()=='ADJP':
 			#print "HERE inside"
 			tmp = noun_verb_adj_attr(cousin)
 			atrb = add_to_list(atrb, tmp)
@@ -419,9 +404,7 @@ def find_attributes(node):
 			attrs = add_to_list(attrs, tmp)
 
 		elif sibling.label() == 'DT':
-			x = sibling[0].lower()
-			if x=='no' or x=='not':
-				attrs.append(x)
+			attrs = check_for_not(attrs, sibling)
 
 		else:
 			tmp = common_check(sibling)
@@ -535,50 +518,14 @@ def parsetreeAnalysis(text):
 # ---------------------------------------------------------------------------------------------------
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-'''
-	THIS PART MERGES THE TWO DICTIONARIES INTO ONE
-'''
+#	THIS PART MERGES THE TWO DICTIONARIES INTO ONE
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-def merge (l, r):
-    m = difflib.SequenceMatcher(None, l, r)
-    for o, i1, i2, j1, j2 in m.get_opcodes():
-        if o == 'equal':
-            yield l[i1:i2]
-        elif o == 'delete':
-            yield l[i1:i2]
-        elif o == 'insert':
-            yield r[j1:j2]
-        elif o == 'replace':
-            yield l[i1:i2]
-            yield r[j1:j2]
-
-def merge_dictionaries(rel, rel2):
-	fin_rel = dict()
-	for key, val in rel.items():
-		if key in rel2.keys():
-			val2 = rel2[key]
-			merged = merge(val.lower().split(), val2.lower().split())
-			new_val = ' '.join(' '.join(x) for x in merged)
-			#print new_val
-			fin_rel[key] = new_val
-		else:
-			#pass
-			fin_rel[key] = val
-
-	for key, val in rel2.items():
-		if key not in (fin_rel.keys()):
-			fin_rel[key] = val
-	
-	return fin_rel
-
-
+def merge_dictionaries(x, y):
+	kvp = { key: ' '.join(list(set().union(x[key].split(),y[key].split()))) if key in y else ' '.join(x[key]) for key in set(x).union(set(y))}
+	return kvp
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-'''
-	CODE FOR MERGING ENDS HERE
-'''
+#	CODE FOR MERGING ENDS HERE
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
 # -----------------------------------------------------------------------------
 '''
 	THIS PART CONTAINS THE FUNCTION FOR RUNNING THREADS
@@ -607,7 +554,6 @@ def run_thread(op, sent, lock):
 	lock.acquire()
 	finalDic.append(kvp)
 	lock.release()
-
 # -----------------------------------------------------------------------------
 '''
 	THREAD FUNCTION ENDS HERE
@@ -685,13 +631,14 @@ def namedEntityRecognisition(output, text):
 #-----------------------------------------------
 
 if __name__=="__main__" :
-	text = "The fan above the bed was dirty"
-	text = "I was not provided blanket at night"
-	text = "We were only given one towel initially"
-	text = "the fan above the bed is dirty"
-	text = "Very limited snacks and food items available."
-	text = "The restaurant serves very reasonably priced and quality cuisine."
-	#text = "The bar is decently stocked."
+	# text = "The fan above the bed was dirty"
+	# text = "I was not provided blanket at night"
+	# text = "We were only given one towel initially"
+	# text = "the fan above the bed is dirty"
+	# text = "Very limited snacks and food items available."
+	# text = "The restaurant serves very reasonably priced and quality cuisine."
+	# text = "The food is not good"
+	text = "The bar is decently stocked."
 	#text = "Courteous staff and overall a value for money."
 	#text = "The room was good but the ac stop working"
 	#text = "Staff is quite good and managing person is really good person I ever meet in my life (hotel)"
@@ -735,7 +682,6 @@ if __name__=="__main__" :
 
 	for x in range(len(txt)):
 		t[x].join()
-
 	
 	print finalDic
 
