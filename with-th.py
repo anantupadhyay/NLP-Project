@@ -240,7 +240,7 @@ def getDependencyAnalysis(output, text):
 
 def common_check(child):
 	atrb = []
-	#print child.label()
+	#print child.parent().label(), child[0]
 	if child.label().startswith('JJ') or child.label()=='RB':
 		atrb.append(' '.join(child.flatten()))
 
@@ -249,6 +249,14 @@ def common_check(child):
 
 	elif child.label()=='ADVP':
 		atrb.append(' '.join(child.flatten()))
+
+	elif child.label()=='VB':
+		atrb.append(' '.join(child.flatten()))
+
+	elif child.label()=='VBG':
+		tmp = ' '.join(child.flatten())
+		if tmp.lower() != 'is':
+			atrb.append(tmp)
 
 	#print(atrb)
 	return atrb
@@ -364,12 +372,9 @@ def verb_phrase_attrb(node):
 		#print cousin.label()
 		if ((cousin.label() == 'VBN') or (cousin.label() == 'VBG') or (cousin.label() == 'RB') or (cousin.label() == 'VBP') or (cousin.label() == 'VBZ')):
 			tmp = ' '.join(cousin.flatten())
-			print "here in verb phrase"
+			#print "here in verb phrase"
 			if tmp.lower() != "is":
 				atrb.append(tmp)
-
-		elif cousin.label() == 'MD':
-			atrb.append(' '.join(cousin.flatten()))
 
 		elif cousin.label() == 'VB':
 			atrb.append(' '.join(cousin.flatten()))
@@ -406,9 +411,6 @@ def ucp_phrase(node):
 				for word in tmp:
 					atrb.append(word)
 
-		elif cousin.label() == 'VB':
-			atrb.append(' '.join(cousin.flatten()))
-
 		elif cousin.label()=='NP' or cousin.label()=='VP' or cousin.label()=='ADJP':
 			tmp = noun_verb_adj_attr(cousin)
 			if len(tmp) > 0:
@@ -423,7 +425,8 @@ def ucp_phrase(node):
 
 	return atrb
 
-
+def check_uplevel_cond(gdad):
+	return (gdad.parent()!=None) and (gdad.label()!='S' and gdad.label()!='FRAG' and gdad.label()!='SBAR') and (len(attrs)==0 or gdad.parent().label()=='S' or gdad.parent().label()=='FRAG' or gdad.parent().label()=='VP')
 
 def find_attributes(node):
 	attrs = []
@@ -473,21 +476,8 @@ def find_attributes(node):
 					attrs.append(word)
 		
 		# If it is a verb phrase, then check all the children of the VP
-		elif (uncle.label() == 'VP'):
-			#print uncle[0][0]
-			tmp = verb_phrase_attrb(uncle)
-			if len(tmp) > 0:
-				for word in tmp:
-					attrs.append(word)
-
-		elif uncle.label() == 'ADJP':
-			tmp = adjective_phrase_attrb(uncle)
-			if len(tmp) > 0:
-				for word in tmp:
-					attrs.append(word)
-
-		elif uncle.label() == 'NP':
-			tmp = noun_phrase_attrb(uncle)
+		elif ((uncle.label()=='VP') or (uncle.label()=='NP') or (uncle.label()=='ADJP')):
+			tmp = noun_verb_adj_attr(uncle)
 			if len(tmp) > 0:
 				for word in tmp:
 					attrs.append(word)
@@ -509,7 +499,7 @@ def find_attributes(node):
 	# Searching all the sibling of grand-parent of the node
 	# Here we are looking for verb phrase and its children only
 	#print attrs
-	if ((gdad.parent()!=None) and (len(attrs)==0 or gdad.parent().label()=='S' or gdad.parent().label()=='FRAG' or gdad.parent().label()=='VP')):
+	if (check_uplevel_cond(gdad)):
 		ggdad = gdad.parent()
 		
 		if(ggdad.label() != 'ROOT'):
@@ -517,9 +507,9 @@ def find_attributes(node):
 				if s==gdad:
 					continue
 				#print s
-				if s.label() == 'VP':
+				if s.label()=='VP' or s.label()=='NP' or s.label()=='ADJP':
 					#print "here"
-					tmp = verb_phrase_attrb(s)
+					tmp = noun_verb_adj_attr(s)
 					if len(tmp) > 0:
 						for word in tmp:
 							attrs.append(word)
@@ -527,20 +517,8 @@ def find_attributes(node):
 				elif s.label() == 'VB':
 					attrs.append(' '.join(s.flatten()))
 
-				elif s.label() == 'NP':
-					tmp = noun_phrase_attrb(s)
-					if len(tmp) > 0:
-						for word in tmp:
-							attrs.append(word)
-
 				elif s.label() == 'RB':
 					attrs.append(' '.join(s.flatten()))
-
-				elif s.label() == 'ADJP':
-					tmp = adjective_phrase_attrb(s)
-					if len(tmp) > 0:
-						for word in tmp:
-							attrs.append(word)
 
 				elif s.label() == 'ADVP':
 					attrs.append(' '.join(s.flatten()))
@@ -805,13 +783,6 @@ if __name__=="__main__" :
 	print ("Removing stop words, Final KVP are")
 	print remove_stop_words(stopwordList)
 	print('-'*100)
-
-	# with open('outputfile.txt', 'w') as fout:
-	# 	for x in xrange(len(finalDic)):
-	# 		for k,v in finalDic[x].items():
-	# 			fout.write(k)
-	# 			fout.write(": "+v)
-	# 			fout.write('\n')
 # ------------------------------------------------------
 '''
 	CONGRATS! YOU HAVE ARRIVED AT THE END OF CODE...
