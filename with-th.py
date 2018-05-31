@@ -238,6 +238,14 @@ def getDependencyAnalysis(output, text):
 '''
 #------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+def add_to_list(atrb, data):
+	if len(data) > 0:
+		for word in data:
+			atrb.append(word)
+
+	return atrb
+
+
 def common_check(child):
 	atrb = []
 	#print child.parent().label(), child[0]
@@ -269,28 +277,20 @@ def noun_verb_adj_attr(node):
 		#print child.label()
 		if child.label()=='ADJP':
 			tmp = adjective_phrase_attrb(child)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
+			atrb = add_to_list(atrb, tmp)
 
 		elif child.label()=='VP':
 			tmp = verb_phrase_attrb(child)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
+			atrb = add_to_list(atrb, tmp)
 
 		elif child.label()=='NP':
 			tmp = noun_phrase_attrb(child)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
+			atrb = add_to_list(atrb, tmp)
 
 		else:
 			#print "Going for common_check"
 			tmp = common_check(child)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
+			atrb = add_to_list(atrb, tmp)
 
 	return atrb
 
@@ -307,9 +307,7 @@ def second_level_pp(node):
 
 		elif child.label() == 'NP':
 			tmp = noun_phrase_attrb(child)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
+			atrb = add_to_list(atrb, tmp)
 
 	return atrb
 
@@ -326,15 +324,11 @@ def noun_phrase_attrb(node):
 
 		elif child.label()=='NP' or child.label()=='VP' or child.label()=='ADJP':
 			tmp = noun_verb_adj_attr(child)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
+			atrb = add_to_list(atrb, tmp)
 
 		else:
 			tmp = common_check(child)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
+			atrb = add_to_list(atrb, tmp)
 		
 	return atrb
 
@@ -344,24 +338,18 @@ def adjective_phrase_attrb(node):
 	for child in node:
 		if child.label() == 'PP':
 			tmp = second_level_pp(child)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
+			atrb = add_to_list(atrb, tmp)
 
 		elif child.label() == 'MD':
 			atrb.append(' '.join(child.flatten()))
 
 		elif child.label()=='NP' or child.label()=='VP' or child.label()=='ADJP':
 			tmp = noun_verb_adj_attr(child)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
+			atrb = add_to_list(atrb, tmp)
 
 		else:
 			tmp = common_check(child)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
+			atrb = add_to_list(atrb, tmp)
 
 	return atrb
 
@@ -382,16 +370,11 @@ def verb_phrase_attrb(node):
 		elif cousin.label()=='NP' or cousin.label()=='VP' or cousin.label()=='ADJP':
 			#print "HERE inside"
 			tmp = noun_verb_adj_attr(cousin)
-			#print tmp
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
+			atrb = add_to_list(atrb, tmp)
 
 		else:
 			tmp = common_check(cousin)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
+			atrb = add_to_list(atrb, tmp)
 
 	return atrb
 
@@ -407,21 +390,15 @@ def ucp_phrase(node):
 
 		elif cousin.label() == 'UCP':
 			tmp = ucp_phrase(cousin)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
+			atrb = add_to_list(atrb, tmp)
 
 		elif cousin.label()=='NP' or cousin.label()=='VP' or cousin.label()=='ADJP':
 			tmp = noun_verb_adj_attr(cousin)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
+			atrb = add_to_list(atrb, tmp)
 
 		else:
 			tmp = common_check(cousin)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
+			atrb = add_to_list(atrb, tmp)
 
 	return atrb
 
@@ -439,9 +416,7 @@ def find_attributes(node):
 
 		if sibling.label() == 'ADJP' or sibling.label()=='NP':
 			tmp = noun_verb_adj_attr(sibling)
-			if len(tmp) > 0:
-				for word in tmp:
-					attrs.append(word)
+			attrs = add_to_list(attrs, tmp)
 
 		elif sibling.label() == 'DT':
 			x = sibling[0].lower()
@@ -450,9 +425,7 @@ def find_attributes(node):
 
 		else:
 			tmp = common_check(sibling)
-			if len(tmp) > 0:
-				for word in tmp:
-					attrs.append(word)
+			attrs = add_to_list(attrs, tmp)
 
 	# Searching all the uncles of the node
 	for uncle in gdad:
@@ -469,30 +442,22 @@ def find_attributes(node):
 
 		elif uncle.label() == 'UCP':
 			tmp = ucp_phrase(uncle)
-			if len(tmp) > 0:
-				for word in tmp:
-					attrs.append(word)
+			attrs = add_to_list(attrs, tmp)
 		
 		# If it is a verb phrase, then check all the children of the VP
 		elif ((uncle.label()=='VP') or (uncle.label()=='NP') or (uncle.label()=='ADJP')):
 			tmp = noun_verb_adj_attr(uncle)
-			if len(tmp) > 0:
-				for word in tmp:
-					attrs.append(word)
+			attrs = add_to_list(attrs, tmp)
 
 		elif uncle.label() == 'S':
 			for child in uncle:
 				if child.label() == 'VP':
 					tmp = verb_phrase_attrb(child)
-					if len(tmp) > 0:
-						for word in tmp:
-							attrs.append(word)
+					attrs = add_to_list(attrs, tmp)
 
 		elif uncle.label() == 'PP':
 			tmp = second_level_pp(uncle)
-			if len(tmp) > 0:
-				for word in tmp:
-					attrs.append(word)
+			attrs = add_to_list(attrs, tmp)
 
 	# Searching all the sibling of grand-parent of the node
 	# Here we are looking for verb phrase and its children only
@@ -508,9 +473,7 @@ def find_attributes(node):
 				if s.label()=='VP' or s.label()=='NP' or s.label()=='ADJP':
 					#print "here"
 					tmp = noun_verb_adj_attr(s)
-					if len(tmp) > 0:
-						for word in tmp:
-							attrs.append(word)
+					attrs = add_to_list(attrs, tmp)
 
 				elif s.label() == 'VB':
 					attrs.append(' '.join(s.flatten()))
@@ -520,8 +483,6 @@ def find_attributes(node):
 
 				elif s.label() == 'ADVP':
 					attrs.append(' '.join(s.flatten()))
-
-
 
 	return attrs
 
