@@ -1,7 +1,6 @@
 from pycorenlp import StanfordCoreNLP
 from nltk.tree import ParentedTree, Tree
 from nltk.parse.stanford import StanfordParser
-import difflib
 import json
 import coreference_resolution as cr 
 import threading
@@ -385,7 +384,7 @@ def ucp_phrase(node):
 def check_uplevel_cond(gdad, attrs):
 	return (gdad.parent()!=None and gdad.parent().label()!='ROOT') and (gdad.label()!='FRAG' and gdad.label()!='SBAR') and (len(attrs)==0 or gdad.parent().label()=='S' or gdad.parent().label()=='FRAG' or gdad.parent().label()=='VP')
 
-def find_attributes(node):
+def find_attributes(node, rel2, lock):
 	attrs = []
 	dad = node.parent()
 	gdad = dad.parent()
@@ -446,7 +445,9 @@ def find_attributes(node):
 			elif s.label()=='VB' or s.label()=='RB' or s.label()=='ADVP':
 				attrs.append(' '.join(s.flatten()))
 
-	return attrs
+	lock.acquire()
+	rel2[node[0]] = list(set().union(rel2[node[0]],attrs))
+	lock.release()
 
 def parsetreeAnalysis(text):
 	try:
@@ -461,18 +462,26 @@ def parsetreeAnalysis(text):
 		for s in tree.subtrees(lambda tree: tree.label().startswith('NN')):
 			rel2.setdefault(s[0], [])
 			nouns.append(s)
-
+		lck = threading.Lock()
+		th = [None]*len(nouns)
+		x = 0
 		for s in nouns:
-			attr = find_attributes(s)
-			rel2[s[0]] = list(set().union(rel2[s[0]],attr))
+			th[x] = threading.Thread(target=find_attributes, args=(s, rel2, lck,))
+			th[x].start()
+			x += 1
 
-		#print rel2
+		for x in range(len(nouns)):
+			th[x].join()
+
+		lck.acquire()
 		print ('\n')
 		for key, val in rel2.items():
+			if len(val)==0:
+				rel2.pop(key, 0)
+				continue
 			st = ' '.join(val)
 			rel2[key] = st
-
-		#print rel2
+		lck.release()
 		return rel2
 
 	# THIS PART CHECKS FOR ERRORS, IF ANY, AND REPORTS THE FAILURE	
@@ -617,7 +626,7 @@ if __name__=="__main__" :
 	#text = "Food was cold but it was good"
 	#text = "the room was clean, beautiful, spacious and good"
 	#text = "The room was dirty. New day. Looking for bugs in this part. A regular one."
-	text = "The room was dirty and the drower was empty and the room was bad"
+	#text = "The room was dirty and the drower was empty and the room was bad"
 	
 	print "Original Text is -> ", text
 
