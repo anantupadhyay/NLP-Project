@@ -238,6 +238,54 @@ def getDependencyAnalysis(output, text):
 '''
 #------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+def common_check(child):
+	atrb = []
+	#print child.label()
+	if child.label().startswith('JJ') or child.label()=='RB':
+		atrb.append(' '.join(child.flatten()))
+
+	elif child.label()=='CD' or child.label()=='MD':
+		atrb.append(' '.join(child.flatten()))
+
+	elif child.label()=='ADVP':
+		atrb.append(' '.join(child.flatten()))
+
+	#print(atrb)
+	return atrb
+
+
+def noun_verb_adj_attr(node):
+	atrb = []
+
+	for child in node:
+		#print child.label()
+		if child.label()=='ADJP':
+			tmp = adjective_phrase_attrb(child)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+
+		elif child.label()=='VP':
+			tmp = verb_phrase_attrb(child)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+
+		elif child.label()=='NP':
+			tmp = noun_phrase_attrb(child)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+
+		else:
+			#print "Going for common_check"
+			tmp = common_check(child)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+
+	return atrb
+
 def second_level_pp(node):
 	atrb = []
 	for child in node:
@@ -268,77 +316,44 @@ def noun_phrase_attrb(node):
 		elif child.label().startswith('NN'):
 			atrb.append(' '.join(child.flatten()))
 
-		elif child.label().startswith('JJ'):
-			atrb.append(' '.join(child.flatten()))
-
-		elif child.label() == 'NP':
-			tmp = noun_phrase_attrb(child)
+		elif child.label()=='NP' or child.label()=='VP' or child.label()=='ADJP':
+			tmp = noun_verb_adj_attr(child)
 			if len(tmp) > 0:
 				for word in tmp:
 					atrb.append(word)
 
-		elif child.label() == 'VP':
-			tmp = verb_phrase_attrb(child)
+		else:
+			tmp = common_check(child)
 			if len(tmp) > 0:
 				for word in tmp:
 					atrb.append(word)
-
-		elif child.label() == 'ADJP':
-			tmp = adjective_phrase_attrb(child)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
-
-		elif child.label() == 'ADVP':
-			atrb.append(' '.join(child.flatten()))
-
-		elif child.label() == 'CD':
-			atrb.append(' '.join(child.flatten()))
-
+		
 	return atrb
 
 
 def adjective_phrase_attrb(node):
 	atrb = []
 	for child in node:
-		if child.label().startswith('JJ'):
-			atrb.append(' '.join(child.flatten()))
-
-		elif child.label() == 'VP':
-			tmp = verb_phrase_attrb(child)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
-
-		elif child.label() == 'NP':
-			tmp = noun_phrase_attrb(child)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
-
-		elif child.label() == 'ADJP':
-			tmp = adjective_phrase_attrb(child)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
-
-		elif child.label() == 'PP':
+		if child.label() == 'PP':
 			tmp = second_level_pp(child)
 			if len(tmp) > 0:
 				for word in tmp:
 					atrb.append(word)
 
-		elif child.label() == 'ADVP':
-			atrb.append(' '.join(child.flatten()))
-
-		elif child.label() == 'RB':
-			atrb.append(' '.join(child.flatten()))
-
-		elif child.label() == 'CD':
-			atrb.append(' '.join(child.flatten()))
-
 		elif child.label() == 'MD':
 			atrb.append(' '.join(child.flatten()))
+
+		elif child.label()=='NP' or child.label()=='VP' or child.label()=='ADJP':
+			tmp = noun_verb_adj_attr(child)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+
+		else:
+			tmp = common_check(child)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
 
 	return atrb
 
@@ -347,45 +362,31 @@ def verb_phrase_attrb(node):
 
 	for cousin in node:
 		#print cousin.label()
-		if cousin.label() == 'ADJP':
-			tmp = adjective_phrase_attrb(cousin)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
-		#print ch[0]
-		elif cousin.label() == 'ADVP':
-			atrb.append(' '.join(cousin.flatten()))
-
-		elif ((cousin.label() == 'VBN') or (cousin.label() == 'VBG') or (cousin.label() == 'RB') or (cousin.label() == 'VBP') or (cousin.label() == 'VBZ')):
+		if ((cousin.label() == 'VBN') or (cousin.label() == 'VBG') or (cousin.label() == 'RB') or (cousin.label() == 'VBP') or (cousin.label() == 'VBZ')):
 			tmp = ' '.join(cousin.flatten())
+			print "here in verb phrase"
 			if tmp.lower() != "is":
 				atrb.append(tmp)
-
-			#print "here", atrb, node
-		# the leaves() method returns a list of node
-		elif cousin.label() == 'VP':
-			tmp = verb_phrase_attrb(cousin)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
-		# if cousin is a noun phrase
-		elif (cousin.label() == 'NP'):
-			tmp = noun_phrase_attrb(cousin)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
-
-		elif cousin.label() == 'RB':
-			atrb.append(' '.join(cousin.flatten()))
-
-		elif cousin.label() == 'CD':
-			atrb.append(' '.join(cousin.flatten()))
 
 		elif cousin.label() == 'MD':
 			atrb.append(' '.join(cousin.flatten()))
 
 		elif cousin.label() == 'VB':
 			atrb.append(' '.join(cousin.flatten()))
+
+		elif cousin.label()=='NP' or cousin.label()=='VP' or cousin.label()=='ADJP':
+			#print "HERE inside"
+			tmp = noun_verb_adj_attr(cousin)
+			#print tmp
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
+
+		else:
+			tmp = common_check(cousin)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
 
 	return atrb
 
@@ -394,49 +395,31 @@ def ucp_phrase(node):
 
 	for cousin in node:
 		#print cousin.label()
-		if cousin.label() == 'ADJP':
-			tmp = adjective_phrase_attrb(cousin)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
-		#print ch[0]
-		elif cousin.label() == 'ADVP':
-			atrb.append(' '.join(cousin.flatten()))
-
-		elif ((cousin.label() == 'VBN') or (cousin.label() == 'VBG') or (cousin.label() == 'RB') or (cousin.label() == 'VBP') or (cousin.label() == 'VBZ')):
+		if ((cousin.label() == 'VBN') or (cousin.label() == 'VBG') or (cousin.label() == 'RB') or (cousin.label() == 'VBP') or (cousin.label() == 'VBZ')):
 			tmp = (' '.join(cousin.flatten()))
 			if tmp.lower() != "is":
 				atrb.append(tmp)
-
-		elif cousin.label() == 'VP':
-			tmp = verb_phrase_attrb(cousin)
-			if len(tmp) > 0:
-				for word in tmp:
-					atrb.append(word)
 
 		elif cousin.label() == 'UCP':
 			tmp = ucp_phrase(cousin)
 			if len(tmp) > 0:
 				for word in tmp:
 					atrb.append(word)
-		# if cousin is a noun phrase
-		elif (cousin.label() == 'NP'):
-			tmp = noun_phrase_attrb(cousin)
+
+		elif cousin.label() == 'VB':
+			atrb.append(' '.join(cousin.flatten()))
+
+		elif cousin.label()=='NP' or cousin.label()=='VP' or cousin.label()=='ADJP':
+			tmp = noun_verb_adj_attr(cousin)
 			if len(tmp) > 0:
 				for word in tmp:
 					atrb.append(word)
 
-		elif cousin.label() == 'RB':
-			atrb.append(' '.join(cousin.flatten()))
-
-		elif cousin.label() == 'CD':
-			atrb.append(' '.join(cousin.flatten()))
-
-		elif cousin.label() == 'MD':
-			atrb.append(' '.join(cousin.flatten()))
-
-		elif cousin.label() == 'VB':
-			atrb.append(' '.join(cousin.flatten()))
+		else:
+			tmp = common_check(cousin)
+			if len(tmp) > 0:
+				for word in tmp:
+					atrb.append(word)
 
 	return atrb
 
@@ -568,7 +551,7 @@ def find_attributes(node):
 
 def parsetreeAnalysis(text):
 	try:
-		#print text
+		#print type(text)
 		#print output
 		nlp = StanfordCoreNLP('http://13.127.253.52:9000/')
 		output = nlp.annotate(text, properties={'annotators': "parse", 'pipelineLanguage': 'en', 'outputFormat':'json'})
@@ -670,6 +653,7 @@ def run_thread(op, sent, lock):
 	#print sent
 	#res = (getDependencyAnalysis(op, sent))
 	res = {}
+	#print type(sent)
 	res2 = (parsetreeAnalysis(sent))
 	#print res2
 	kvp = dict()
@@ -771,14 +755,14 @@ if __name__=="__main__" :
 	text = "The bar is decently stocked."
 	text = "Courteous staff and overall a value for money."
 	text = "The room was good but the ac stop working"
-	text = "Staff is quite good and managing person is really good person I ever meet in my life (hotel)"
-	text = "smell of cigarettes smoking was there when I entered  rooms should be smelling good and fresh"
-	text = "Staff is quite good and the managing person is a really good person I have ever meet in my life (hotel)"
-	text = "Food was cold but food was good. it should be eaten raw."
-	text = "Food was cold but it was good and it should be eaten raw."
+	#text = "Staff is quite good and managing person is really good person I ever meet in my life (hotel)"
+	#text = "smell of cigarettes smoking was there when I entered  rooms should be smelling good and fresh"
+	#text = "Staff is quite good and the managing person is a really good person I have ever meet in my life (hotel)"
+	#text = "Food was cold but food was good. it should be eaten raw."
+	#text = "Food was cold but it was good and Food should be eaten raw"
 	#text = "the room was clean, beautiful, spacious and good"
-	text = "The room was dirty. New day. Looking for bugs in this part. A regular one."
-	text = "The room was dirty and the drower was empty"
+	#text = "The room was dirty. New day. Looking for bugs in this part. A regular one."
+	#text = "The room was dirty and the drower was empty"
 	
 	print "Original Text is -> ", text
 
