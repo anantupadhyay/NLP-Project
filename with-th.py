@@ -251,7 +251,7 @@ def check_for_not(atrb, node):
 
 def common_check(child):
 	atrb = []
-	vb_check = ['VBN', 'VBP', 'VBZ']
+	vb_check = ['VBN', 'VBP', 'VBZ', 'VBG']
 	#print child.parent().label(), child[0]
 	if child.label().startswith('JJ') or child.label()=='RB':
 		atrb.append(' '.join(child.flatten()))
@@ -265,7 +265,7 @@ def common_check(child):
 	elif child.label()=='VB':
 		atrb.append(' '.join(child.flatten()))
 
-	elif child.parent().label()=='VP':
+	elif child.parent().label()=='VP' or child.parent().label()=='UCP':
 		if child.label() in vb_check:
 			wrd = (' '.join(child.flatten()))
 			atrb.append(wrd) and wrd.lower()!="is"
@@ -368,12 +368,7 @@ def ucp_phrase(node):
 
 	for cousin in node:
 		#print cousin.label()
-		if ((cousin.label() == 'VBN') or (cousin.label() == 'VBG') or (cousin.label() == 'RB') or (cousin.label() == 'VBP') or (cousin.label() == 'VBZ')):
-			tmp = (' '.join(cousin.flatten()))
-			if tmp.lower() != "is":
-				atrb.append(tmp)
-
-		elif cousin.label() == 'UCP':
+		if cousin.label()=='UCP':
 			tmp = ucp_phrase(cousin)
 			atrb = add_to_list(atrb, tmp)
 
@@ -388,17 +383,14 @@ def ucp_phrase(node):
 	return atrb
 
 def check_uplevel_cond(gdad, attrs):
-	return (gdad.parent()!=None) and (gdad.label()!='S' and gdad.label()!='FRAG' and gdad.label()!='SBAR') and (len(attrs)==0 or gdad.parent().label()=='S' or gdad.parent().label()=='FRAG' or gdad.parent().label()=='VP')
+	return (gdad.parent()!=None and gdad.parent().label()!='ROOT') and (gdad.label()!='FRAG' and gdad.label()!='SBAR') and (len(attrs)==0 or gdad.parent().label()=='S' or gdad.parent().label()=='FRAG' or gdad.parent().label()=='VP')
 
 def find_attributes(node):
 	attrs = []
 	dad = node.parent()
 	gdad = dad.parent()
-	#print node, dad, gdad
-	#print node[0]
-	# Searching all the siblings of the node
-	for sibling in dad:
 
+	for sibling in dad:
 		if sibling.label() == 'ADJP' or sibling.label()=='NP':
 			tmp = noun_verb_adj_attr(sibling)
 			attrs = add_to_list(attrs, tmp)
@@ -411,92 +403,68 @@ def find_attributes(node):
 			attrs = add_to_list(attrs, tmp)
 
 	# Searching all the uncles of the node
-	for uncle in gdad:
-		if gdad == None:
-			break
-		if(uncle == dad):
-			continue
-		# Checking if directly a adverb is present, then append it to attribute list
-		if((uncle.label() == 'RB')):
-			attrs.append(uncle[0])
+	if gdad != None:
+		for uncle in gdad:
+			if(uncle == dad):
+				continue
 
-		elif uncle.label() == 'VB' or uncle.label()=='VBN':
-			attrs.append(' '.join(uncle.flatten()))
+			elif uncle.label()=='UCP':
+				tmp = ucp_phrase(uncle)
+				attrs = add_to_list(attrs, tmp)
+			
+			# If it is a verb phrase, then check all the children of the VP
+			elif ((uncle.label()=='VP') or (uncle.label()=='NP') or (uncle.label()=='ADJP')):
+				tmp = noun_verb_adj_attr(uncle)
+				attrs = add_to_list(attrs, tmp)
 
-		elif uncle.label() == 'UCP':
-			tmp = ucp_phrase(uncle)
-			attrs = add_to_list(attrs, tmp)
-		
-		# If it is a verb phrase, then check all the children of the VP
-		elif ((uncle.label()=='VP') or (uncle.label()=='NP') or (uncle.label()=='ADJP')):
-			tmp = noun_verb_adj_attr(uncle)
-			attrs = add_to_list(attrs, tmp)
+			elif uncle.label() == 'S':
+				for child in uncle:
+					if child.label() == 'VP':
+						tmp = verb_phrase_attrb(child)
+						attrs = add_to_list(attrs, tmp)
 
-		elif uncle.label() == 'S':
-			for child in uncle:
-				if child.label() == 'VP':
-					tmp = verb_phrase_attrb(child)
-					attrs = add_to_list(attrs, tmp)
+			elif uncle.label() == 'PP':
+				tmp = second_level_pp(uncle)
+				attrs = add_to_list(attrs, tmp)
 
-		elif uncle.label() == 'PP':
-			tmp = second_level_pp(uncle)
-			attrs = add_to_list(attrs, tmp)
+			else:
+				tmp = common_check(uncle)
+				attrs = add_to_list(attrs, tmp)
 
-	# Searching all the sibling of grand-parent of the node
-	# Here we are looking for verb phrase and its children only
-	#print attrs
+	# Going one level up
 	if (check_uplevel_cond(gdad, attrs)):
 		ggdad = gdad.parent()
-		
-		if(ggdad.label() != 'ROOT'):
-			for s in ggdad:
-				if s==gdad:
-					continue
-				#print s
-				if s.label()=='VP' or s.label()=='NP' or s.label()=='ADJP':
-					#print "here"
-					tmp = noun_verb_adj_attr(s)
-					attrs = add_to_list(attrs, tmp)
+		for s in ggdad:
+			if s==gdad:
+				continue
+			#print s
+			if s.label()=='VP' or s.label()=='NP' or s.label()=='ADJP':
+				#print "here"
+				tmp = noun_verb_adj_attr(s)
+				attrs = add_to_list(attrs, tmp)
 
-				elif s.label() == 'VB':
-					attrs.append(' '.join(s.flatten()))
-
-				elif s.label() == 'RB':
-					attrs.append(' '.join(s.flatten()))
-
-				elif s.label() == 'ADVP':
-					attrs.append(' '.join(s.flatten()))
+			elif s.label()=='VB' or s.label()=='RB' or s.label()=='ADVP':
+				attrs.append(' '.join(s.flatten()))
 
 	return attrs
 
 def parsetreeAnalysis(text):
 	try:
-		#print type(text)
-		#print output
 		nlp = StanfordCoreNLP('http://13.127.253.52:9000/')
 		output = nlp.annotate(text, properties={'annotators': "parse", 'pipelineLanguage': 'en', 'outputFormat':'json'})
 		parse_tree = output['sentences'][0]['parse']
- 		#print parse_tree
 		tree = ParentedTree.convert(Tree.fromstring(parse_tree))
 		#tree.pretty_print()
-
-		np = dict()
 		rel2 = dict()
+		nouns = list()
 		# FINDING THE NP AND ITS CORRESPONDING NOUN OR PRONOUN
 		for s in tree.subtrees(lambda tree: tree.label().startswith('NN')):
-			
-			#print s[0]
-			vis = np.get(s[0], 0)
-			if(vis == 1):
-				continue
-			np[s[0]] = 1
 			rel2.setdefault(s[0], [])
+			nouns.append(s)
 
+		for s in nouns:
 			attr = find_attributes(s)
-			rel2[s[0]] = attr
-			#print attr
-			if len(attr)==0:
-				rel2.pop(s[0])
+			rel2[s[0]] = list(set().union(rel2[s[0]],attr))
 
 		#print rel2
 		print ('\n')
@@ -631,24 +599,25 @@ def namedEntityRecognisition(output, text):
 #-----------------------------------------------
 
 if __name__=="__main__" :
-	# text = "The fan above the bed was dirty"
-	# text = "I was not provided blanket at night"
-	# text = "We were only given one towel initially"
-	# text = "the fan above the bed is dirty"
-	# text = "Very limited snacks and food items available."
-	# text = "The restaurant serves very reasonably priced and quality cuisine."
-	# text = "The food is not good"
-	text = "The bar is decently stocked."
+	#text = "The fan above the bed was dirty"
+	#text = "I was not provided blanket at night :("
+	#text = "We were only given one towel initially"
+	#text = "the fan above the bed is dirty"
+	#text = "Very limited snacks and food items available."
+	#text = "The restaurant serves very reasonably priced and quality cuisine."
+	#text = "The food is not good"
+	#text = "The bar is decently stocked."
+	#text = "The room is good but the service is poor"
 	#text = "Courteous staff and overall a value for money."
-	#text = "The room was good but the ac stop working"
+	#text = "The room was good but the ac was not working"
 	#text = "Staff is quite good and managing person is really good person I ever meet in my life (hotel)"
 	#text = "smell of cigarettes smoking was there when I entered  rooms should be smelling good and fresh"
 	#text = "Staff is quite good and the managing person is a really good person I have ever meet in my life (hotel)"
 	#text = "Food was cold but food was good. it should be eaten raw."
-	#text = "Food was cold but it was good and Food should be eaten raw"
+	#text = "Food was cold but it was good"
 	#text = "the room was clean, beautiful, spacious and good"
 	#text = "The room was dirty. New day. Looking for bugs in this part. A regular one."
-	#text = "The room was dirty and the drower was empty"
+	text = "The room was dirty and the drower was empty and the room was bad"
 	
 	print "Original Text is -> ", text
 
