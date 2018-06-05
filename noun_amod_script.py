@@ -19,12 +19,11 @@ def dependencyAnalysis(text):
 				x1 = tmp['dependent']
 				x2 = tmp['governor']
 				if ((data[0]['tokens'][x1-1]['pos'] in check_list) and (data[0]['tokens'][x2-1]['pos'] in check_list)):
-					idx.add(x1)
 					idx.add(x2)
 		for x in range(len(data[0]['enhancedPlusPlusDependencies'])):
 			tmp = data[0]['enhancedPlusPlusDependencies'][x]
 			if((tmp['governor']) in idx and tmp['dep']=='amod'):
-				s1 = tmp['dependentGloss'] + " " + tmp['governorGloss']
+				s1 = tmp['dependentGloss'] + "_" + tmp['governorGloss']
 				noun_list.append(s1)
 		print noun_list
 
@@ -34,7 +33,7 @@ def dependencyAnalysis(text):
 if __name__=="__main__" :
 	try:
 		text = "The managing person is a good person"
-		text = "The managing director was humble person"
+		#text = "The managing director was humble person"
 		res = dependencyAnalysis(text)
 		if res != None:
 			print res
