@@ -132,63 +132,37 @@ def getDependencyAnalysis(output, text):
 		# ============================================================================================================================================================================================================================================================================================================================================================
 		for x in range(len(data[0]['enhancedPlusPlusDependencies'])):
 			tmp = data[0]['enhancedPlusPlusDependencies'][x]
-			if((tmp['dep'] == 'neg')):
+			if(tmp['dep'] == 'neg'):
 				for key, val in rel.items():
 					if(tmp['governorGloss'] in val):
 						rel[key].insert(0, tmp['dependentGloss'])
 					elif(tmp['dependentGloss'] in val):
 						rel[key].insert(0, tmp['governorGloss'])
 
-			if((tmp['dep'] == 'xcomp')):
+			elif((tmp['dep']=='xcomp') or (tmp['dep']=='dobj') or (tmp['dep']=='compound') or (tmp['dep']=='advmod')):
 				for key, val in rel.items():
-					if(tmp['governorGloss'] in val):
-						if(tmp['dependentGloss'] != key):
-							rel[key].append(tmp['dependentGloss'])
-					elif(tmp['dependentGloss'] in val):
-						if(tmp['governorGloss'] != key):
-							rel[key].append(tmp['governorGloss'])
+					if(tmp['governorGloss'] in val and tmp['dependentGloss'] != key):
+						rel[key].append(tmp['dependentGloss'])
+					elif(tmp['dependentGloss'] in val and tmp['governorGloss'] != key):
+						rel[key].append(tmp['governorGloss'])
 
-			if((tmp['dep'] == 'dobj')):
-				for key, val in rel.items():
-					if(tmp['governorGloss'] in val):
-						if(tmp['dependentGloss'] != key):
-							rel[key].append(tmp['dependentGloss'])
-					elif(tmp['dependentGloss'] in val):
-						if(tmp['governorGloss'] != key):
-							rel[key].append(tmp['governorGloss'])
-
-			if((tmp['dep'] == 'compound')):
-				for key, val in rel.items():
-					if(tmp['governorGloss'] in val):
-						if(tmp['dependentGloss'] != key):
-							rel[key].append(tmp['dependentGloss'])
-					elif(tmp['dependentGloss'] in val):
-						if(tmp['governorGloss'] != key):
-							rel[key].append(tmp['governorGloss'])
-
-			if((tmp['dep'] == 'advmod')):
-				for key, val in rel.items():
-					if(tmp['governorGloss'] in val):
-						if(tmp['dependentGloss'] != key):
-							rel[key].insert(0, tmp['dependentGloss'])
-					elif(tmp['dependentGloss'] in val):
-						if(tmp['governorGloss'] != key):
-							rel[key].insert(0, tmp['governorGloss'])
+			elif(tmp['dep']=='nsubj'):
+				if tmp['governorGloss'] in rel.keys():
+					rel[tmp['governorGloss']].append(tmp['dependentGloss'])
+					if(tmp['dependentGloss'] in rel.keys()):
+						x = rel[tmp['dependentGloss']]
+						rel[tmp['governorGloss']].extend(x)
 
 		# This part ends here! 
-		# =========================================================================================================================================================================================================================================
-
+		# =============================================================================================================
 		# This part prints the final key value pair
-		
 		for key, val in rel.items():
 			st = ""
 			for word in text.split():
-				#print word
 				if word in val:
 					st += word + " "
 			rel[key] = st
 
-		#print rel
 		return rel
 		
 
@@ -486,8 +460,8 @@ def run_thread(op, sent, lock):
 	#sen = sent.translate(None, string.punctuation)
 	res = (getDependencyAnalysis(op, sent))
 	#res = {}
-	#res2 = (parsetreeAnalysis(sent))
-	res2 = {}
+	res2 = (parsetreeAnalysis(sent))
+	#res2 = {}
 	kvp = dict()
 	if res and res2 and type(res)!=tuple and type(res2)!=tuple:
 		kvp = merge_dictionaries(res, res2)
