@@ -53,18 +53,19 @@ def dependencyAnalysis(text):
 		idx = defaultdict(list) # Stores index of all nouns relations
 		noun_list = list() # final list of output
 		check_list = ['NN', 'NNP', 'NNS', 'PRP']
+		dlist = ['amod', 'nummod', 'advmod', 'tmod']
 		for x in range(len(data[0]['tokens'])):
 			if(data[0]['tokens'][x]['pos'] in check_list):
 				noun[data[0]['tokens'][x]['index']] = data[0]['tokens'][x]['word']
-		print noun
+		#print noun
 		for x in range(len(data[0]['enhancedPlusPlusDependencies'])):
 			tmp = data[0]['enhancedPlusPlusDependencies'][x]
-			if tmp['dep']=='nsubj':
+			if ((tmp['dep']=='nsubj') and (data[0]['tokens'][tmp['governor']]['pos'] in check_list) and (data[0]['tokens'][tmp['dependent']]['pos'] in check_list)):
 				idx[tmp['dependent']].append(tmp['governor'])
 
 		for x in range(len(data[0]['enhancedPlusPlusDependencies'])):
 			tmp = data[0]['enhancedPlusPlusDependencies'][x]
-			if tmp['governor'] in noun.keys() and tmp['governor'] not in idx.keys() and tmp['dep']=='amod':
+			if tmp['governor'] in noun.keys() and tmp['governor'] not in idx.keys() and tmp['dep'] in dlist:
 				s = tmp['dependentGloss'] + "_" + tmp['governorGloss']
 				noun[tmp['governor']] = s
 			elif tmp['governor'] in noun.keys() and tmp['governor'] in idx.keys() and tmp['dep']!='det':
@@ -86,6 +87,7 @@ if __name__=="__main__" :
 	try:
 		text = "The managing person is a good person"
 		text = "more staff should be at reception"
+		text = "there was only one napkin"
 		res = dependencyAnalysis(text)
 		if res != None:
 			print res
