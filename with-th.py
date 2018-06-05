@@ -88,119 +88,92 @@ def getDependencyAnalysis(output, text):
 	try:
 		#print(output['sentences'])
 		wjson = json.dumps(output['sentences'])
-		wjdata = json.loads(wjson)
-
-
+		data = json.loads(wjson)
 		# The code below deals with extracting noun and pronouns from the sentence and storing them in a dictionary (index:word)	
-		#-----------------------------------------------------------------------------------------------------------------------
 		noun = dict()
+		nlist = ['NN', 'NNP', 'NNS', 'PRP']
 		rel = dict()
-
-		for x in range(len(wjdata[0]['tokens'])):
-			if((wjdata[0]['tokens'][x]['pos'] == 'NN') or (wjdata[0]['tokens'][x]['pos'] == 'NNP') or (wjdata[0]['tokens'][x]['pos'] == 'NNS') or (wjdata[0]['tokens'][x]['pos'] == 'PRP')):
-				noun[wjdata[0]['tokens'][x]['index']] = wjdata[0]['tokens'][x]['word']
-
-		# print ("The extracted nouns from the sentence are", noun)
-		# print ('#'*100)
-
-		# Code for extracting noun ends here!
+		for x in range(len(data[0]['tokens'])):
+			if((data[0]['tokens'][x]['pos']) in nlist):
+				noun[data[0]['tokens'][x]['index']] = data[0]['tokens'][x]['word']
 		#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-		
 		# The Code here deals with extracting the dependencies of noun with adjectives and verbs
 		# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		
-		for x in range(len(wjdata[0]['enhancedPlusPlusDependencies'])):
-			if((wjdata[0]['enhancedPlusPlusDependencies'][x]['dependent']) in noun.keys()):
+		for x in range(len(data[0]['enhancedPlusPlusDependencies'])):
+			tmp = data[0]['enhancedPlusPlusDependencies'][x]
+			if((tmp['dependent']) in noun.keys()):
 				#getting the index of the governor
-				#print ("here")
-				idx = wjdata[0]['enhancedPlusPlusDependencies'][x]['governor']
-				#print (idx)
+				idx = tmp['governor']
 				# If it is related to ROOT, then no need to add it to dictionary
-				if(wjdata[0]['enhancedPlusPlusDependencies'][x]['governorGloss'] == 'ROOT'):
+				if(tmp['governorGloss'] == 'ROOT'):
 					continue
 				#print (idx)
-				if((wjdata[0]['tokens'][idx-1]['pos'] == 'JJ') or (wjdata[0]['tokens'][idx-1]['pos'] == 'JJS') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VBN') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VBG') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VB') or (wjdata[0]['tokens'][idx-1]['pos'] == 'RB') or (wjdata[0]['tokens'][idx-1]['pos'] == 'CD') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VBZ')):
-					#print ("not here")
-					#print (wjdata[0]['tokens'][idx]['word'])
-					if(noun[(wjdata[0]['enhancedPlusPlusDependencies'][x]['dependent'])] not in rel.keys()):
-						rel.setdefault(noun[(wjdata[0]['enhancedPlusPlusDependencies'][x]['dependent'])], [])
+				if((data[0]['tokens'][idx-1]['pos'] == 'JJ') or (data[0]['tokens'][idx-1]['pos'] == 'JJS') or (data[0]['tokens'][idx-1]['pos'] == 'VBN') or (data[0]['tokens'][idx-1]['pos'] == 'VBG') or (data[0]['tokens'][idx-1]['pos'] == 'VB') or (data[0]['tokens'][idx-1]['pos'] == 'RB') or (data[0]['tokens'][idx-1]['pos'] == 'CD') or (data[0]['tokens'][idx-1]['pos'] == 'VBZ')):
+					if(noun[(tmp['dependent'])] not in rel.keys()):
+						rel.setdefault(noun[(data[0]['enhancedPlusPlusDependencies'][x]['dependent'])], [])
 
-					rel[noun[(wjdata[0]['enhancedPlusPlusDependencies'][x]['dependent'])]].append(wjdata[0]['enhancedPlusPlusDependencies'][x]['governorGloss'])
+					rel[noun[(data[0]['enhancedPlusPlusDependencies'][x]['dependent'])]].append(data[0]['enhancedPlusPlusDependencies'][x]['governorGloss'])
 
-			elif((wjdata[0]['enhancedPlusPlusDependencies'][x]['governor']) in noun.keys()):
+			elif((tmp['governor']) in noun.keys()):
 				#getting the index of the dependent
-				idx = wjdata[0]['enhancedPlusPlusDependencies'][x]['dependent']
+				idx = tmp['dependent']
 				# If it is related to ROOT, then no need to add it to dictionary
-				if(wjdata[0]['enhancedPlusPlusDependencies'][x]['dependentGloss'] == 'ROOT'):
+				if(tmp['dependentGloss'] == 'ROOT'):
 					continue
-				if((wjdata[0]['tokens'][idx-1]['pos'] == 'JJ') or (wjdata[0]['tokens'][idx-1]['pos'] == 'JJS') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VBN') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VBG') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VB') or (wjdata[0]['tokens'][idx-1]['pos'] == 'CD') or (wjdata[0]['tokens'][idx-1]['pos'] == 'RB') or (wjdata[0]['tokens'][idx-1]['pos'] == 'VBZ')):
-					#print("here")
-					if(noun[(wjdata[0]['enhancedPlusPlusDependencies'][x]['governor'])] not in rel.keys()):
-						rel.setdefault(noun[(wjdata[0]['enhancedPlusPlusDependencies'][x]['governor'])], [])
-					rel[noun[(wjdata[0]['enhancedPlusPlusDependencies'][x]['governor'])]].append(wjdata[0]['enhancedPlusPlusDependencies'][x]['dependentGloss'])
+				if((data[0]['tokens'][idx-1]['pos'] == 'JJ') or (data[0]['tokens'][idx-1]['pos'] == 'JJS') or (data[0]['tokens'][idx-1]['pos'] == 'VBN') or (data[0]['tokens'][idx-1]['pos'] == 'VBG') or (data[0]['tokens'][idx-1]['pos'] == 'VB') or (data[0]['tokens'][idx-1]['pos'] == 'CD') or (data[0]['tokens'][idx-1]['pos'] == 'RB') or (data[0]['tokens'][idx-1]['pos'] == 'VBZ')  or (data[0]['tokens'][idx-1]['pos'] == 'RBR')):
+					if(noun[(tmp['governor'])] not in rel.keys()):
+						rel.setdefault(noun[(tmp['governor'])], [])
+					rel[noun[(tmp['governor'])]].append(tmp['dependentGloss'])
 		
 		# The part dealing with extracting adjective and verb dependencies from noun ends here!
 		# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~		
 
-
-
 		# The following part deals with extracting negative and compound relations from the sentence
 		# ============================================================================================================================================================================================================================================================================================================================================================
-		for x in range(len(wjdata[0]['enhancedPlusPlusDependencies'])):
-			if((wjdata[0]['enhancedPlusPlusDependencies'][x]['dep'] == 'neg')):
+		for x in range(len(data[0]['enhancedPlusPlusDependencies'])):
+			tmp = data[0]['enhancedPlusPlusDependencies'][x]
+			if((tmp['dep'] == 'neg')):
 				for key, val in rel.items():
-					#print ("Reached here")
-					if(wjdata[0]['enhancedPlusPlusDependencies'][x]['governorGloss'] in val):	
-						#print ('here')
-						rel[key].insert(0, wjdata[0]['enhancedPlusPlusDependencies'][x]['dependentGloss'])
-					elif(wjdata[0]['enhancedPlusPlusDependencies'][x]['dependentGloss'] in val):
-						#print ("here")
-						rel[key].insert(0, wjdata[0]['enhancedPlusPlusDependencies'][x]['governorGloss'])
+					if(tmp['governorGloss'] in val):
+						rel[key].insert(0, tmp['dependentGloss'])
+					elif(tmp['dependentGloss'] in val):
+						rel[key].insert(0, tmp['governorGloss'])
 
-			if((wjdata[0]['enhancedPlusPlusDependencies'][x]['dep'] == 'xcomp')):
+			if((tmp['dep'] == 'xcomp')):
 				for key, val in rel.items():
-					#print ("Reached here")
-					if(wjdata[0]['enhancedPlusPlusDependencies'][x]['governorGloss'] in val):	
-						#print ('here')
-						if(wjdata[0]['enhancedPlusPlusDependencies'][x]['dependentGloss'] != key):
-							rel[key].append(wjdata[0]['enhancedPlusPlusDependencies'][x]['dependentGloss'])
-					elif(wjdata[0]['enhancedPlusPlusDependencies'][x]['dependentGloss'] in val):
-						#print ("here")
-						if(wjdata[0]['enhancedPlusPlusDependencies'][x]['governorGloss'] != key):
-							rel[key].append(wjdata[0]['enhancedPlusPlusDependencies'][x]['governorGloss'])
+					if(tmp['governorGloss'] in val):
+						if(tmp['dependentGloss'] != key):
+							rel[key].append(tmp['dependentGloss'])
+					elif(tmp['dependentGloss'] in val):
+						if(tmp['governorGloss'] != key):
+							rel[key].append(tmp['governorGloss'])
 
-			if((wjdata[0]['enhancedPlusPlusDependencies'][x]['dep'] == 'dobj')):
+			if((tmp['dep'] == 'dobj')):
 				for key, val in rel.items():
-					if(wjdata[0]['enhancedPlusPlusDependencies'][x]['governorGloss'] in val):	
-						#print ('here')
-						if(wjdata[0]['enhancedPlusPlusDependencies'][x]['dependentGloss'] != key):
-							rel[key].append(wjdata[0]['enhancedPlusPlusDependencies'][x]['dependentGloss'])
-					elif(wjdata[0]['enhancedPlusPlusDependencies'][x]['dependentGloss'] in val):
-						#print ("here")
-						if(wjdata[0]['enhancedPlusPlusDependencies'][x]['governorGloss'] != key):
-							rel[key].append(wjdata[0]['enhancedPlusPlusDependencies'][x]['governorGloss'])
+					if(tmp['governorGloss'] in val):
+						if(tmp['dependentGloss'] != key):
+							rel[key].append(tmp['dependentGloss'])
+					elif(tmp['dependentGloss'] in val):
+						if(tmp['governorGloss'] != key):
+							rel[key].append(tmp['governorGloss'])
 
-			if((wjdata[0]['enhancedPlusPlusDependencies'][x]['dep'] == 'compound')):
+			if((tmp['dep'] == 'compound')):
 				for key, val in rel.items():
-					if(wjdata[0]['enhancedPlusPlusDependencies'][x]['governorGloss'] in val):	
-						#print ('here')
-						if(wjdata[0]['enhancedPlusPlusDependencies'][x]['dependentGloss'] != key):
-							rel[key].append(wjdata[0]['enhancedPlusPlusDependencies'][x]['dependentGloss'])
-					elif(wjdata[0]['enhancedPlusPlusDependencies'][x]['dependentGloss'] in val):
-						#print ("here")
-						if(wjdata[0]['enhancedPlusPlusDependencies'][x]['governorGloss'] != key):
-							rel[key].append(wjdata[0]['enhancedPlusPlusDependencies'][x]['governorGloss'])
+					if(tmp['governorGloss'] in val):
+						if(tmp['dependentGloss'] != key):
+							rel[key].append(tmp['dependentGloss'])
+					elif(tmp['dependentGloss'] in val):
+						if(tmp['governorGloss'] != key):
+							rel[key].append(tmp['governorGloss'])
 
-			if((wjdata[0]['enhancedPlusPlusDependencies'][x]['dep'] == 'advmod')):
+			if((tmp['dep'] == 'advmod')):
 				for key, val in rel.items():
-					if(wjdata[0]['enhancedPlusPlusDependencies'][x]['governorGloss'] in val):	
-						#print ('here')
-						if(wjdata[0]['enhancedPlusPlusDependencies'][x]['dependentGloss'] != key):
-							rel[key].insert(0, wjdata[0]['enhancedPlusPlusDependencies'][x]['dependentGloss'])
-					elif(wjdata[0]['enhancedPlusPlusDependencies'][x]['dependentGloss'] in val):
-						#print ("here")
-						if(wjdata[0]['enhancedPlusPlusDependencies'][x]['governorGloss'] != key):
-							rel[key].insert(0, wjdata[0]['enhancedPlusPlusDependencies'][x]['governorGloss'])
+					if(tmp['governorGloss'] in val):
+						if(tmp['dependentGloss'] != key):
+							rel[key].insert(0, tmp['dependentGloss'])
+					elif(tmp['dependentGloss'] in val):
+						if(tmp['governorGloss'] != key):
+							rel[key].insert(0, tmp['governorGloss'])
 
 		# This part ends here! 
 		# =========================================================================================================================================================================================================================================
@@ -327,7 +300,6 @@ def noun_phrase_attrb(node):
 			atrb = add_to_list(atrb, tmp)
 		
 	return atrb
-
 
 def adjective_phrase_attrb(node):
 	atrb = []
@@ -514,8 +486,8 @@ def run_thread(op, sent, lock):
 	#sen = sent.translate(None, string.punctuation)
 	res = (getDependencyAnalysis(op, sent))
 	#res = {}
-	res2 = (parsetreeAnalysis(sent))
-	#print res2
+	#res2 = (parsetreeAnalysis(sent))
+	res2 = {}
 	kvp = dict()
 	if res and res2 and type(res)!=tuple and type(res2)!=tuple:
 		kvp = merge_dictionaries(res, res2)
