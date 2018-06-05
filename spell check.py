@@ -1,20 +1,28 @@
-# -*- coding: utf-8 -*-
+# # -*- coding: utf-8 -*-
 
-from gingerit.gingerit import GingerIt
+# from gingerit.gingerit import GingerIt
 
-text = "the got busi working .the got busi working. the got busi working. the got busi working . the got busi working .the got busi working. the got busi working. the got busi working ."
-#text = "Klüft skräms inför på fédéral électoral große"
+# text = "the got busi working .the got busi working. the got busi working. the got busi working . the got busi working .the got busi working. the got busi working. the got busi working ."
+# #text = "Klüft skräms inför på fédéral électoral große"
 
-parser = GingerIt()
-print parser.parse(text)['result'], '\n'
+# parser = GingerIt()
+# print parser.parse(text)['result'], '\n'
 
-#print text
+# #print text
 
 
-from googletrans import Translator
-translator = Translator()
+# from googletrans import Translator
+# translator = Translator()
 
-txt = "Klüft skräms inför på fédéral électoral große stüff"
-spell = translator.translate(txt, dest='en')
-op = (spell.text).encode("utf-8")
-print op
+# txt = "Klüft skräms inför på fédéral électoral große stüff"
+# spell = translator.translate(txt, dest='en')
+# op = (spell.text).encode("utf-8")
+# print op
+
+import jamspell
+import jamspell
+
+corrector = jamspell.TSpellCorrector()
+corrector.LoadLangModel('model_en.bin')
+
+print corrector.FixFragment('I am the begt spell cherken!')

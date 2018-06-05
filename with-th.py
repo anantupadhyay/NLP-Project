@@ -511,10 +511,8 @@ def merge_dictionaries(x, y):
 
 def run_thread(op, sent, lock):
 	#sen = sent.translate(None, string.punctuation)
-	#print sent
-	#res = (getDependencyAnalysis(op, sent))
-	res = {}
-	#print type(sent)
+	res = (getDependencyAnalysis(op, sent))
+	#res = {}
 	res2 = (parsetreeAnalysis(sent))
 	#print res2
 	kvp = dict()
@@ -524,10 +522,7 @@ def run_thread(op, sent, lock):
 		kvp = res
 	elif res2:
 		kvp = res2
-	#print "\nThe final key value pairs are"
-	#print kvp
-	#print ('*'*100)
-	#global xx
+	
 	lock.acquire()
 	finalDic.append(kvp)
 	lock.release()
@@ -545,17 +540,15 @@ def run_thread(op, sent, lock):
 	
 def remove_stop_words(stopwordList):
 	try:
-		#print stopwordList
 		for x in range(len(finalDic)):
 			for k,v in finalDic[x].items():
 				for word in v.split():
-					#print word
 					if word in stopwordList:
 						v = v.replace(word, '')
 
 				finalDic[x][k] = v
 
-		print '\n\n'
+		print '\n'
 		print finalDic
 
 	except:
@@ -626,7 +619,7 @@ if __name__=="__main__" :
 	#text = "Food was cold but it was good"
 	#text = "the room was clean, beautiful, spacious and good"
 	#text = "The room was dirty. New day. Looking for bugs in this part. A regular one."
-	#text = "The room was dirty and the drower was empty and the room was bad"
+	text = "The room was dirty and the drower was empty and the room was bad"
 	
 	print "Original Text is -> ", text
 
