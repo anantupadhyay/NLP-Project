@@ -436,13 +436,12 @@ def find_attributes(node, rel2, lock):
 		for s in ggdad:
 			if s==gdad:
 				continue
-			#print s
 			if s.label()=='VP' or s.label()=='NP' or s.label()=='ADJP':
 				#print "here"
 				tmp = noun_verb_adj_attr(s)
 				attrs = add_to_list(attrs, tmp)
 
-			elif s.label()=='VB' or s.label()=='RB' or s.label()=='ADVP':
+			elif s.label()=='VB' or s.label()=='RB' or s.label()=='ADVP' or s.label()=='MD':
 				attrs.append(' '.join(s.flatten()))
 
 	lock.acquire()
@@ -498,7 +497,9 @@ def parsetreeAnalysis(text):
 #	THIS PART MERGES THE TWO DICTIONARIES INTO ONE
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 def merge_dictionaries(x, y):
-	kvp = { key: ' '.join(list(set().union(x[key].split(),y[key].split()))) if key in y else ' '.join(x[key]) for key in set(x).union(set(y))}
+	kvp = {key: ' '.join(list(set().union(x[key].split(),y[key].split()))) for key in x if key in y}
+	kvp.update({ k : y[k] for k in set(y) - set(x) })
+	kvp.update({ k : x[k] for k in set(x) - set(y) })
 	return kvp
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 #	CODE FOR MERGING ENDS HERE
@@ -619,7 +620,12 @@ if __name__=="__main__" :
 	#text = "Food was cold but it was good"
 	#text = "the room was clean, beautiful, spacious and good"
 	#text = "The room was dirty. New day. Looking for bugs in this part. A regular one."
-	text = "The room was dirty and the drower was empty and the room was bad"
+	#text = "food should be there"
+	#text = "there was only one napkin"
+	#text = "Only one bedsheet was there"
+	#text = "drinks should be cold"
+	text = "More staff should be at reception"
+	#text = "There can be extra staff"
 	
 	print "Original Text is -> ", text
 
