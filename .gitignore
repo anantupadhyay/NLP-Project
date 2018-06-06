@@ -8,3 +8,5 @@ apikey.txt
 subject_obj_verb.py
 cr-sw.py
 remove_foreign_word.py
+common_words.txt
+coreference_resolution.pyc

@@ -132,14 +132,14 @@ def getDependencyAnalysis(output, text):
 		# ============================================================================================================================================================================================================================================================================================================================================================
 		for x in range(len(data[0]['enhancedPlusPlusDependencies'])):
 			tmp = data[0]['enhancedPlusPlusDependencies'][x]
-			if(tmp['dep'] == 'neg'):
+			if((tmp['dep'] == 'neg')):
 				for key, val in rel.items():
 					if(tmp['governorGloss'] in val):
 						rel[key].insert(0, tmp['dependentGloss'])
 					elif(tmp['dependentGloss'] in val):
 						rel[key].insert(0, tmp['governorGloss'])
 
-			elif((tmp['dep']=='xcomp') or (tmp['dep']=='dobj') or (tmp['dep']=='compound') or (tmp['dep']=='advmod')):
+			elif((tmp['dep']=='xcomp') or (tmp['dep']=='dobj') or (tmp['dep']=='compound') or (tmp['dep']=='advmod')or tmp['dep']=='nsubjpass'):
 				for key, val in rel.items():
 					if(tmp['governorGloss'] in val and tmp['dependentGloss'] != key):
 						rel[key].append(tmp['dependentGloss'])
@@ -573,8 +573,8 @@ if __name__=="__main__" :
 	#text = "There can be extra staff"
 	#text = "when I explained to the hotel receptionist about my previous bitter experience, he acknowledged it and gave me a better room in the new wing which was quite good"
 	#text = "Helpful office to print materials such as boarding passes and all the front office staff were attentive and got the job done"
-	text = "Lobby was too cluttered and always crowded, Airport pick-up was not sent by the hotel, inspite of confirmation"
-	
+	#text = "Lobby was too cluttered and always crowded, Airport-pick-up was not sent by the hotel, inspite of confirmation"
+	text = "The hotel was fully-booked"
 	print "Original Text is -> ", text
 
 	# op = cr.correct_spell(text)
