@@ -7,6 +7,7 @@ import threading
 import re
 import itertools
 import string
+from replace_common_words import split_words
 
 # Defining the global list that would contain the final key value pair of sentences
 finalDic = list()
@@ -57,27 +58,26 @@ def cleaner_function(text):
 	text = text.replace(" n ", " and ")						# Replacing 'n' with 'and'
 	text = text.replace(" bcz ", " because ")				# replacing 'bcz' with 'because'
 	text = text.replace(" ur ", " your ")					# replacing 'ur' with 'your'
-	text = text.replace(" u` ", " you ")					# replacing 'ur' with 'your'
+	text = text.replace(" u ", " you ")						# replacing 'ur' with 'your'
 	text = text.replace(" b4 ", " before ")					# relpacing 'b4' with 'before'
 	text = text.replace(" awsm ", " awesome ")				# replacing 'awsm' with 'awesome'
 	
 	text = re.sub(r'\.+', ".", text)						# replacing '...*' with '.'
 	text = re.sub(r'\?+', "?", text)						# replacing '???*' with '?'
 
-	text = ''.join(''.join(s)[:2] for _, s in itertools.groupby(text))		# replacing 'testtttt' with 'testt'
+	#text = ''.join(''.join(s)[:2] for _, s in itertools.groupby(text))		# replacing 'testtttt' with 'testt'
 	text = (emoji_pattern.sub(r'', text))					# remove emoji pattern in text
 
 	for k,v in emojis:
 		text = text.replace(k, v)
 
-	print('-'*100)
-	print "Cleaned text is\n", text
-	print('-'*100)
-	return text
+	pattern = re.compile(r'\b(' + '|'.join(split_words.keys()) + r')\b')
+	result = pattern.sub(lambda x: split_words[x.group()], text)
 
-'''
-	CLEANING OF TEXT ENDS HERE
-'''
+	print('-'*100)
+	print "Cleaned text is\n", result
+	print('-'*100)
+	return result
 
 # ---------------------------------------------------------------------------------------------
 
@@ -574,35 +574,26 @@ if __name__=="__main__" :
 	#text = "when I explained to the hotel receptionist about my previous bitter experience, he acknowledged it and gave me a better room in the new wing which was quite good"
 	#text = "Helpful office to print materials such as boarding passes and all the front office staff were attentive and got the job done"
 	#text = "Lobby was too cluttered and always crowded, Airport-pick-up was not sent by the hotel, inspite of confirmation"
-	text = "The hotel was fully-booked"
+	#text = "The hotel was fully-booked"
+	#text = "The room snack just had a 11110/- rupee oreo, 10/- rupee bourbon biscuit, 10/- rupee cashew nut packet for which they billed us 1000/- + taxes which was very shocking."
+	text = "the wifi access was limited"
 	print "Original Text is -> ", text
-
-	# op = cr.correct_spell(text)
-	# op = op.encode("utf-8")
-	# print op
-	# print type(op)
 	clean_txt = cleaner_function(text)
 	txt = cr.resolve_coreference_in_text(clean_txt)
-
 	lock = threading.Lock()
 	t = [None]*len(txt)
 	x = 0
 	for sent in txt:
-		#print sent
-		# print type(sen)
 		sen = sent.encode("utf-8")
 		op = getCoreNLPAnalysis(sen)
 		sen = namedEntityRecognisition(op, sen)
 		print "Individual sentence is -> ", sen.encode("utf-8")
 		sen = sen.replace("-LRB-", "(")
 		sen = sen.replace("-RRB-", ")")
-		#print sen
 		inp = sen.encode("utf-8")
-		#print type(inp)
 		t[x] = threading.Thread(target=run_thread, args=(op, inp, lock,))
 		t[x].start()
 		x += 1
-		#t.join()
 
 	for x in range(len(txt)):
 		t[x].join()

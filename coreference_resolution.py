@@ -58,6 +58,7 @@ def resolve_coreference_in_text(text):
 if __name__=="__main__" :
 	txt = "Aniket is in Pune. He is my friend"
 	txt = "when I explained to the hotel receptionist about my previous bitter experience, he acknowledged it and gave me a better room in the new wing which was quite good"
+	txt	= "the wifi-access was limited"
 	var = resolve_coreference_in_text(txt)
 	for sen in var:
 		print sen.encode("utf-8")
