@@ -1,5 +1,5 @@
 from pycorenlp import StanfordCoreNLP
-from googletrans import Translator
+import re
 import json
 
 def correct_spell(text):
@@ -10,13 +10,11 @@ def correct_spell(text):
 def resolve_coreference_in_text(text):
 	nlp = StanfordCoreNLP('http://13.127.253.52:9000/')
 	output = nlp.annotate(text, properties={'annotators': 'coref','outputFormat':'json'})
-	#'annotators': 'tokenize,ssplit,pos,depparse,parse,dcoref'
 	#print output['corefs']
 	dmp = json.dumps(output['corefs'])
 	data = json.loads(dmp)
 	dmp2 = json.dumps(output['sentences'])
 	sen = json.loads(dmp2)
-
 	pnoun = ['he', 'she', 'they', 'it', 'we']
 	coref = dict()
 	for keys in data:
@@ -37,7 +35,6 @@ def resolve_coreference_in_text(text):
 				coref.pop(key, None)
 			else:
 				coref[key] = lis
-
 	new_text = []
 	for idx in range(len(sen)):
 		tmp = ""
@@ -54,17 +51,13 @@ def resolve_coreference_in_text(text):
 			word = ele[0]
 			idx = ele[1]
 
-			new_text[idx-1] = new_text[idx-1].replace(word, key)
+			new_text[idx-1] = re.sub(r"\b%s\b" % word , key, new_text[idx-1])
 
-	#print type(new_text[0])
 	return new_text
 
 if __name__=="__main__" :
 	txt = "Aniket is in Pune. He is my friend"
-	# text = correct_spell(txt)
-	# print text
-	# text = text.encode("utf-8")
-	
+	txt = "when I explained to the hotel receptionist about my previous bitter experience, he acknowledged it and gave me a better room in the new wing which was quite good"
 	var = resolve_coreference_in_text(txt)
 	for sen in var:
 		print sen.encode("utf-8")

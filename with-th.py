@@ -491,7 +491,7 @@ def remove_stop_words(stopwordList):
 			for k,v in finalDic[x].items():
 				for word in v.split():
 					if word in stopwordList:
-						v = v.replace(word, '')
+						v = re.sub(r"\b%s\b" % word , '', v)
 
 				finalDic[x][k] = v
 
@@ -525,10 +525,9 @@ def namedEntityRecognisition(output, text):
 			sen += word + "-"
 		else:
 			if len(sen) > 1:
-				#print sen
 				sen = sen[:-1]
 				org = org[:-1]
-				text = text.replace(org, sen)
+				text = re.sub(r"\b%s\b" % org , sen, text)
 				sen = ""
 				org = ""
 
@@ -570,8 +569,11 @@ if __name__=="__main__" :
 	#text = "there was only one napkin"
 	#text = "Only one bedsheet was there"
 	#text = "drinks should be cold"
-	text = "More staff should be at reception"
+	#text = "More staff should be at reception"
 	#text = "There can be extra staff"
+	#text = "when I explained to the hotel receptionist about my previous bitter experience, he acknowledged it and gave me a better room in the new wing which was quite good"
+	#text = "Helpful office to print materials such as boarding passes and all the front office staff were attentive and got the job done"
+	text = "Lobby was too cluttered and always crowded, Airport pick-up was not sent by the hotel, inspite of confirmation"
 	
 	print "Original Text is -> ", text
 
@@ -581,7 +583,7 @@ if __name__=="__main__" :
 	# print type(op)
 	clean_txt = cleaner_function(text)
 	txt = cr.resolve_coreference_in_text(clean_txt)
-	#print txt
+
 	lock = threading.Lock()
 	t = [None]*len(txt)
 	x = 0
@@ -592,7 +594,6 @@ if __name__=="__main__" :
 		op = getCoreNLPAnalysis(sen)
 		sen = namedEntityRecognisition(op, sen)
 		print "Individual sentence is -> ", sen.encode("utf-8")
-		#print op
 		sen = sen.replace("-LRB-", "(")
 		sen = sen.replace("-RRB-", ")")
 		#print sen
