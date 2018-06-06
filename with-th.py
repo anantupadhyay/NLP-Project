@@ -102,17 +102,14 @@ def getDependencyAnalysis(output, text):
 		for x in range(len(data[0]['enhancedPlusPlusDependencies'])):
 			tmp = data[0]['enhancedPlusPlusDependencies'][x]
 			if((tmp['dependent']) in noun.keys()):
-				#getting the index of the governor
 				idx = tmp['governor']
 				# If it is related to ROOT, then no need to add it to dictionary
 				if(tmp['governorGloss'] == 'ROOT'):
 					continue
-				#print (idx)
-				if((data[0]['tokens'][idx-1]['pos'] == 'JJ') or (data[0]['tokens'][idx-1]['pos'] == 'JJS') or (data[0]['tokens'][idx-1]['pos'] == 'VBN') or (data[0]['tokens'][idx-1]['pos'] == 'VBG') or (data[0]['tokens'][idx-1]['pos'] == 'VB') or (data[0]['tokens'][idx-1]['pos'] == 'RB') or (data[0]['tokens'][idx-1]['pos'] == 'CD') or (data[0]['tokens'][idx-1]['pos'] == 'VBZ')):
+				if(((data[0]['tokens'][idx-1]['pos'] == 'JJ') or (data[0]['tokens'][idx-1]['pos'] == 'JJS') or (data[0]['tokens'][idx-1]['pos'] == 'VBN') or (data[0]['tokens'][idx-1]['pos'] == 'VBG') or (data[0]['tokens'][idx-1]['pos'] == 'VB') or (data[0]['tokens'][idx-1]['pos'] == 'RB') or (data[0]['tokens'][idx-1]['pos'] == 'CD') or (data[0]['tokens'][idx-1]['pos'] == 'VBZ') or data[0]['tokens'][idx-1]['pos'] == 'NN') and tmp['dep']=='nsubj'):
 					if(noun[(tmp['dependent'])] not in rel.keys()):
-						rel.setdefault(noun[(data[0]['enhancedPlusPlusDependencies'][x]['dependent'])], [])
-
-					rel[noun[(data[0]['enhancedPlusPlusDependencies'][x]['dependent'])]].append(data[0]['enhancedPlusPlusDependencies'][x]['governorGloss'])
+						rel.setdefault(noun[(tmp['dependent'])], [])
+					rel[noun[(tmp['dependent'])]].append(data[0]['enhancedPlusPlusDependencies'][x]['governorGloss'])
 
 			elif((tmp['governor']) in noun.keys()):
 				#getting the index of the dependent
@@ -122,9 +119,8 @@ def getDependencyAnalysis(output, text):
 					continue
 				if((data[0]['tokens'][idx-1]['pos'] == 'JJ') or (data[0]['tokens'][idx-1]['pos'] == 'JJS') or (data[0]['tokens'][idx-1]['pos'] == 'VBN') or (data[0]['tokens'][idx-1]['pos'] == 'VBG') or (data[0]['tokens'][idx-1]['pos'] == 'VB') or (data[0]['tokens'][idx-1]['pos'] == 'CD') or (data[0]['tokens'][idx-1]['pos'] == 'RB') or (data[0]['tokens'][idx-1]['pos'] == 'VBZ')  or (data[0]['tokens'][idx-1]['pos'] == 'RBR')):
 					if(noun[(tmp['governor'])] not in rel.keys()):
-						rel.setdefault(noun[(tmp['governor'])], [])
-					rel[noun[(tmp['governor'])]].append(tmp['dependentGloss'])
-		
+						rel.setdefault(noun[tmp['governor']], [])
+					rel[noun[tmp['governor']]].append(tmp['dependentGloss'])
 		# The part dealing with extracting adjective and verb dependencies from noun ends here!
 		# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~		
 
@@ -138,6 +134,14 @@ def getDependencyAnalysis(output, text):
 						rel[key].insert(0, tmp['dependentGloss'])
 					elif(tmp['dependentGloss'] in val):
 						rel[key].insert(0, tmp['governorGloss'])
+
+			elif tmp['dep'].startswith('nmod'):
+				if tmp['governorGloss'] in rel.values() and tmp['dependentGloss'] not in rel.values():
+					key = rel.get(tmp['governorGloss'])
+					rel[key].append(tmp['dependentGloss'])
+			elif tmp['dep'].startswith('acl'):
+				if tmp['governorGloss'] in key and tmp['dependentGloss'] not in rel[tmp['governorGloss']]:
+					rel[tmp['governorGloss']].append(tmp['dependentGloss'])
 
 			elif((tmp['dep']=='xcomp') or (tmp['dep']=='dobj') or (tmp['dep']=='compound') or (tmp['dep']=='advmod')or tmp['dep']=='nsubjpass'):
 				for key, val in rel.items():
@@ -155,14 +159,9 @@ def getDependencyAnalysis(output, text):
 
 		# This part ends here! 
 		# =============================================================================================================
-		# This part prints the final key value pair
 		for key, val in rel.items():
-			st = ""
-			for word in text.split():
-				if word in val:
-					st += word + " "
+			st = ' '.join(val)
 			rel[key] = st
-
 		return rel
 		
 
@@ -331,15 +330,18 @@ def check_uplevel_cond(gdad, attrs):
 	return (gdad.parent()!=None and gdad.parent().label()!='ROOT') and (gdad.label()!='FRAG' and gdad.label()!='SBAR') and (len(attrs)==0 or gdad.parent().label()=='S' or gdad.parent().label()=='FRAG' or gdad.parent().label()=='VP')
 
 def find_attributes(node, rel2, lock):
+	#print node[0]
 	attrs = []
 	dad = node.parent()
 	gdad = dad.parent()
 
 	for sibling in dad:
+		if sibling == dad:
+			continue
 		if sibling.label() == 'ADJP' or sibling.label()=='NP':
 			tmp = noun_verb_adj_attr(sibling)
 			attrs = add_to_list(attrs, tmp)
-
+	
 		elif sibling.label() == 'DT':
 			attrs = check_for_not(attrs, sibling)
 
@@ -576,7 +578,11 @@ if __name__=="__main__" :
 	#text = "Lobby was too cluttered and always crowded, Airport-pick-up was not sent by the hotel, inspite of confirmation"
 	#text = "The hotel was fully-booked"
 	#text = "The room snack just had a 11110/- rupee oreo, 10/- rupee bourbon biscuit, 10/- rupee cashew nut packet for which they billed us 1000/- + taxes which was very shocking."
-	text = "the wifi access was limited"
+	#text = "Limitation on free wifi access. Wifi was the worst ever. I could not even make Skype calls. The wifi was very spotty, and as a business traveller, that's my number 1 priority"
+	#text = "when i came the 28 % price was more expensive and did not knew that i pay more money for high tax "
+	#text = "wifi is as important as having the bed in the room"
+	#text = "Free wifi should be available in public areas other than private rooms"
+	text = "It took 15 hours to check me in"
 	print "Original Text is -> ", text
 	clean_txt = cleaner_function(text)
 	txt = cr.resolve_coreference_in_text(clean_txt)
