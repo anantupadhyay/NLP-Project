@@ -258,7 +258,7 @@ def noun_phrase_attrb(node):
 	atrb = []
 	for child in node:
 		if child.label() == 'DT':
-			atrb = check_for_not(atrb, child)
+			atrb.append(check_for_not(child))
 
 		elif child.label().startswith('NN'):
 			atrb.append(' '.join(child.flatten()))
@@ -586,7 +586,9 @@ if __name__=="__main__" :
 	#text = "Not the standard of 4.5 star"
 	#text = "We did not like the location but the food was good"
 	#text = "bed was not very comfortable"
-	#text = "food was not at all tasty"
+	#text = "When booking this resort they should have given more information about rules and regulations."
+	#text = "Think there should be some kind of rewards program for returning guests."
+	text = "There should be glass separating the bedroom from the bathroom ."
 	print "Original Text is -> ", text
 	clean_txt = cleaner_function(text)
 	txt = cr.resolve_coreference_in_text(clean_txt)

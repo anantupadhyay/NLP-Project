@@ -10,3 +10,5 @@ cr-sw.py
 remove_foreign_word.py
 common_words.txt
 coreference_resolution.pyc
+replace_common_words.py
+replace_common_words.pyc
