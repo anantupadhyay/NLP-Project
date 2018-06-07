@@ -140,7 +140,7 @@ def getDependencyAnalysis(output, text):
 					key = rel.get(tmp['governorGloss'])
 					rel[key].append(tmp['dependentGloss'])
 			elif tmp['dep'].startswith('acl'):
-				if tmp['governorGloss'] in key and tmp['dependentGloss'] not in rel[tmp['governorGloss']]:
+				if tmp['governorGloss'] in rel.keys() and tmp['dependentGloss'] not in rel[tmp['governorGloss']]:
 					rel[tmp['governorGloss']].append(tmp['dependentGloss'])
 
 			elif((tmp['dep']=='xcomp') or (tmp['dep']=='dobj') or (tmp['dep']=='compound') or (tmp['dep']=='advmod')or tmp['dep']=='nsubjpass'):
@@ -156,7 +156,6 @@ def getDependencyAnalysis(output, text):
 					if(tmp['dependentGloss'] in rel.keys()):
 						x = rel[tmp['dependentGloss']]
 						rel[tmp['governorGloss']].extend(x)
-
 		# This part ends here! 
 		# =============================================================================================================
 		for key, val in rel.items():
@@ -189,10 +188,10 @@ def add_to_list(atrb, data):
 			atrb.append(word)
 	return atrb
 
-def check_for_not(atrb, node):
-	if node[0].lower=="no" or node[0].lower=="not":
-		atrb.append(node[0])
-	return atrb
+def check_for_not(node):
+	if node[0].lower()=="no" or node[0].lower()=="not":
+		return node[0]
+	return ""
 
 def common_check(child):
 	atrb = []
@@ -244,7 +243,7 @@ def second_level_pp(node):
 	atrb = []
 	for child in node:
 		if child.label() == 'DT':
-			atrb = check_for_not(atrb, child)
+			atrb.append(check_for_not(child))
 
 		elif child.label() == 'IN':
 			atrb.append(' '.join(child.flatten()))
@@ -338,13 +337,11 @@ def find_attributes(node, rel2, lock):
 	for sibling in dad:
 		if sibling == dad:
 			continue
-		if sibling.label() == 'ADJP' or sibling.label()=='NP':
+		if sibling.label()=='ADJP' or sibling.label()=='NP':
 			tmp = noun_verb_adj_attr(sibling)
 			attrs = add_to_list(attrs, tmp)
-	
-		elif sibling.label() == 'DT':
-			attrs = check_for_not(attrs, sibling)
-
+		elif sibling.label()=='DT':
+			attrs.append(check_for_not(sibling))
 		else:
 			tmp = common_check(sibling)
 			attrs = add_to_list(attrs, tmp)
@@ -460,8 +457,8 @@ def merge_dictionaries(x, y):
 
 def run_thread(op, sent, lock):
 	#sen = sent.translate(None, string.punctuation)
-	res = (getDependencyAnalysis(op, sent))
-	#res = {}
+	#res = (getDependencyAnalysis(op, sent))
+	res = {}
 	res2 = (parsetreeAnalysis(sent))
 	#res2 = {}
 	kvp = dict()
@@ -582,7 +579,14 @@ if __name__=="__main__" :
 	#text = "when i came the 28 % price was more expensive and did not knew that i pay more money for high tax "
 	#text = "wifi is as important as having the bed in the room"
 	#text = "Free wifi should be available in public areas other than private rooms"
-	text = "It took 15 hours to check me in"
+	#text = "It took 15 hours to check me in"
+	#text = "They did not even give me Invoice for staying with them."
+	#text = "Request was not completely up to the mark"
+	#text = "Beach was not that appealing"
+	#text = "Not the standard of 4.5 star"
+	#text = "We did not like the location but the food was good"
+	#text = "bed was not very comfortable"
+	#text = "food was not at all tasty"
 	print "Original Text is -> ", text
 	clean_txt = cleaner_function(text)
 	txt = cr.resolve_coreference_in_text(clean_txt)
