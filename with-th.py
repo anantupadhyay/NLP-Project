@@ -17,8 +17,6 @@ def getCoreNLPAnalysis(text):
 		nlp = StanfordCoreNLP('http://13.127.253.52:9000/')
 		output = nlp.annotate(text, properties={'annotators': "tokenize,ssplit,ner,regexner,depparse", 'pipelineLanguage': 'en', 'outputFormat':'json'})
 		#'annotators': 'tokenize,ssplit,pos,depparse,parse,dcoref'
-		#print output
-		#exit()
 		return output
 
 	except Exception as er:
@@ -188,10 +186,10 @@ def add_to_list(atrb, data):
 			atrb.append(word)
 	return atrb
 
-def check_for_not(node):
+def check_for_not(atrb, node):
 	if node[0].lower()=="no" or node[0].lower()=="not":
-		return node[0]
-	return ""
+		atrb.append(node[0])
+	return atrb
 
 def common_check(child):
 	atrb = []
@@ -243,7 +241,7 @@ def second_level_pp(node):
 	atrb = []
 	for child in node:
 		if child.label() == 'DT':
-			atrb.append(check_for_not(child))
+			atrb = check_for_not(atrb, child)
 
 		elif child.label() == 'IN':
 			atrb.append(' '.join(child.flatten()))
@@ -258,7 +256,7 @@ def noun_phrase_attrb(node):
 	atrb = []
 	for child in node:
 		if child.label() == 'DT':
-			atrb.append(check_for_not(child))
+			atrb = check_for_not(atrb, child)
 
 		elif child.label().startswith('NN'):
 			atrb.append(' '.join(child.flatten()))
@@ -341,7 +339,7 @@ def find_attributes(node, rel2, lock):
 			tmp = noun_verb_adj_attr(sibling)
 			attrs = add_to_list(attrs, tmp)
 		elif sibling.label()=='DT':
-			attrs.append(check_for_not(sibling))
+			attrs = check_for_not(attrs, sibling)
 		else:
 			tmp = common_check(sibling)
 			attrs = add_to_list(attrs, tmp)
@@ -457,8 +455,8 @@ def merge_dictionaries(x, y):
 
 def run_thread(op, sent, lock):
 	#sen = sent.translate(None, string.punctuation)
-	#res = (getDependencyAnalysis(op, sent))
-	res = {}
+	res = (getDependencyAnalysis(op, sent))
+	#res = {}
 	res2 = (parsetreeAnalysis(sent))
 	#res2 = {}
 	kvp = dict()
@@ -588,7 +586,18 @@ if __name__=="__main__" :
 	#text = "bed was not very comfortable"
 	#text = "When booking this resort they should have given more information about rules and regulations."
 	#text = "Think there should be some kind of rewards program for returning guests."
-	text = "There should be glass separating the bedroom from the bathroom ."
+	#text = "There should be glass separating the bedroom from the bathroom ."
+	#text = "All restaurants around the world should strive for good food."
+	#text = "If you're heading to Budapest, you should DEFINITELY stay at the Aria Hotel!"
+	#text = "I would suggest that the volume should be turned down, especially when there is a singer."
+	#text = "if I return to Budapest I would probably stay here again."
+	#text = "I would return to Aria Hotel Budapest any time and would warmly recommend it."
+	#text = "I would also note that the gym is very basic "
+	#text = "Every detail from booking to check out could not have been handled better or more professionally ."
+	#text = "Our only issue was with the concierge."
+	#text = "there was only a little food put out in buffet"
+	#text = "My only complaint was breakfast."
+	text = "only certain taxis/car services could drive up to the building entrance."
 	print "Original Text is -> ", text
 	clean_txt = cleaner_function(text)
 	txt = cr.resolve_coreference_in_text(clean_txt)

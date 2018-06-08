@@ -82,6 +82,7 @@ text = "Beach was not that appealing"
 text = "hotel was not the standard of 4.5 star"
 text = "bed was not very comfortable"
 text = "food was not at all tasty"
+text = "The managing person was not a good person"
 txt = text.lower().split()
 if 'not' in txt:
 	negDependencyAnalysis(text)
