@@ -327,13 +327,12 @@ def check_uplevel_cond(gdad, attrs):
 	return (gdad.parent()!=None and gdad.parent().label()!='ROOT') and (gdad.label()!='FRAG' and gdad.label()!='SBAR') and (len(attrs)==0 or gdad.parent().label()=='S' or gdad.parent().label()=='FRAG' or gdad.parent().label()=='VP')
 
 def find_attributes(node, rel2, lock):
-	#print node[0]
 	attrs = []
 	dad = node.parent()
 	gdad = dad.parent()
 
 	for sibling in dad:
-		if sibling == dad:
+		if sibling == node:
 			continue
 		if sibling.label()=='ADJP' or sibling.label()=='NP':
 			tmp = noun_verb_adj_attr(sibling)
@@ -416,7 +415,6 @@ def parsetreeAnalysis(text):
 			th[x].join()
 
 		lck.acquire()
-		print ('\n')
 		for key, val in rel2.items():
 			if len(val)==0:
 				rel2.pop(key, 0)
@@ -564,7 +562,7 @@ if __name__=="__main__" :
 	#text = "The room was dirty. New day. Looking for bugs in this part. A regular one."
 	#text = "food should be there"
 	#text = "there was only one napkin"
-	#text = "Only one bedsheet was there"
+	text = "Only one bedsheet was there"
 	#text = "drinks should be cold"
 	#text = "More staff should be at reception"
 	#text = "There can be extra staff"
@@ -597,7 +595,7 @@ if __name__=="__main__" :
 	#text = "Our only issue was with the concierge."
 	#text = "there was only a little food put out in buffet"
 	#text = "My only complaint was breakfast."
-	text = "only certain taxis/car services could drive up to the building entrance."
+	#text = "only certain taxis/car services could drive up to the building entrance."
 	print "Original Text is -> ", text
 	clean_txt = cleaner_function(text)
 	txt = cr.resolve_coreference_in_text(clean_txt)
