@@ -453,8 +453,8 @@ def merge_dictionaries(x, y):
 
 def run_thread(op, sent, lock):
 	#sen = sent.translate(None, string.punctuation)
-	res = (getDependencyAnalysis(op, sent))
-	#res = {}
+	#res = (getDependencyAnalysis(op, sent))
+	res = {}
 	res2 = (parsetreeAnalysis(sent))
 	#res2 = {}
 	kvp = dict()
@@ -562,9 +562,9 @@ if __name__=="__main__" :
 	#text = "The room was dirty. New day. Looking for bugs in this part. A regular one."
 	#text = "food should be there"
 	#text = "there was only one napkin"
-	text = "Only one bedsheet was there"
+	#text = "Only one bedsheet was there"
 	#text = "drinks should be cold"
-	#text = "More staff should be at reception"
+	text = "there should be more staff at reception"
 	#text = "There can be extra staff"
 	#text = "when I explained to the hotel receptionist about my previous bitter experience, he acknowledged it and gave me a better room in the new wing which was quite good"
 	#text = "Helpful office to print materials such as boarding passes and all the front office staff were attentive and got the job done"
