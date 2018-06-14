@@ -28,4 +28,5 @@ def getOpenIE(output):
 
 
 text = "The room is good but food was worse and room is big"
+text = "complementry food wastage asked to pay 1000/- for a meal."
 print getOpenIE(getCoreNLPAnalysis(text))
