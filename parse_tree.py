@@ -99,4 +99,6 @@ text = "there was only one napkin"
 text = "Only one bedsheet was there"
 text = "drinks should be cold"
 text = "there should be more staff at reception"
+text = "the room is good and the food is great"
+text = "We dined at the restaurant in the hotel, they messed up our order a couple of times."
 getParseTreeAnalysis(getCoreNLPAnalysis(text))
