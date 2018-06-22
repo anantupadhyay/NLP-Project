@@ -10,3 +10,16 @@
 15 - domain
 21 - attribute
 59 - subject
+
+
+Do not show video if watched within 'x' days limit
+
+Give atleast 15 videos to the user
+
+Change <<most_frequent_complaint_domain>> function
+
+Work on recommending video through review
+
+tag table - SADD 
+pair table - key value sentiment
+match table - matches tag and pair
