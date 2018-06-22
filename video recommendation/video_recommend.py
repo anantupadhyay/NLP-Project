@@ -1,6 +1,7 @@
-import pandas as pd 
+import pandas as pd
 import threading
 import datetime
+import random
 
 def recommend_video_from_review(subject, attribute, domain, department, sent, vdo_dict):
 	vdo_dict[sent] = "Not Found"
@@ -16,13 +17,17 @@ def get_recent_video(vdo_dict2):
 	for x in li:
 		vdo_dict2[x] = vdo_df[['video_name', 'video_url']][vdo_df['id']==x].values
 
-def get_non_watched_video(df, vdo_dict2):
-	li = df['video_details_id_id'][(df['is_watched']==0) & (df['hotel_id_id']==1)].sample(3).values
+def get_non_watched_video(df, vdo_dict2, hotelid):
+	li = df['video_details_id_id'][(df['is_watched']==0) & (df['hotel_id_id']==hotelid)].sample(3).values
 	for x in li:
 		vdo_dict2[x] = vdo_df[['video_name', 'video_url']][vdo_df['id']==x].values
 
-def get_least_recently_watched(df, vdo_dict2):
-	
+def get_least_recently_watched(df, vdo_dict2, hotelid):
+	wlist = df[['updated_at', 'video_details_id_id']].loc[df['hotel_id_id']==hotelid].dropna()
+	li = wlist.sort_values('updated_at').video_details_id_id.unique()[:8]
+	li = random.sample(li, 3)
+	for x in li:
+		vdo_dict2[x] = vdo_df[['video_name', 'video_url']][vdo_df['id']==x].values
 
 def get_most_complaint_domain(vdo_dict2):
 	tags = pd.read_csv('dataset/tags.csv')
@@ -33,30 +38,31 @@ def get_most_complaint_domain(vdo_dict2):
 
 def recommend_video_without_review(vdo_dict2):
 	df = pd.read_csv('dataset/watchlist.csv')
-	get_non_watched_video(df, vdo_dict2)
-	get_least_recently_watched(df, vdo_dict2)
-	get_recent_video(vdo_dict2)
-	get_most_complaint_domain(vdo_dict2)
+	hotelid = 1
+	# get_non_watched_video(df, vdo_dict2, hotelid)
+	get_least_recently_watched(df, vdo_dict2, hotelid)
+	# get_recent_video(vdo_dict2)
+	# get_most_complaint_domain(vdo_dict2)
 
 vdo_df = pd.read_csv('dataset/video.csv')
 if __name__=="__main__" :
-	review = pd.read_csv('dataset/review.csv')
-	procs=[]
-	vdo_dict = {}
-	for x in range(0, 7):
-		sub = review['subject'][x]
-		attrb = review['attribute'][x]
-		domain = review['domain'][x]
-		dept = review['department'][x]
-		proc=threading.Thread(target=recommend_video_from_review, args=([sub], [attrb], [domain], [dept], review['review'][x], vdo_dict))
-		procs.append(proc)
-		proc.start()
+	# review = pd.read_csv('dataset/review.csv')
+	# procs=[]
+	# vdo_dict = {}
+	# for x in range(0, 7):
+	# 	sub = review['subject'][x]
+	# 	attrb = review['attribute'][x]
+	# 	domain = review['domain'][x]
+	# 	dept = review['department'][x]
+	# 	proc=threading.Thread(target=recommend_video_from_review, args=([sub], [attrb], [domain], [dept], review['review'][x], vdo_dict))
+	# 	procs.append(proc)
+	# 	proc.start()
 
-	for proc in procs:
-		proc.join()
+	# for proc in procs:
+	# 	proc.join()
 
-	for k,v in vdo_dict.items():
-		print k, " -> ", v, '\n'
+	# for k,v in vdo_dict.items():
+	# 	print k, " -> ", v, '\n'
 
 	vdo_dict2 ={}
 	recommend_video_without_review(vdo_dict2)
