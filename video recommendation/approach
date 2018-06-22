@@ -12,11 +12,11 @@
 59 - subject
 
 
-Do not show video if watched within 'x' days limit
+Do not show video if watched within 'x' days limit -- done
 
 Give atleast 15 videos to the user
 
-Change <<most_frequent_complaint_domain>> function
+Change <<most_frequent_complaint_domain>> function -- done
 
 Work on recommending video through review
 
