@@ -1,0 +1,12 @@
+- Video data is given in table
+- Compare the tags of review with the video tags
+- Recommend videos on the basis of those tags
+- If not found, then omit the last tag and research video, then recommend, if still not found, leave the K:V
+- Each video will be having 4 tags-> department, domain, attribute, subject and so will the review.
+- Video details will contain -> name, thumbnail_url, video_url, quiz, tag
+- watchlist will contain -> video_details_id, hotel_id, is_watched, show_on
+
+5 - department
+15 - domain
+21 - attribute
+59 - subject

@@ -1,0 +1,8 @@
+id,created_at,updated_at,subject,attribute,department,domain,review
+1,"2018-03-09 19:47:28.765552",NULL,Services,Efficiency,Hotel,Hotel,"The room service is good"
+4,"2018-03-09 19:47:30.377058",NULL,Hotel,Quality,Hotel,Hotel,"The quality of hotel is bad"
+6,"2018-03-09 20:00:43.047355",NULL,Amenities,Adequacy,Housekeeping,"Room Making","The room was not according to expectation"
+7,"2018-03-09 20:00:43.818294",NULL,Appliances,Availability,Housekeeping,"Room Making","minibar was not in the room"
+8,"2018-03-09 19:44:59.801908",NULL,Room,Integrity/Maintenance,Housekeeping,Maintenance,"AC was not working"
+9,"2018-03-09 20:01:31.024614",NULL,Linen,Availability,Housekeeping,"Room Making","Extra bedsheets were not there"
+17,"2018-03-09 20:00:44.276181",NULL,Bathroom,Quality,Housekeeping,"Room Making","there was smell coming from bathroom"

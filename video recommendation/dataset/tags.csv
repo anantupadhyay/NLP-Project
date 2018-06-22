@@ -1,0 +1,430 @@
+id,created_at,updated_at,subject,attribute,department,domain
+1,"2018-03-09 19:47:28.765552",NULL,Services,Efficiency,Hotel,Hotel
+4,"2018-03-09 19:47:30.377058",NULL,Hotel,Quality,Hotel,Hotel
+6,"2018-03-09 20:00:43.047355",NULL,Amenities,Adequacy,Housekeeping,"Room Making"
+7,"2018-03-09 20:00:43.818294",NULL,Appliances,Availability,Housekeeping,"Room Making"
+8,"2018-03-09 19:44:59.801908",NULL,Room,Integrity/Maintenance,Housekeeping,Maintenance
+9,"2018-03-09 20:01:31.024614",NULL,Linen,Availability,Housekeeping,"Room Making"
+17,"2018-03-09 20:00:44.276181",NULL,Bathroom,Quality,Housekeeping,"Room Making"
+18,"2018-03-09 19:45:29.531191",NULL,Efficiency,Accuracy,Hotel,Hotel
+19,"2018-03-09 20:01:03.816380",NULL,Services,Integrity/Maintenance,Housekeeping,Maintenance
+20,"2018-03-09 19:45:30.323555",NULL,Services,Ambience,Housekeeping,Maintenance
+21,"2018-03-09 19:45:30.720354",NULL,Services,Temperature,Housekeeping,Maintenance
+22,"2018-03-09 19:45:31.105424",NULL,Services,Accuracy,Hotel,Hotel
+23,"2018-03-09 19:47:14.366324",NULL,Food,Integrity/Maintenance,"Food & Beverage","Food Production"
+24,"2018-03-09 20:00:51.299649",NULL,Food,Ambience,"Food & Beverage","Food Production"
+25,"2018-03-09 20:01:14.054496",NULL,Food,Temperature,"Food & Beverage","Food Production"
+26,"2018-03-09 19:47:14.777879",NULL,Food,Integrity/Maintenance,"Food & Beverage",Maintenance
+27,"2018-03-09 19:45:33.054198",NULL,Food,Ambience,"Food & Beverage",Maintenance
+28,"2018-03-09 19:45:33.444186",NULL,Food,Temperature,"Food & Beverage",Maintenance
+29,"2018-03-09 20:01:19.376923",NULL,Food,Accuracy,"Food & Beverage",Service
+30,"2018-03-09 19:45:34.259270",NULL,Room,Accuracy,"Front Office",Check-in/Check-out
+31,"2018-03-09 19:47:24.355320",NULL,Staff,Cleanliness,Housekeeping,"Room Making"
+32,"2018-03-09 20:00:47.790218",NULL,Staff,Quality,Housekeeping,"Room Making"
+33,"2018-03-09 19:47:18.357333",NULL,Ambience,Cleanliness,Housekeeping,"Room Making"
+34,"2018-03-09 19:47:18.759596",NULL,Ambience,Quality,Housekeeping,"Room Making"
+35,"2018-03-09 19:46:45.466335",NULL,Staff,Integrity/Maintenance,Housekeeping,Maintenance
+36,"2018-03-09 19:45:37.454266",NULL,Staff,Cleanliness,Housekeeping,Maintenance
+37,"2018-03-09 20:01:34.600850",NULL,Staff,Quality,Housekeeping,Maintenance
+38,"2018-03-09 19:45:38.254175",NULL,Staff,Integrity/Maintenance,Housekeeping,"Room Making"
+39,"2018-03-09 19:45:39.454569",NULL,Cleanliness,Ambience,Hotel,Hotel
+40,"2018-03-09 20:00:58.497532",NULL,Cleanliness,Cleanliness,Housekeeping,"Room Making"
+41,"2018-03-09 19:47:19.565792",NULL,Cleanliness,Quality,Housekeeping,"Room Making"
+42,"2018-03-09 19:45:40.667004",NULL,Ambience,Ambience,Hotel,Hotel
+43,"2018-03-09 19:45:42.966254",NULL,Services,Cleanliness,Housekeeping,Maintenance
+44,"2018-03-09 19:45:43.368462",NULL,Services,Quality,Housekeeping,Maintenance
+45,"2018-03-09 19:45:43.764987",NULL,Services,Integrity/Maintenance,Housekeeping,"Room Making"
+46,"2018-03-09 19:46:38.184443",NULL,Services,Cleanliness,Housekeeping,"Room Making"
+47,"2018-03-09 19:46:38.584311",NULL,Services,Quality,Housekeeping,"Room Making"
+48,"2018-03-09 19:45:44.986583",NULL,Integrity/Maintenance,Integrity/Maintenance,Housekeeping,Maintenance
+49,"2018-03-09 19:45:45.396138",NULL,Integrity/Maintenance,Cleanliness,Housekeeping,Maintenance
+50,"2018-03-09 19:45:45.795381",NULL,Integrity/Maintenance,Quality,Housekeeping,Maintenance
+51,"2018-03-09 19:45:46.217709",NULL,Cleanliness,Integrity/Maintenance,Housekeeping,Maintenance
+52,"2018-03-09 19:45:46.654636",NULL,Cleanliness,Cleanliness,Housekeeping,Maintenance
+53,"2018-03-09 19:45:47.056690",NULL,Cleanliness,Quality,Housekeeping,Maintenance
+54,"2018-03-09 19:45:47.415461",NULL,Integrity/Maintenance,Integrity/Maintenance,Housekeeping,"Room Making"
+55,"2018-03-09 20:01:26.143916",NULL,Integrity/Maintenance,Cleanliness,Housekeeping,"Room Making"
+56,"2018-03-09 20:01:26.536201",NULL,Integrity/Maintenance,Quality,Housekeeping,"Room Making"
+57,"2018-03-09 19:45:48.607662",NULL,Cleanliness,Integrity/Maintenance,Housekeeping,"Room Making"
+59,"2018-03-09 19:45:51.693781",NULL,Cleanliness,Courtesy,Hotel,Hotel
+60,"2018-03-09 19:47:25.557480",NULL,Staff,Quality,Hotel,Hotel
+61,"2018-03-09 19:46:30.602455",NULL,Room,Quality,Housekeeping,"Room Making"
+62,"2018-03-09 19:47:20.364827",NULL,Pricing,Ambience,"Front Office","Billing & Payment"
+63,"2018-03-09 19:47:20.765204",NULL,Pricing,Efficiency,"Front Office","Billing & Payment"
+64,"2018-03-09 19:45:54.375480",NULL,Ambience,Adequacy,Hotel,Hotel
+65,"2018-03-09 19:45:54.775373",NULL,Noise,Adequacy,Hotel,Hotel
+66,"2018-03-09 19:45:55.176910",NULL,Ambience,Integrity/Maintenance,Housekeeping,Maintenance
+67,"2018-03-09 19:45:55.584870",NULL,Noise,Integrity/Maintenance,Housekeeping,Maintenance
+68,"2018-03-09 19:46:38.984870",NULL,Room,Ambience,Hotel,Hotel
+69,"2018-03-09 19:45:56.785206",NULL,Room,Noise,Hotel,Hotel
+70,"2018-03-09 19:47:23.555877",NULL,Room,"Pest Control",Hotel,Hotel
+71,"2018-03-09 19:45:57.985535",NULL,Hotel,Adequacy,Hotel,Hotel
+72,"2018-03-09 19:45:58.387452",NULL,Hotel,Integrity/Maintenance,Housekeeping,Maintenance
+73,"2018-03-09 19:45:58.784351",NULL,"Pest Control",Adequacy,Hotel,Hotel
+74,"2018-03-09 19:45:59.227408",NULL,"Pest Control",Integrity/Maintenance,Housekeeping,Maintenance
+75,"2018-03-09 20:00:50.608337",NULL,Food,Cleanliness,"Food & Beverage","Food Production"
+76,"2018-03-09 19:46:07.735012",NULL,"Phone Call",Cleanliness,Housekeeping,"Room Making"
+77,"2018-03-09 19:46:08.135517",NULL,"Phone Call",Quality,Housekeeping,"Room Making"
+78,"2018-03-09 19:47:29.988585",NULL,Hotel,Cleanliness,Hotel,Hotel
+79,"2018-03-09 19:47:25.947217",NULL,Efficiency,Quality,Hotel,Hotel
+80,"2018-03-09 19:46:16.104460",NULL,Efficiency,Cleanliness,Housekeeping,"Room Making"
+81,"2018-03-09 20:00:53.887783",NULL,Efficiency,Quality,Housekeeping,"Room Making"
+82,"2018-03-09 19:46:58.414640",NULL,Services,Quality,Hotel,Hotel
+83,"2018-03-09 19:47:25.155600",NULL,Quality,Quality,Hotel,Hotel
+85,"2018-03-09 20:01:11.645417",NULL,Bed,Quality,Housekeeping,Offering
+86,"2018-03-09 19:46:25.856770",NULL,Check-Out,Courtesy,"Front Office",Check-in/Check-out
+87,"2018-03-09 19:46:29.418529",NULL,Courtesy,Cleanliness,Housekeeping,"Room Making"
+88,"2018-03-09 19:46:29.814324",NULL,Courtesy,Quality,Housekeeping,"Room Making"
+89,"2018-03-09 19:46:33.783562",NULL,Food,Taste,"Food & Beverage","Food Production"
+90,"2018-03-09 19:46:34.183521",NULL,Food,Location,"Food & Beverage","Food Production"
+92,"2018-03-09 19:46:36.179830",NULL,Efficiency,Courtesy,Hotel,Hotel
+93,"2018-03-09 20:00:47.099069",NULL,Food,Courtesy,"Food & Beverage",Service
+94,"2018-03-09 19:46:36.974965",NULL,Services,Courtesy,Hotel,Hotel
+95,"2018-03-09 19:46:37.384769",NULL,Staff,Efficiency,Hotel,Hotel
+96,"2018-03-09 19:46:39.385191",NULL,Room,Temperature,Hotel,Hotel
+97,"2018-03-09 19:46:39.784926",NULL,Menu,Accuracy,Hotel,Hotel
+98,"2018-03-09 20:01:04.956202",NULL,Beverage,Ambience,"Food & Beverage","Food Production"
+99,"2018-03-09 20:01:05.327189",NULL,Beverage,Temperature,"Food & Beverage","Food Production"
+100,"2018-03-09 19:47:01.818184",NULL,"Water Supply",Ambience,"Food & Beverage","Food Production"
+101,"2018-03-09 19:47:02.267262",NULL,"Water Supply",Temperature,"Food & Beverage","Food Production"
+102,"2018-03-09 19:46:55.210890",NULL,Quality,Cleanliness,Housekeeping,"Room Making"
+103,"2018-03-09 19:46:55.614912",NULL,Quality,Quality,Housekeeping,"Room Making"
+104,"2018-03-09 19:46:47.080185",NULL,Staff,Ambience,Hotel,Hotel
+105,"2018-03-09 19:46:52.377950",NULL,Food,Cleanliness,"Food & Beverage",Maintenance
+106,"2018-03-09 20:01:23.445045",NULL,Food,Quality,"Food & Beverage",Maintenance
+108,"2018-03-09 19:47:22.755890",NULL,Quality,Integrity/Maintenance,Housekeeping,Maintenance
+109,"2018-03-09 20:00:48.259941",NULL,Quality,Cleanliness,Housekeeping,Maintenance
+110,"2018-03-09 19:47:23.154218",NULL,Quality,Quality,Housekeeping,Maintenance
+111,"2018-03-09 20:00:48.701127",NULL,Quality,Integrity/Maintenance,Housekeeping,"Room Making"
+113,"2018-03-09 19:46:56.814854",NULL,Quality,Value,Hotel,Hotel
+114,"2018-03-09 19:47:19.965153",NULL,"Phone Call",Value,Hotel,Hotel
+115,"2018-03-09 19:46:58.014940",NULL,Quality,Efficiency,Hotel,Hotel
+116,"2018-03-09 20:01:04.576838",NULL,Beverage,Integrity/Maintenance,"Food & Beverage","Food Production"
+117,"2018-03-09 19:46:59.618151",NULL,"Water Supply",Integrity/Maintenance,"Food & Beverage","Food Production"
+118,"2018-03-09 20:01:05.949363",NULL,Beverage,Integrity/Maintenance,"Food & Beverage",Maintenance
+119,"2018-03-09 19:47:00.457330",NULL,"Water Supply",Integrity/Maintenance,"Food & Beverage",Maintenance
+120,"2018-03-09 20:01:27.611688",NULL,Beverage,Cleanliness,Housekeeping,"Food Production"
+121,"2018-03-09 20:01:27.991612",NULL,"Water Supply",Cleanliness,Housekeeping,"Food Production"
+122,"2018-03-09 20:01:28.362187",NULL,Beverage,Cleanliness,Housekeeping,"Room Making"
+123,"2018-03-09 20:01:28.734439",NULL,"Water Supply",Cleanliness,Housekeeping,"Room Making"
+124,"2018-03-09 19:47:04.305833",NULL,Beverage,Cleanliness,"Food & Beverage","Food Production"
+125,"2018-03-09 20:01:29.184333",NULL,"Water Supply",Cleanliness,"Food & Beverage","Food Production"
+126,"2018-03-09 20:01:29.564446",NULL,Beverage,Cleanliness,"Food & Beverage","Room Making"
+127,"2018-03-09 20:01:29.934905",NULL,"Water Supply",Cleanliness,"Food & Beverage","Room Making"
+128,"2018-03-09 19:47:05.925573",NULL,Appliances,Cleanliness,Housekeeping,"Room Making"
+129,"2018-03-09 19:47:07.126166",NULL,Tableware,Integrity/Maintenance,"Food & Beverage",Maintenance
+130,"2018-03-09 19:47:07.527950",NULL,Tableware,Ambience,Hotel,Hotel
+131,"2018-03-09 19:47:07.938531",NULL,Tableware,Temperature,Hotel,Hotel
+132,"2018-03-09 19:47:12.344540",NULL,Tableware,Cleanliness,Housekeeping,"Food Production"
+133,"2018-03-09 19:47:12.744707",NULL,Tableware,Cleanliness,Housekeeping,"Room Making"
+134,"2018-03-09 19:47:13.153346",NULL,Tableware,Cleanliness,"Food & Beverage","Food Production"
+135,"2018-03-09 19:47:13.544993",NULL,Tableware,Cleanliness,"Food & Beverage","Room Making"
+136,"2018-03-09 19:47:09.935264",NULL,Appliances,Availability,Hotel,Hotel
+140,"2018-03-09 19:45:26.354950",NULL,Check-In,Efficiency,"Front Office",Check-in/Check-out
+143,"2018-03-09 19:45:04.231595",NULL,Cleanliness,Quality,Hotel,Hotel
+146,"2018-03-09 19:42:29.966557",NULL,Food,Availability,"Food & Beverage","Food Production"
+149,"2018-03-09 19:42:30.364760",NULL,Appliances,Availability,Housekeeping,Maintenance
+150,"2018-03-09 20:00:45.888778",NULL,Food,Variety,"Food & Beverage","Food Production"
+153,"2018-03-09 19:47:15.956904",NULL,Pricing,Adequacy,"Front Office","Billing & Payment"
+154,"2018-03-09 19:47:16.754156",NULL,"Phone Call",Courtesy,Hotel,Hotel
+155,"2018-03-09 19:42:32.776731",NULL,Staff,Courtesy,Hotel,Hotel
+156,"2018-03-09 19:42:33.184537",NULL,Taste,Cleanliness,Housekeeping,"Room Making"
+157,"2018-03-09 19:42:33.574735",NULL,Taste,Quality,Housekeeping,"Room Making"
+159,"2018-03-09 19:44:52.588645",NULL,Room,Quality,Hotel,Hotel
+160,"2018-03-09 19:45:29.134263",NULL,Menu,Quality,Hotel,Hotel
+162,"2018-03-09 19:43:04.981139",NULL,Adequacy,Quality,Hotel,Hotel
+163,"2018-03-09 19:44:52.990289",NULL,Room,Location,Hotel,Hotel
+164,"2018-03-09 19:44:00.973402",NULL,Cleanliness,Location,Hotel,Hotel
+165,"2018-03-09 19:43:30.457472",NULL,Kitchen,Efficiency,Hotel,Hotel
+166,"2018-03-09 19:47:28.364635",NULL,Room,Adequacy,Hotel,Hotel
+167,"2018-03-09 19:43:31.252412",NULL,Beverage,Efficiency,"Food & Beverage",Service
+168,"2018-03-09 19:43:31.653842",NULL,"Water Supply",Efficiency,"Food & Beverage",Service
+169,"2018-03-09 19:43:33.657691",NULL,Staff,Accuracy,Hotel,Hotel
+170,"2018-03-09 19:43:34.061400",NULL,Cleanliness,Value,Hotel,Hotel
+171,"2018-03-09 19:43:34.459203",NULL,Value,Cleanliness,Housekeeping,"Room Making"
+172,"2018-03-09 19:43:37.265130",NULL,Appliances,Efficiency,Hotel,Hotel
+173,"2018-03-09 19:44:47.408097",NULL,Efficiency,Integrity/Maintenance,Housekeeping,Maintenance
+174,"2018-03-09 19:43:39.257229",NULL,Services,Availability,Hotel,Hotel
+175,"2018-03-09 19:43:41.281969",NULL,Room,Ambience,Housekeeping,Maintenance
+176,"2018-03-09 19:43:41.675431",NULL,Room,Temperature,Housekeeping,Maintenance
+177,"2018-03-09 19:43:43.286381",NULL,Snacks,Integrity/Maintenance,"Food & Beverage","Food Production"
+178,"2018-03-09 19:43:43.685126",NULL,Snacks,Ambience,"Food & Beverage","Food Production"
+179,"2018-03-09 19:43:44.087310",NULL,Snacks,Temperature,"Food & Beverage","Food Production"
+180,"2018-03-09 19:43:44.888306",NULL,Beverage,Ambience,"Food & Beverage",Maintenance
+181,"2018-03-09 19:43:45.280342",NULL,Beverage,Temperature,"Food & Beverage",Maintenance
+182,"2018-03-09 19:43:45.680720",NULL,Snacks,Integrity/Maintenance,"Food & Beverage",Maintenance
+183,"2018-03-09 19:43:46.082304",NULL,Snacks,Ambience,"Food & Beverage",Maintenance
+184,"2018-03-09 19:43:46.479699",NULL,Snacks,Temperature,"Food & Beverage",Maintenance
+185,"2018-03-09 19:43:47.280198",NULL,Appliances,Ambience,Housekeeping,Maintenance
+186,"2018-03-09 19:43:47.682952",NULL,Appliances,Temperature,Housekeeping,Maintenance
+187,"2018-03-09 19:44:59.400999",NULL,"Bathroom Fittings",Integrity/Maintenance,Housekeeping,Maintenance
+188,"2018-03-09 19:47:30.776126",NULL,Hotel,Location,Hotel,Hotel
+189,"2018-03-09 19:44:04.941429",NULL,Quality,Location,Hotel,Hotel
+190,"2018-03-09 19:44:06.127007",NULL,Staff,Location,Hotel,Hotel
+191,"2018-03-09 20:01:11.247712",NULL,Bed,Adequacy,Housekeeping,Offering
+192,"2018-03-09 19:45:00.698057",NULL,Room,Efficiency,Hotel,Hotel
+193,"2018-03-09 19:44:20.438494",NULL,Services,Adequacy,Hotel,Hotel
+194,"2018-03-09 19:45:27.933953",NULL,Integrity/Maintenance,Quality,Hotel,Hotel
+197,"2018-03-09 19:44:40.218063",NULL,Linen,Integrity/Maintenance,Housekeeping,"Room Making"
+198,"2018-03-09 19:44:41.427214",NULL,Ambience,Courtesy,Hotel,Hotel
+199,"2018-03-09 19:44:41.826094",NULL,Ambience,Noise,Hotel,Hotel
+200,"2018-03-09 19:44:46.605801",NULL,Food,Theft,"Food & Beverage",Service
+201,"2018-03-09 19:44:50.589714",NULL,"Phone Call",Ambience,Hotel,Hotel
+202,"2018-03-09 19:44:50.988485",NULL,"Phone Call",Efficiency,Hotel,Hotel
+203,"2018-03-09 19:45:11.742054",NULL,Pricing,Quality,"Front Office","Billing & Payment"
+204,"2018-03-09 19:47:17.555425",NULL,Courtesy,Ambience,Hotel,Hotel
+205,"2018-03-09 19:47:17.955200",NULL,Courtesy,Efficiency,Hotel,Hotel
+206,"2018-03-09 19:47:27.155156",NULL,Bed,Courtesy,Hotel,Hotel
+207,"2018-03-09 19:47:27.552667",NULL,Adequacy,Courtesy,Hotel,Hotel
+208,"2018-03-09 19:47:27.967352",NULL,"Id Card",Readiness,Hotel,Hotel
+209,"2018-03-09 19:45:04.631881",NULL,Location,Quality,Hotel,Hotel
+227,"2018-03-09 20:01:26.914911",NULL,"Bathroom Fittings",Cleanliness,Housekeeping,"Room Making"
+230,"2018-03-09 19:47:31.976885",NULL,Furnishings,Cleanliness,Housekeeping,"Room Making"
+252,"2018-03-10 10:18:27.569749",NULL,Hotel,Quality,Hotel,Offering
+256,"2018-03-10 10:18:33.264153",NULL,Hotel,Ambience,Housekeeping,Offering
+275,"2018-03-10 10:29:29.883632",NULL,Linen,Quality,Housekeeping,Offering
+276,"2018-03-10 10:29:31.213229",NULL,Room,Quality,Housekeeping,Offering
+284,"2018-03-10 10:29:42.013119",NULL,Hotel,Location,"Front Office",Offering
+307,"2018-03-10 10:30:09.899591",NULL,Pricing,Value,"Front Office","Billing & Payment"
+308,"2018-03-10 10:30:11.290261",NULL,Beverage,Availability,"Food & Beverage","Food Production"
+331,"2018-03-10 10:30:36.406560",NULL,Staff,Quality,"Front Office",Service
+350,"2018-03-10 10:30:58.700858",NULL,"Water Supply",Availability,Housekeeping,Maintenance
+369,"2018-03-10 10:31:21.769625",NULL,Appliances,Availability,Housekeeping,Offering
+373,"2018-03-10 10:31:26.317374",NULL,Pricing,Accuracy,"Front Office","Billing & Payment"
+378,"2018-03-10 10:31:32.973233",NULL,Room,Efficiency,"Front Office",Service
+379,"2018-03-10 10:31:34.292817",NULL,Staff,Availability,Hotel,Service
+383,"2018-03-10 10:31:38.443081",NULL,Check-In,Courtesy,"Front Office",Check-in/Check-out
+422,"2018-03-10 10:32:24.356118",NULL,Bathroom,Quality,Housekeeping,Offering
+423,"2018-03-10 10:32:25.287493",NULL,Furnishing,Quality,Housekeeping,Offering
+435,"2018-03-10 10:32:38.172154",NULL,"Power Supply",Availability,"Front Office",Maintenance
+470,"2018-03-10 10:33:17.688570",NULL,Amenities,Accuracy,Housekeeping,"Room Making"
+472,"2018-03-10 10:33:19.972494",NULL,Beverage,Accuracy,"Food & Beverage",Service
+483,"2018-03-10 10:33:32.592233",NULL,Amenities,Quality,Housekeeping,Offering
+488,"2018-03-10 10:33:38.048946",NULL,Hotel,Value,"Front Office",Offering
+497,"2018-03-10 10:33:48.473022",NULL,Exterior,Quality,Hotel,Offering
+499,"2018-03-10 10:33:50.750772",NULL,Restaurant,Quality,"Food & Beverage",Offering
+516,"2018-03-10 10:34:08.684750",NULL,Appliances,Recommendation,Housekeeping,Offering
+576,"2018-03-10 10:41:34.252406",NULL,Pricing,Value,"Food & Beverage",Offering
+582,"2018-03-10 10:41:41.805884",NULL,Amenities,Efficiency,Housekeeping,Service
+596,"2018-03-15 09:14:00.329777",NULL,Billing,Accuracy,"Front Office","Billing & Payment"
+601,"2018-03-19 08:16:43.416876",NULL,Staff,Efficiency,Housekeeping,Service
+604,"2018-03-20 09:51:54.246852",NULL,"Fittings & Fixtures",Integrity/Maintenance,Housekeeping,Maintenance
+605,"2018-03-20 10:16:04.646101",NULL,Bed,Integrity/Maintenance,Housekeeping,Maintenance
+606,"2018-03-20 10:26:52.900883",NULL,Restaurant,"Pest Control",Housekeeping,"Public Areas"
+607,"2018-03-20 10:30:17.520877",NULL,"Power Supply",Integrity/Maintenance,"Front Office",Maintenance
+610,"2018-03-23 05:12:56.194143",NULL,Hotel,Cleanliness,Housekeeping,"Public Areas"
+611,"2018-03-23 10:29:31.245504",NULL,Staff,Quality,Hotel,Offering
+612,"2018-03-23 10:33:54.006540",NULL,Staff,Courtesy,Hotel,Offering
+613,"2018-03-23 10:48:51.211941",NULL,Hotel,Quality,Hotel,Service
+620,"2018-03-23 17:49:58.502614",NULL,Amenities,Availability,Housekeeping,Offering
+624,"2018-03-24 08:12:17.625234",NULL,Staff,Accuracy,"Food & Beverage",Service
+625,"2018-03-24 08:12:38.030632",NULL,Staff,Accuracy,Hotel,Service
+626,"2018-03-27 09:21:03.315924",NULL,Staff,Efficiency,"Front Office",Check-in/Check-out
+627,"2018-03-29 09:49:29.802864",NULL,Amenities,Value,Housekeeping,Offering
+628,"2018-04-03 04:43:58.296102",NULL,Staff,Efficiency,Hotel,Service
+630,"2018-04-04 04:30:19.758184",NULL,Room,Adequacy,Housekeeping,Offering
+635,"2018-04-06 16:13:58.750224",NULL,Amenities,Value,Hotel,Offering
+636,"2018-04-06 16:14:03.470700",NULL,Internet,Efficiency,"Front Office",IT
+639,"2018-04-06 16:14:18.793121",NULL,Elevator,Integrity/Maintenance,"Front Office",Maintenance
+645,"2018-04-06 16:14:46.753653",NULL,Appliances,Integrity/Maintenance,Housekeeping,Offering
+651,"2018-04-06 16:15:18.444126",NULL,Surfaces,Cleanliness,Housekeeping,"Public Areas"
+663,"2018-04-06 16:16:14.981497",NULL,Staff,Adequacy,Hotel,Service
+682,"2018-04-06 16:17:48.425700",NULL,Hotel,Integrity/Maintenance,Hotel,Maintenance
+694,"2018-04-06 16:18:48.308956",NULL,Appliances,Quality,Housekeeping,Offering
+703,"2018-04-06 16:19:30.086455",NULL,Bathroom,Adequacy,Hotel,Offering
+711,"2018-04-06 16:20:08.274739",NULL,Room,Ambience,Housekeeping,Offering
+712,"2018-04-06 16:20:13.925612",NULL,Appliances,Integrity/Maintenance,"Front Office",Maintenance
+731,"2018-04-06 16:21:43.693364",NULL,Billing,Availability,"Front Office","Billing & Payment"
+736,"2018-04-06 16:22:05.572214",NULL,Hotel,Ambience,Hotel,Offering
+746,"2018-04-06 16:22:51.814970",NULL,Furnishing,Adequacy,Housekeeping,Offering
+750,"2018-04-06 16:23:10.853173",NULL,Linen,Cleanliness,Housekeeping,Offering
+753,"2018-04-06 16:23:24.208239",NULL,Hotel,Quality,"Food & Beverage",Offering
+765,"2018-04-06 16:24:17.202996",NULL,Beverage,Quality,"Food & Beverage",Offering
+770,"2018-04-06 16:24:41.366485",NULL,Beverage,Value,"Food & Beverage",Offering
+773,"2018-04-06 16:24:55.503736",NULL,Menu,Value,"Food & Beverage",Offering
+774,"2018-04-06 16:24:59.811456",NULL,Wifi,Quality,"Front Office",Offering
+785,"2018-04-06 16:25:50.824086",NULL,Internet,Quality,"Front Office",Offering
+788,"2018-04-06 16:26:04.722915",NULL,Staff,Quality,"Food & Beverage",Service
+804,"2018-04-06 16:27:22.102242",NULL,Billing,Value,"Front Office","Billing & Payment"
+808,"2018-04-06 16:27:37.904210",NULL,Elevator,Availability,Hotel,Offering
+809,"2018-04-06 16:27:42.583835",NULL,Staff,Availability,"Front Office",Service
+810,"2018-04-06 16:27:47.472393",NULL,Internet,Integrity/Maintenance,"Front Office",Offering
+813,"2018-04-06 16:28:01.643217",NULL,Amenities,Accuracy,Housekeeping,Offering
+816,"2018-04-06 16:28:13.082948",NULL,Check-In,Quality,"Front Office",Check-in/Check-out
+825,"2018-04-06 16:28:53.557889",NULL,Menu,Availability,"Food & Beverage",Offering
+830,"2018-04-06 16:29:16.814668",NULL,Staff,Accuracy,"Food & Beverage",Offering
+831,"2018-04-06 16:29:19.978345",NULL,Staff,Accuracy,"Front Office",Offering
+838,"2018-04-06 16:29:52.017813",NULL,Hotel,Location,Hotel,Offering
+840,"2018-04-06 16:30:01.632565",NULL,Menu,Adequacy,"Food & Beverage",Offering
+841,"2018-04-06 16:30:06.362206",NULL,Staff,Efficiency,"Food & Beverage",Service
+848,"2018-04-06 16:30:38.551304",NULL,Food,Accuracy,"Food & Beverage","Food Production"
+852,"2018-04-06 16:30:57.358008",NULL,Room,Comfort,Hotel,Offering
+853,"2018-04-06 16:31:02.628787",NULL,Menu,Adequacy,"Food & Beverage","Food Production"
+854,"2018-04-06 16:31:07.075085",NULL,Beverage,Quality,"Food & Beverage","Food Production"
+874,"2018-04-06 16:32:37.295034",NULL,Food,Availability,"Food & Beverage",Offering
+875,"2018-04-06 16:32:42.083456",NULL,Check-Out,Efficiency,"Front Office",Check-in/Check-out
+876,"2018-04-06 16:32:46.315398",NULL,Billing,Efficiency,"Front Office","Billing & Payment"
+879,"2018-04-06 16:33:00.444836",NULL,"Water Supply",Integrity/Maintenance,Housekeeping,Maintenance
+881,"2018-04-06 16:33:10.057153",NULL,Staff,Availability,"Food & Beverage",Service
+885,"2018-04-06 16:33:26.645869",NULL,Staff,Courtesy,Housekeeping,Service
+886,"2018-04-06 16:33:32.129598",NULL,Food,Value,"Food & Beverage",Offering
+892,"2018-04-06 16:33:59.688215",NULL,Food,Variety,"Food & Beverage",Offering
+908,"2018-04-06 16:35:11.271283",NULL,Hotel,Cleanliness,Hotel,"Public Areas"
+913,"2018-04-06 16:35:35.603810",NULL,Check-In,Value,"Front Office",Check-in/Check-out
+914,"2018-04-06 16:35:40.272056",NULL,Check-Out,Value,"Front Office",Check-in/Check-out
+917,"2018-04-06 16:35:54.937805",NULL,Food,Efficiency,"Food & Beverage",Service
+927,"2018-04-06 16:36:42.953031",NULL,Beverage,Availability,"Food & Beverage",Offering
+928,"2018-04-06 16:36:48.914539",NULL,Food,Adequacy,"Food & Beverage",Offering
+934,"2018-04-07 05:33:35.962621",NULL,Drain,Integrity/Maintenance,Housekeeping,Maintenance
+935,"2018-04-07 06:45:50.390612",NULL,Appliances,Availability,Hotel,Offering
+939,"2018-04-09 08:16:22.324882",NULL,"Power Supply",Availability,Hotel,Maintenance
+940,"2018-04-10 04:45:22.967969",NULL,Booking,Location,"Front Office",Reservation
+942,"2018-04-11 10:42:25.366878",NULL,Hotel,Cleanliness,Housekeeping,"Public Area"
+949,"2018-04-24 04:21:24.213713",NULL,Exterior,Adequacy,Hotel,"Public Area"
+951,"2018-04-24 05:56:41.671563",NULL,"Phone Call",Accuracy,"Front Office","Front Desk"
+954,"2018-04-24 06:22:59.843239",NULL,Laundry,Availability,Housekeeping,Offering
+955,"2018-04-24 06:24:17.816563",NULL,Elevator,Integrity/Maintenance,Hotel,Maintenance
+958,"2018-04-24 06:37:01.677010",NULL,"Drinking Water",Quality,"Food & Beverage",Offering
+959,"2018-05-02 07:08:40.768510",NULL,Hotel,Adequacy,Hotel,Offering
+961,"2018-05-02 07:08:45.445481",NULL,User-Experience,Quality,Hotel,Service
+964,"2018-05-02 07:08:51.335023",NULL,Bathroom,Cleanliness,Housekeeping,"Room Making"
+966,"2018-05-02 07:08:57.650597",NULL,Staff,Courtesy,Hotel,Service
+969,"2018-05-02 07:09:03.981039",NULL,Surfaces,Cleanliness,Housekeeping,"Room Making"
+971,"2018-05-02 07:09:08.179971",NULL,Room,Cleanliness,Housekeeping,"Room Making"
+972,"2018-05-02 07:09:10.937245",NULL,Appliances,Integrity/Maintenance,Housekeeping,Maintenance
+973,"2018-05-02 07:14:49.255997",NULL,Staff,Courtesy,"Front Office","Check-In & Check-Out"
+974,"2018-05-02 07:14:55.016482",NULL,Drinking-Water,Quality,Housekeeping,"Room Making"
+975,"2018-05-02 07:15:01.084296",NULL,User-Experience,Value,Hotel,Service
+976,"2018-05-02 07:15:06.361957",NULL,Room,Recommendation,Hotel,Offering
+979,"2018-05-02 07:15:38.868885",NULL,Bed,Accuracy,"Front Office",Offering
+980,"2018-05-02 07:15:40.839964",NULL,Room,Availability,"Front Office",Offering
+982,"2018-05-02 07:16:00.500403",NULL,Bed,Cleanliness,Housekeeping,"Room Making"
+983,"2018-05-02 07:16:02.345130",NULL,Linen,Quality,Housekeeping,"Room Making"
+984,"2018-05-02 07:16:04.536536",NULL,Bathroom,"Pest Control",Housekeeping,"Room Making"
+985,"2018-05-02 07:16:06.604596",NULL,Staff,Efficiency,Housekeeping,"Room Making"
+986,"2018-05-02 07:16:13.098641",NULL,Billing,Accuracy,"Front Office","Billing & Payments"
+987,"2018-05-02 07:16:26.104587",NULL,User-Experience,Quality,Housekeeping,Service
+988,"2018-05-02 07:16:28.494723",NULL,Check-In,Accuracy,"Front Office","Billing & Payments"
+989,"2018-05-02 07:16:41.868102",NULL,Surfaces,Integrity/Maintenance,Housekeeping,Maintenance
+990,"2018-05-02 07:16:45.760508",NULL,Food,Quality,Hotel,"Food Production"
+991,"2018-05-02 07:16:48.012556",NULL,Menu,Variety,Hotel,Offering
+992,"2018-05-02 07:16:54.778819",NULL,Guest-Rating,Quality,Hotel,Service
+993,"2018-05-02 07:17:15.457891",NULL,Corridors,Quality,Hotel,"Public Areas"
+994,"2018-05-02 07:17:26.515492",NULL,Hotel,Recommendation,Hotel,Offering
+995,"2018-05-02 07:17:32.359291",NULL,Elevator,Cleanliness,Housekeeping,"Public Areas"
+996,"2018-05-02 07:18:24.682141",NULL,Room,Ambience,Hotel,Offering
+997,"2018-05-02 07:18:53.554621",NULL,Amenities,Quality,Hotel,Offering
+998,"2018-05-02 07:18:55.603081",NULL,Hotel,Security,Hotel,Offering
+999,"2018-05-02 07:18:57.655556",NULL,Appliances,Integrity/Maintenance,Hotel,Maintenance
+1000,"2018-05-02 07:19:04.161504",NULL,Room,Accuracy,"Front Office","Check-In & Check-Out"
+1002,"2018-05-02 07:19:21.817838",NULL,Furnishings,Availability,Housekeeping,"Room Making"
+1004,"2018-05-02 07:19:57.247244",NULL,Room,Accuracy,Housekeeping,Service
+1005,"2018-05-02 07:20:18.885903",NULL,Billing,Accuracy,"Food & Beverage","Billing & Payments"
+1006,"2018-05-02 07:20:28.890203",NULL,Room-Service,Availability,"Food & Beverage",Offering
+1007,"2018-05-02 07:20:36.167708",NULL,Bed,Availability,Housekeeping,Offering
+1008,"2018-05-02 07:20:51.725026",NULL,Restaurant,Availability,Hotel,Offering
+1009,"2018-05-02 07:20:53.771909",NULL,Appliances,Integrity/Maintenance,"Front Office",Offering
+1010,"2018-05-02 07:20:55.614360",NULL,Furnishings,Availability,Housekeeping,Offering
+1011,"2018-05-02 07:21:03.396468",NULL,Surfaces,Availability,Hotel,"Public Areas"
+1012,"2018-05-02 07:21:07.082469",NULL,Bed,Accuracy,"Front Office","Check-In & Check-Out"
+1013,"2018-05-02 07:21:09.335520",NULL,Pricing,Value,"Front Office","Billing & Payments"
+1014,"2018-05-02 07:21:15.071817",NULL,Hotel,Integrity/Maintenance,Hotel,Offering
+1015,"2018-05-02 07:21:53.571967",NULL,Drinking-Water,Accuracy,"Food & Beverage",Offering
+1016,"2018-05-02 07:22:05.040400",NULL,Furnishings,Accuracy,Housekeeping,"Room Making"
+1018,"2018-05-02 07:22:21.017113",NULL,"Water Supply",Availability,"Food & Beverage","Food Production"
+1019,"2018-05-02 07:22:31.639161",NULL,"Bathroom Fittings",Integrity/Maintenance,Hotel,Maintenance
+1020,"2018-05-02 07:22:53.132626",NULL,Drinking-Water,Availability,"Food & Beverage","Food Production"
+1021,"2018-05-02 07:23:00.227458",NULL,"Bathroom Fittings",Availability,Hotel,"Public Areas"
+1022,"2018-05-02 07:23:02.389154",NULL,Tableware,Availability,"Food & Beverage",Service
+1024,"2018-05-02 07:23:19.384654",NULL,"Power Supply",Availability,Hotel,Offering
+1025,"2018-05-02 07:23:33.719397",NULL,"Power Supply",Integrity/Maintenance,Housekeeping,Maintenance
+1026,"2018-05-02 07:23:35.577469",NULL,Drinking-Water,Availability,Housekeeping,"Room Making"
+1027,"2018-05-02 07:23:48.479907",NULL,"Phone Call",Efficiency,"Front Office","Front Desk"
+1028,"2018-05-02 07:24:10.584622",NULL,Drinking-Water,Availability,"Food & Beverage",Offering
+1029,"2018-05-02 07:24:12.630801",NULL,Room,Quality,"Front Office","Check-In & Check-Out"
+1030,"2018-05-02 07:24:19.393844",NULL,Restaurant,Cleanliness,"Food & Beverage",Offering
+1031,"2018-05-02 07:24:37.415077",NULL,Bed,Adequacy,Housekeeping,"Room Making"
+1032,"2018-05-02 07:24:39.258646",NULL,Bathroom,Adequacy,Housekeeping,"Room Making"
+1033,"2018-05-02 07:24:48.884533",NULL,Check-Out,Accuracy,"Front Office","Check-In & Check-Out"
+1034,"2018-05-02 07:24:53.860057",NULL,Staff,Accuracy,Housekeeping,Service
+1035,"2018-05-02 07:25:00.013682",NULL,Food,Availability,"Food & Beverage",Service
+1036,"2018-05-02 07:25:13.866770",NULL,"Water Supply",Availability,Housekeeping,"Room Making"
+1039,"2018-05-06 15:42:08.783006",NULL,"Bathroom Fittings",Availability,Housekeeping,"Room Making"
+1040,"2018-05-06 15:55:23.744219",NULL,Corridors,Ambience,Hotel,Offering
+1042,"2018-05-07 07:06:40.181624",NULL,Check-In,Availability,"Front Office",Check-in/Check-out
+1044,"2018-05-07 10:55:54.740196",NULL,Hotel,Ambience,Hotel,"Public Area"
+1055,"2018-05-11 06:33:51.501640",NULL,"Luggage Assistance",Availability,"Front Office","Front Desk"
+1062,"2018-05-11 06:34:08.301643",NULL,Linen,Cleanliness,Housekeeping,"Public Areas"
+1065,"2018-05-11 06:34:21.337731",NULL,"Bathroom Fittings",Integrity/Maintenance,Housekeeping,"Room Making"
+1066,"2018-05-11 06:34:24.266111",NULL,Linen,Cleanliness,Housekeeping,"Room Making"
+1067,"2018-05-11 06:34:31.991546",NULL,Room,Quality,"Front Office",Offering
+1068,"2018-05-11 06:34:35.055559",NULL,Exterior,Cleanliness,Housekeeping,"Public Areas"
+1069,"2018-05-11 06:34:37.095431",NULL,Staff,Courtesy,"Front Office",Service
+1071,"2018-05-11 06:34:41.816569",NULL,Hotel,Value,Hotel,Offering
+1073,"2018-05-11 06:34:46.609827",NULL,Staff,Quality,Housekeeping,Service
+1080,"2018-05-11 06:35:03.155963",NULL,Menu,Quality,"Food & Beverage",Offering
+1115,"2018-05-11 06:36:38.749615",NULL,Food,Accuracy,"Food & Beverage",Offering
+1116,"2018-05-11 06:36:42.326002",NULL,"Power Supply",Integrity/Maintenance,Hotel,Maintenance
+1136,"2018-05-11 06:37:35.459319",NULL,Pricing,Value,Hotel,Offering
+1139,"2018-05-11 06:37:42.649243",NULL,Amenities,Availability,"Front Office",Offering
+1140,"2018-05-11 06:37:44.974205",NULL,Room,Adequacy,Hotel,Offering
+1154,"2018-05-11 06:38:22.103713",NULL,Food,Quality,"Food & Beverage",Offering
+1157,"2018-05-11 06:38:31.785707",NULL,Room,Quality,Hotel,Offering
+1158,"2018-05-11 06:38:33.729992",NULL,Amenities,Quality,Housekeeping,"Room Making"
+1162,"2018-05-11 06:38:42.189094",NULL,Amenities,Recommendation,Hotel,Offering
+1176,"2018-05-11 06:39:15.916155",NULL,Staff,Quality,Hotel,Service
+1177,"2018-05-11 06:39:18.286346",NULL,Food,Quality,"Food & Beverage","Food Production"
+1197,"2018-05-11 06:40:05.963659",NULL,Amenities,Availability,Housekeeping,"Room Making"
+1201,"2018-05-11 06:40:15.714081",NULL,Room,"Pest Control",Housekeeping,"Room Making"
+1202,"2018-05-11 06:40:17.873331",NULL,Appliances,Integrity/Maintenance,Housekeeping,"Room Making"
+1203,"2018-05-11 06:40:19.803835",NULL,Linen,Adequacy,Housekeeping,"Room Making"
+1204,"2018-05-11 06:40:22.184319",NULL,Amenities,Availability,Hotel,Offering
+1205,"2018-05-11 06:40:24.537977",NULL,User-Experience,Value,Hotel,Offering
+1206,"2018-05-11 06:40:27.323166",NULL,User-Experience,Quality,Hotel,Offering
+1217,"2018-05-15 13:57:04.505480",NULL,Check-In,Accuracy,"Front Office","Check-In & Check-Out"
+1218,"2018-05-15 13:57:08.475050",NULL,Staff,Quality,,"Food Production"
+1219,"2018-05-15 13:57:10.649470",NULL,Amenities,Value,Housekeeping,"Room Making"
+1220,"2018-05-15 13:58:39.320202",NULL,Staff,Quality,"Food & Beverage","Food Production"
+1221,"2018-05-15 14:01:12.291810",NULL,Appliances,Availability,Hotel,Maintenance
+1222,"2018-05-15 14:01:19.824920",NULL,Staff,Efficiency,"Front Office",Service
+1223,"2018-05-15 15:32:28.640367",NULL,Guest-Rating,Quality,Hotel,Offering
+1224,"2018-05-16 04:02:10.048615",NULL,Exterior,Availability,Hotel,Offering
+1226,"2018-05-16 05:34:39.958276",NULL,Corridors,Ambience,"Front Office","Public Area"
+1227,"2018-05-16 06:49:40.864972",NULL,"Water Supply",Availability,Hotel,Maintenance
+1228,"2018-05-16 07:06:07.506856",NULL,Room,Accuracy,"Front Office",Offering
+1231,"2018-05-17 08:54:27.409187",NULL,Room,Adequacy,Housekeeping,"Room Making"
+1235,"2018-05-17 10:36:37.865192",NULL,Internet,Integrity/Maintenance,"Front Office",Maintenance
+1236,"2018-05-17 12:32:42.405892",NULL,Security,Quality,Hotel,Service
+1237,"2018-05-18 09:33:38.955579",NULL,"Guest Rating",Quality,Hotel,Offering
+1238,"2018-05-21 09:34:23.339618",NULL,Staff,Courtesy,"Front Office","Front Desk"
+1239,"2018-05-21 10:49:08.358114",NULL,Room,Accuracy,"Front Office","Front Desk"
+1240,"2018-05-22 12:41:56.274773",NULL,Services,Availability,Hotel,Offering
+1241,"2018-05-23 13:12:22.888705",NULL,Check-Out,Accuracy,"Front Office",Check-in/Check-out
+1242,"2018-05-29 11:58:24.148019",NULL,Staff,Cleanliness,Hotel,Offering
+1243,"2018-05-29 12:28:03.797420",NULL,Quality,Availability,Hotel,Offering
+1244,"2018-05-29 13:03:00.693417",NULL,Hotel,Cleanliness,Hotel,"Public Area"
+1245,"2018-05-29 13:10:02.122063",NULL,Internet,Integrity/Maintenance,Housekeeping,Maintenance
+1246,"2018-05-30 07:58:10.222503",NULL,Staff,Accuracy,"Front Office",Check-in/Check-out
+1247,"2018-05-30 08:14:11.808631",NULL,"Drinking Water",Availability,"Food & Beverage",Offering
+1248,"2018-05-30 09:27:02.892611",NULL,Staff,Courtesy,"Front Office",Offering
+1249,"2018-05-30 09:55:48.197864",NULL,Tableware,Efficiency,"Food & Beverage",Service
+1250,"2018-05-30 11:46:45.583601",NULL,Linen,Accuracy,Housekeeping,"Room Making"
+1251,"2018-05-30 11:58:24.098075",NULL,Amenities,Integrity/Maintenance,Housekeeping,"Room Making"
+1252,"2018-05-30 12:19:00.165130",NULL,Efficiency,Variety,Hotel,Offering
+1253,"2018-05-30 12:47:58.250716",NULL,Services,Quality,Hotel,Offering
+1254,"2018-05-30 12:54:31.172443",NULL,Room,Availability,"Front Office",Check-in/Check-out
+1255,"2018-05-31 12:08:44.182014",NULL,Room,Courtesy,Housekeeping,Offering
+1256,"2018-05-31 12:09:04.807361",NULL,Accuracy,Courtesy,Hotel,Offering
+1257,"2018-05-31 12:09:23.399703",NULL,Internet,Efficiency,Hotel,Offering
+1258,"2018-05-31 12:09:50.534336",NULL,Reception,Accuracy,"Front Office","Front Desk"
+1259,"2018-05-31 13:25:03.495059",NULL,Amenities,Accuracy,Housekeeping,Service
+1260,"2018-06-01 05:29:50.210664",NULL,Room,Availability,Housekeeping,"Room Making"
+1261,"2018-06-01 05:42:28.643166",NULL,Hotel,Cleanliness,Hotel,Offering
+1262,"2018-06-01 07:43:34.579119",NULL,Billing,Courtesy,"Front Office","Billing & Payment"
+1263,"2018-06-01 07:46:14.294135",NULL,Food,Accuracy,"Front Office","Billing & Payment"
+1264,"2018-06-01 09:42:49.150653",NULL,Bathroom,Recommendation,Housekeeping,"Room Making"
+1265,"2018-06-01 10:40:38.448652",NULL,Adequacy,Adequacy,Hotel,Offering
+1266,"2018-06-04 06:07:55.833656",NULL,"Water Supply",Courtesy,Housekeeping,Maintenance
+1267,"2018-06-04 06:14:43.542956",NULL,"Drinking Water",Quality,Hotel,Offering
+1268,"2018-06-04 06:58:10.274645",NULL,Services,Accuracy,Hotel,Offering
+1269,"2018-06-04 13:53:55.936924",NULL,Billing,Accuracy,"Front Office",Check-in/Check-out
