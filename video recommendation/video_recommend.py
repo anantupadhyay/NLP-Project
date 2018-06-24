@@ -59,7 +59,7 @@ def recommend_video_from_review(subject, attribute, domain, department, sent, vd
 	if not tmp.empty:
 		for x in tmp['id'].values:
 			if ((x==watchlist['id'].values)&(hotelid==watchlist['hotel_id_id'])).any():
-				vdo_dict[x] = tmp[['id','video_name','video_url']].values
+				vdo_dict[x] = tmp[['id','video_name','video_url']][tmp['id']==x].values
 
 if __name__=="__main__" :
 	vdo_df = pd.read_csv('dataset/video.csv')
@@ -88,8 +88,8 @@ if __name__=="__main__" :
 		proc.join()
 
 	print "Length of 1st one is -> ", len(vdo_dict), '\n'
-	# for k,v in vdo_dict.items():
-	# 	print k, " -> ", v, '\n'
+	for k,v in vdo_dict.items():
+		print k, " -> ", v, '\n'
 
 	vdo_dict2 ={}
 	recommend_video_without_review(watchlist, vdo_dict2)
@@ -98,13 +98,12 @@ if __name__=="__main__" :
 	# for k,v in vdo_dict2.items():
 	# 	print k, " -> ", v, '\n'
 
-	# Merging vdo_dict2 with vdo_dict
-	for k in vdo_dict2.keys():
-		vdo_dict[k] = vdo_dict2[k]
+	# # Randomly selecting videos from available list of 1st dictionary
+	# for x in range(10):
+	# 	k = random.choice(vdo_dict.keys())
+	# 	print k, "->", vdo_dict[k]
 
-	print "Length of final one is -> ", len(vdo_dict)
-
-	# Randomly selecting videos from available list
-	for x in range(8):
-		k = random.choice(vdo_dict.keys())
-		print k, "->", vdo_dict[k]
+	# # Randomly picking videos from 2nd dictionary
+	# for x in range(5):
+	# 	k = random.choice(vdo_dict2.keys())
+	# 	print k, "->", vdo_dict2[k]
