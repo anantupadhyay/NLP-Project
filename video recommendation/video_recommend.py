@@ -57,8 +57,9 @@ def recommend_video_from_review(subject, attribute, domain, department, sent, vd
 	if tmp.empty:
 		tmp = vdo_df[vdo_df.domain.isin(domain) & vdo_df.department.isin(department) & vdo_df.subject.isin(subject)]
 	if not tmp.empty:
-		if ((tmp['id'].values==watchlist['id'].values)&(hotelid==watchlist['hotel_id_id'])).any():
-			vdo_dict[sent] = tmp[['id','video_name','video_url']].values
+		for x in tmp['id'].values:
+			if ((x==watchlist['id'].values)&(hotelid==watchlist['hotel_id_id'])).any():
+				vdo_dict[x] = tmp[['id','video_name','video_url']].values
 
 if __name__=="__main__" :
 	vdo_df = pd.read_csv('dataset/video.csv')
@@ -72,12 +73,13 @@ if __name__=="__main__" :
 	review = pd.read_csv('dataset/review.csv')
 	procs=[]
 	vdo_dict = {}
-	for x in range(0, 7):
+	for x in range(0, 1):
 		hotelid = 1
 		sub = review['subject'][x]
 		attrb = review['attribute'][x]
 		domain = review['domain'][x]
 		dept = review['department'][x]
+		# recommend_video_from_review([sub], [attrb], [domain], [dept], review['review'][x], vdo_dict, watchlist, hotelid)
 		proc=threading.Thread(target=recommend_video_from_review, args=([sub], [attrb], [domain], [dept], review['review'][x], vdo_dict, watchlist, hotelid))
 		procs.append(proc)
 		proc.start()
@@ -85,12 +87,19 @@ if __name__=="__main__" :
 	for proc in procs:
 		proc.join()
 
-	for k,v in vdo_dict.items():
-		print k, " -> ", v, '\n'
+	print "Length of 1st one is -> ", len(vdo_dict), '\n'
+	# for k,v in vdo_dict.items():
+	# 	print k, " -> ", v, '\n'
 
-	# vdo_dict2 ={}
-	# recommend_video_without_review(watchlist, vdo_dict2)
+	vdo_dict2 ={}
+	recommend_video_without_review(watchlist, vdo_dict2)
 
-	# print "Length of dictionay is ", len(vdo_dict2), '\n\n'
+	print "Length of 2nd one is -> ", len(vdo_dict2), '\n\n'
 	# for k,v in vdo_dict2.items():
 	# 	print k, " -> ", v, '\n'
+
+	# Merging vdo_dict2 with vdo_dic
+	for k in vdo_dict2.keys():
+		vdo_dict[k] = vdo_dict2[k]
+
+	print "Length of final one is -> ", len(vdo_dict)
