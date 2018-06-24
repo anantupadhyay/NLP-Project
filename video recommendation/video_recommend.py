@@ -98,8 +98,13 @@ if __name__=="__main__" :
 	# for k,v in vdo_dict2.items():
 	# 	print k, " -> ", v, '\n'
 
-	# Merging vdo_dict2 with vdo_dic
+	# Merging vdo_dict2 with vdo_dict
 	for k in vdo_dict2.keys():
 		vdo_dict[k] = vdo_dict2[k]
 
 	print "Length of final one is -> ", len(vdo_dict)
+
+	# Randomly selecting videos from available list
+	for x in range(8):
+		k = random.choice(vdo_dict.keys())
+		print k, "->", vdo_dict[k]
