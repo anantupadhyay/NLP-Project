@@ -78,12 +78,12 @@ def get_video_from_similarity(df, vectorizer, sent, vdo_dict, watchlist, porter)
 		if tmp > cosim:
 			cosim = tmp
 			s1 = df['video_name'][x]
-			i1 = x
+			i1 = df['id'][x]
 		tmp2 = euclidean_distances(vec, vec2)
 		if tmp2 < euclid:
 			euclid = tmp2
 			s2 = df['video_name'][x]
-			i2 = x
+			i2 = df['id'][x]
 
 	vdo_dict[i1] = [sent, s1, df['video_url'][df['id']==i1].values]
 	vdo_dict[i2] = [sent, s2, df['video_url'][df['id']==i2].values]
@@ -95,7 +95,7 @@ def train_tfidf_vectorizer(porter, df):
 		words = [w.lower() for w in tokens]
 		stem_token = [porter.stem(t) for t in words]
 		doc.append(' '.join(stem_token))
-	vectorizer = TfidfVectorizer()
+	vectorizer = TfidfVectorizer(ngram_range=(1,3))
 	vectorizer.fit(doc)
 	return vectorizer
 
