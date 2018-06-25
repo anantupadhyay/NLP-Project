@@ -2,7 +2,8 @@ import pandas as pd
 import threading
 import datetime
 import random
-
+from sklearn.metrics.pairwise import cosine_similarity, euclidean_distances
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 def get_non_watched_video(wlist, vdo_dict2, hotelid):
 	li = wlist['video_details_id_id'][(wlist['is_watched']==0) & (wlist['hotel_id_id']==hotelid)].values
@@ -62,6 +63,31 @@ def recommend_video_from_review(subject, attribute, domain, department, sent, vd
 			if ((x==watchlist['id'].values)&(hotelid==watchlist['hotel_id_id'])).any():
 				vdo_dict[x] = tmp[['id','video_name','video_url']][tmp['id']==x].values
 
+def get_video_from_similarity(df, vectorizer, sent, vdo_dict, watchlist):
+	vec2 = vectorizer.transform([sent])
+	cosim, euclid, i1, i2 = 0.0, float('inf'), -1, -1
+	s1, s2 = "", ""
+	for x in range(0, len(df['video_name'])):
+		vec = vectorizer.transform([df['video_name'][x]])
+		tmp = cosine_similarity(vec, vec2)
+		if tmp > cosim:
+			cosim = tmp
+			s1 = df['video_name'][x]
+			i1 = x
+		tmp2 = euclidean_distances(vec, vec2)
+		if tmp2 < euclid:
+			euclid = tmp2
+			s2 = df['video_name'][x]
+			i2 = x
+
+	vdo_dict[i1] = [sent, s1, df['video_url'][df['id']==i1].values]
+	vdo_dict[i2] = [sent, s2, df['video_url'][df['id']==i2].values]
+
+def train_tfidf_vectorizer(df):
+	vectorizer = TfidfVectorizer()
+	vectorizer.fit(df['video_name'])
+	return vectorizer
+
 if __name__=="__main__" :
 	vdo_df = pd.read_csv('dataset/video.csv')
 	watchlist = pd.read_csv('dataset/watchlist.csv')
@@ -70,10 +96,16 @@ if __name__=="__main__" :
 	till_date = (datetime.date.today() - datetime.timedelta(video_watch_limit)).isoformat()
 	watchlist = watchlist[((watchlist['is_watched']==1) & (watchlist['updated_at']<=till_date) | (watchlist['is_watched']==0))]
 	# print watchlist.tail()
+	df = pd.read_csv('dataset/video_details.csv')
+	df = df[df['id'].isin(watchlist['video_details_id_id'].values)]
+	df.reset_index(drop=True, inplace=True)
+	vectorizer = train_tfidf_vectorizer(df)
 
+	vdo_dict = {}
+	sentiment = -0.2
+		
 	review = pd.read_csv('dataset/review.csv')
 	procs=[]
-	vdo_dict = {}
 	for x in range(0, 7):
 		hotelid = 1
 		sub = review['subject'][x]
@@ -81,23 +113,25 @@ if __name__=="__main__" :
 		domain = review['domain'][x]
 		dept = review['department'][x]
 		# recommend_video_from_review([sub], [attrb], [domain], [dept], review['review'][x], vdo_dict, watchlist, hotelid)
-		proc=threading.Thread(target=recommend_video_from_review, args=([sub], [attrb], [domain], [dept], review['review'][x], vdo_dict, watchlist, hotelid))
-		procs.append(proc)
-		proc.start()
+		if sentiment <= 0:
+			proc =get_video_from_similarity(df, vectorizer, review['review'][x], vdo_dict, watchlist)
+		# proc=threading.Thread(target=recommend_video_from_review, args=([sub], [attrb], [domain], [dept], review['review'][x], vdo_dict, watchlist, hotelid))
+	# 	procs.append(proc)
+	# 	proc.start()
 
-	for proc in procs:
-		proc.join()
+	# for proc in procs:
+	# 	proc.join()
 
 	print "Length of 1st one is -> ", len(vdo_dict), '\n'
 	for k,v in vdo_dict.items():
 		print k, " -> ", v, '\n'
 
-	vdo_dict2 ={}
-	recommend_video_without_review(watchlist, vdo_dict2)
+	# vdo_dict2 ={}
+	# recommend_video_without_review(watchlist, vdo_dict2)
 
-	print "Length of 2nd one is -> ", len(vdo_dict2), '\n\n'
-	for k,v in vdo_dict2.items():
-		print k, " -> ", v, '\n'
+	# print "Length of 2nd one is -> ", len(vdo_dict2), '\n\n'
+	# for k,v in vdo_dict2.items():
+	# 	print k, " -> ", v, '\n'
 
 	# # Randomly selecting videos from available list of 1st dictionary
 	# for x in range(10):

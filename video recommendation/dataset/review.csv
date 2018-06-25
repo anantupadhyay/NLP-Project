@@ -1,5 +1,5 @@
 id,created_at,updated_at,subject,attribute,department,domain,review
-1,"2018-03-09 19:47:28.765552",NULL,Services,Efficiency,Hotel,Hotel,"The room service is good"
+1,"2018-03-09 19:47:28.765552",NULL,Services,Efficiency,Hotel,Hotel,"The room service is bad"
 4,"2018-03-09 19:47:30.377058",NULL,Hotel,Quality,Hotel,Hotel,"The quality of hotel is bad"
 6,"2018-03-09 20:00:43.047355",NULL,Amenities,Adequacy,Housekeeping,"Room Making","The room was not according to expectation"
 7,"2018-03-09 20:00:43.818294",NULL,Appliances,Availability,Housekeeping,"Room Making","minibar was not in the room"
