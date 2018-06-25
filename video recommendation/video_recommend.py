@@ -4,6 +4,8 @@ import datetime
 import random
 from sklearn.metrics.pairwise import cosine_similarity, euclidean_distances
 from sklearn.feature_extraction.text import TfidfVectorizer
+from nltk.tokenize import word_tokenize
+import nltk
 
 def get_non_watched_video(wlist, vdo_dict2, hotelid):
 	li = wlist['video_details_id_id'][(wlist['is_watched']==0) & (wlist['hotel_id_id']==hotelid)].values
@@ -63,12 +65,15 @@ def recommend_video_from_review(subject, attribute, domain, department, sent, vd
 			if ((x==watchlist['id'].values)&(hotelid==watchlist['hotel_id_id'])).any():
 				vdo_dict[x] = tmp[['id','video_name','video_url']][tmp['id']==x].values
 
-def get_video_from_similarity(df, vectorizer, sent, vdo_dict, watchlist):
+def get_video_from_similarity(df, vectorizer, sent, vdo_dict, watchlist, porter):
 	vec2 = vectorizer.transform([sent])
 	cosim, euclid, i1, i2 = 0.0, float('inf'), -1, -1
 	s1, s2 = "", ""
 	for x in range(0, len(df['video_name'])):
-		vec = vectorizer.transform([df['video_name'][x]])
+		token = word_tokenize(df['video_name'][x])
+		words = [w.lower() for w in token]
+		stem_token = [porter.stem(t) for t in words]
+		vec = vectorizer.transform([' '.join(stem_token)])
 		tmp = cosine_similarity(vec, vec2)
 		if tmp > cosim:
 			cosim = tmp
@@ -83,9 +88,15 @@ def get_video_from_similarity(df, vectorizer, sent, vdo_dict, watchlist):
 	vdo_dict[i1] = [sent, s1, df['video_url'][df['id']==i1].values]
 	vdo_dict[i2] = [sent, s2, df['video_url'][df['id']==i2].values]
 
-def train_tfidf_vectorizer(df):
+def train_tfidf_vectorizer(porter, df):
+	doc = []
+	for x in df['video_name']:
+		tokens = word_tokenize(x)
+		words = [w.lower() for w in tokens]
+		stem_token = [porter.stem(t) for t in words]
+		doc.append(' '.join(stem_token))
 	vectorizer = TfidfVectorizer()
-	vectorizer.fit(df['video_name'])
+	vectorizer.fit(doc)
 	return vectorizer
 
 if __name__=="__main__" :
@@ -99,7 +110,8 @@ if __name__=="__main__" :
 	df = pd.read_csv('dataset/video_details.csv')
 	df = df[df['id'].isin(watchlist['video_details_id_id'].values)]
 	df.reset_index(drop=True, inplace=True)
-	vectorizer = train_tfidf_vectorizer(df)
+	porter = nltk.PorterStemmer()
+	vectorizer = train_tfidf_vectorizer(porter, df)
 
 	vdo_dict = {}
 	sentiment = -0.2
@@ -107,14 +119,14 @@ if __name__=="__main__" :
 	review = pd.read_csv('dataset/review.csv')
 	procs=[]
 	for x in range(0, 7):
-		hotelid = 1
-		sub = review['subject'][x]
-		attrb = review['attribute'][x]
-		domain = review['domain'][x]
-		dept = review['department'][x]
+		# hotelid = 1
+		# sub = review['subject'][x]
+		# attrb = review['attribute'][x]
+		# domain = review['domain'][x]
+		# dept = review['department'][x]
 		# recommend_video_from_review([sub], [attrb], [domain], [dept], review['review'][x], vdo_dict, watchlist, hotelid)
 		if sentiment <= 0:
-			proc =get_video_from_similarity(df, vectorizer, review['review'][x], vdo_dict, watchlist)
+			get_video_from_similarity(df, vectorizer, review['review'][x], vdo_dict, watchlist, porter)
 		# proc=threading.Thread(target=recommend_video_from_review, args=([sub], [attrb], [domain], [dept], review['review'][x], vdo_dict, watchlist, hotelid))
 	# 	procs.append(proc)
 	# 	proc.start()
