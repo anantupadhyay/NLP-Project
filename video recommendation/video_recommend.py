@@ -6,14 +6,14 @@ import random
 
 def get_non_watched_video(wlist, vdo_dict2, hotelid):
 	li = wlist['video_details_id_id'][(wlist['is_watched']==0) & (wlist['hotel_id_id']==hotelid)].values
-	li = random.sample(li, min(4, len(li)))
+	li = random.sample(li, min(5, len(li)))
 	for x in li:
 		vdo_dict2[x] = vdo_df[['video_name', 'video_url']][vdo_df['id']==x].values
 
 def get_least_recently_watched(watchlist, vdo_dict2, hotelid):
 	wlist = watchlist[['updated_at', 'video_details_id_id']].loc[watchlist['hotel_id_id']==hotelid].dropna()
 	li = wlist.sort_values('updated_at').video_details_id_id.unique()
-	li = random.sample(li[:min(len(li), 8)], min(4, len(li)))
+	li = random.sample(li[:min(len(li), 10)], min(5, len(li)))
 	for x in li:
 		vdo_dict2[x] = vdo_df[['video_name', 'video_url']][vdo_df['id']==x].values
 
@@ -21,12 +21,13 @@ def get_recent_video(watchlist, vdo_dict2):
 	no_of_days = 45
 	dt = (datetime.date.today() - datetime.timedelta(no_of_days)).isoformat()
 	li = watchlist['video_details_id_id'][(watchlist['created_at']>=dt)].values
-	li = random.sample(li, min(4, len(li)))
+	li = random.sample(li, min(5, len(li)))
 	for x in li:
 		vdo_dict2[x] = vdo_df[['video_name', 'video_url']][vdo_df['id']==x].values
 
 def get_most_complaint_domain(watchlist, vdo_dict2, hotelid):
 	from collections import Counter
+	# Getting the date of one mnth back
 	dt = (datetime.date.today() - datetime.timedelta(1*365/12)).isoformat()
 	match = pd.read_csv('dataset/match.csv')
 	tags = pd.read_csv('dataset/tags.csv')
@@ -52,7 +53,7 @@ def recommend_video_without_review(watchlist, vdo_dict2):
 	get_most_complaint_domain(watchlist, vdo_dict2, hotelid)
 
 def recommend_video_from_review(subject, attribute, domain, department, sent, vdo_dict, watchlist, hotelid):
-	vdo_dict[sent] = "Not Found"
+	# vdo_dict[sent] = "Not Found"
 	tmp = vdo_df[vdo_df.subject.isin(subject) & vdo_df.attribute.isin(attribute) & vdo_df.domain.isin(domain) & vdo_df.department.isin(department)]
 	if tmp.empty:
 		tmp = vdo_df[vdo_df.domain.isin(domain) & vdo_df.department.isin(department) & vdo_df.subject.isin(subject)]
@@ -73,7 +74,7 @@ if __name__=="__main__" :
 	review = pd.read_csv('dataset/review.csv')
 	procs=[]
 	vdo_dict = {}
-	for x in range(0, 1):
+	for x in range(0, 7):
 		hotelid = 1
 		sub = review['subject'][x]
 		attrb = review['attribute'][x]
@@ -95,8 +96,8 @@ if __name__=="__main__" :
 	recommend_video_without_review(watchlist, vdo_dict2)
 
 	print "Length of 2nd one is -> ", len(vdo_dict2), '\n\n'
-	# for k,v in vdo_dict2.items():
-	# 	print k, " -> ", v, '\n'
+	for k,v in vdo_dict2.items():
+		print k, " -> ", v, '\n'
 
 	# # Randomly selecting videos from available list of 1st dictionary
 	# for x in range(10):
